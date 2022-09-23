@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "jsx": "preserve",
+    "types": ["reflect-metadata", "node"],
     "jsxImportSource": "@emotion/react",
     "allowJs": true,
     "esModuleInterop": true,

@@ -51,5 +51,6 @@
       }
     }
   },
-  "defaultProject": "client"
+  "defaultProject": "client",
+  "useDaemonProcess": false
 }
