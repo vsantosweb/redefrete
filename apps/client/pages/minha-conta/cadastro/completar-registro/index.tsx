@@ -12,6 +12,7 @@ import PasswordForm from '../../../../resources/components/forms/PasswordForm';
 
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverAuthRepository } from '@redefrete/interfaces';
+import { useRouter } from 'next/router';
 
 
 const content = (
@@ -26,7 +27,7 @@ const steps = [
 ];
 
 export async function getServerSideProps(req, res) {
-
+    
     return await api.get('/driver/auth/register/verify?trackid=' + req.query.trackid)
         .then(response => {
             return {
@@ -57,6 +58,8 @@ function RegisterComplete({ history, driver }) {
     //     initialStep: 0,
     // });
 
+    const router = useRouter();
+    
     const driverAuthService = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
 
     const handleFinishRegister = async (driver) => {
@@ -202,7 +205,7 @@ function RegisterComplete({ history, driver }) {
                 <AlertTitle mt={4} mb={1} fontSize='lg'>Cadastro efetuado com sucesso!</AlertTitle>
                 <AlertDescription maxWidth='sm'>Obrigado por fazer parte do time Redefrete. Seu cadastro foi enviado para análise e em breve você você fará parte da nossa equipe.</AlertDescription>
             </Alert>
-            <Styled.AccountButton onClick={() => history.push('/minha-conta/login')} colorScheme={'primary'}>Acessar minha conta<i className={'las la-arrow-right'}></i></Styled.AccountButton>
+            <Styled.AccountButton onClick={() => router.push('/minha-conta/login')} colorScheme={'primary'}>Acessar minha conta<i className={'las la-arrow-right'}></i></Styled.AccountButton>
 
         </Stack>
 

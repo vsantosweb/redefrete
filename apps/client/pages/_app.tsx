@@ -1,6 +1,6 @@
 import React, { ReactElement, ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-
+import './styles.css';
 import type { AppProps } from 'next/app'
 import Theme from '../theme'
 import Head from 'next/head';
