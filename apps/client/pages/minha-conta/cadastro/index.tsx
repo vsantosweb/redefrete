@@ -86,7 +86,7 @@ function Register({ history }) {
                     <p>Enviamos um email para você confirmar seu pré-cadastro.</p>
                 </AlertDescription>
             </Alert>
-            <Styled.AccountButton onClick={() => history.push('/minha-conta/login')} colorScheme={'primary'}>Acessar minha conta<i className={'las la-arrow-right'}></i></Styled.AccountButton>
+            {/* <Styled.AccountButton onClick={() => history.push('/minha-conta/login')} colorScheme={'primary'}>Acessar minha conta<i className={'las la-arrow-right'}></i></Styled.AccountButton> */}
         </Stack>
 
     }
