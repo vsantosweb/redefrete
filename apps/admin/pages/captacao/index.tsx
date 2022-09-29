@@ -34,7 +34,7 @@ const CaptationLead: Page = () => {
 
     // const onSelectionChange = React.useCallback(({ data }) => { Router.push(`/lead/${data[0].id}`) }, [])
 
-    const filterlead = search.length > 0 ? lead.filter(driver => driver.phone.includes(search)) : []
+    // const filterlead = search.length > 0 ? lead.filter(driver => driver.phone.includes(search)) : []
 
     
 
