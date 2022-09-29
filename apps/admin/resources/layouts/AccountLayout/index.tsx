@@ -6,7 +6,7 @@ import SidebarMenu from '../../components/Sidebar';
 import PageHeader from '../../components/PageHeader';
 
 export default function AccountLayout({ children, title }) {
-    
+
     return (
         <Styled.Wrapper>
             <Styled.SideBar>

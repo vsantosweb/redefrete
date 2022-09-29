@@ -26,7 +26,7 @@ function SidebarMenu() {
                                         <div className={'icon'}>{route.icon}</div>
                                     </div>
                                     <div className={'itemLink'}>{route.name}</div>
-                                    {/* <Badge>6</Badge> */}
+                                    {/* <Badge variant={'solid'}>6</Badge> */}
                                 </div></a></Link>
                             </Styled.SidebarMenuItem>)}
 

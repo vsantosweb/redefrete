@@ -1,6 +1,6 @@
 import React from "react";
 import type { NextPage } from "next";
-import { Alert, AlertDescription, AlertIcon, AlertTitle, FormControl, FormLabel, Input, Stack } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, AlertTitle, FormControl, FormLabel, Input, Stack, Text } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import * as Styled from '../styles';
@@ -17,9 +17,9 @@ export const Login = () => {
 
   React.useEffect(() => setButonState({ disabled: !isValid }), [isValid])
 
-  const submitCredentials = (credentials) => {
+  const submitCredentials = async (credentials) => {
 
-    authService.signIn(credentials).then(() => router.push('/'))
+    await authService.signIn(credentials).then(() => router.push('/'))
       .catch((error) => setErrorMessage(error.response.data.message))
 
 
@@ -30,20 +30,18 @@ export const Login = () => {
       <Stack>
         <FormControl>
           <FormLabel>Email</FormLabel>
-          <Input variant={'flushed'} placeholder={'email@example.com'} autoComplete={'off'} {...register('email', { required: true })} />
+          <Input placeholder={'email@example.com'} autoComplete={'off'} {...register('email', { required: true })} />
         </FormControl>
 
         <FormControl>
           <FormLabel>Senha</FormLabel>
-          <Input variant={'flushed'} placeholder='••••••••••' type={'password'} {...register('password', { required: true })} />
+          <Input placeholder='••••••••••' type={'password'} {...register('password', { required: true })} />
         </FormControl>
 
         <Styled.AccountButton type={'submit'}
-          colorScheme={'primary'} isLoading={isSubmitting} disabled={!isValid} rightIcon={<i className={'las la-arrow-right'}></i>}>Entrar</Styled.AccountButton>
-        {errorMessage && <Alert  status='error'>
-          <AlertIcon />
-          <AlertDescription>{errorMessage}</AlertDescription>
-        </Alert>}
+          colorScheme={'primary'} isLoading={isSubmitting} disabled={!isValid || isSubmitting} rightIcon={<i className={'las la-arrow-right'}></i>}>Entrar</Styled.AccountButton>
+        {errorMessage &&           <Text color={'red'}>{errorMessage}</Text>
+}
       </Stack>
 
     </form>

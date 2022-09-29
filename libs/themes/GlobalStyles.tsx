@@ -40,6 +40,7 @@ const GlobalStyles = css`
   .InovuaReactDataGrid > div:nth-child(3) {
     display: none !important;
   }
+  .InovuaReactDataGrid__row{}
 `;
 export const ViewPort = styled.main`
   margin: auto;

@@ -116,7 +116,7 @@ const Theme = ({ children }: any) => {
     <ChakraProvider theme={chakraTheme}>
       <ThemeProvider theme={theme}>
         <Global styles={GlobalStyles} />
-        <ViewPort>{children}</ViewPort>
+        {children}
       </ThemeProvider>
     </ChakraProvider>
   );

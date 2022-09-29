@@ -2,19 +2,26 @@ import styled from "@emotion/styled";
 
 
 export const AppWrapper = styled.div`
-flex-grow: 1;
-height: auto;
+flex: 1;
+display: flex;
+flex-direction: column;
+/* height: auto;
+position: relative; */
 `
 export const AppContent = styled.div`
-flex-grow: 1;
 padding: 12px;
 height: 100%;
+position: relative;
+
+
 `
 export const Wrapper = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  flex: 1;
+position: relative;
+
+  /* flex: 1; */
 `;
 export const AccountHeaderWrapper = styled.header`
   flex-direction: column;

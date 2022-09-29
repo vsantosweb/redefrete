@@ -21,7 +21,7 @@ const PageHeader = ({  title }) => {
                 </Styled.HeaderMenu>
             </Styled.PageHeaderContent>
             <Styled.PageHeaderInfo>
-                <IconButton onClick={() => router.back()} variant={'outline'} size={'sm'} borderRadius={'50%'} aria-label={'go-back'} icon={<i className={'las la-arrow-left'}></i>} />
+                <IconButton onClick={() => router.back()} variant={'unstyled'} size={'lg'} borderRadius={'50%'} aria-label={'go-back'} icon={<i className={'las la-arrow-left'}></i>} />
                 <h3>{title}</h3>
             </Styled.PageHeaderInfo>
         </Styled.PageHeaderWrapper>
