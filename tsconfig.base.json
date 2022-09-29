@@ -20,7 +20,7 @@
       "@redefrete/types": ["libs/repository/Types/index.d.ts"],
       "@redefrete/teste": ["libs/teste/src/index.ts"],
       "@redefrete/components": ["libs/components/index.ts"],
-      "@redefrete/templates/forms": ["libs/templates/forms/index.ts"],
+      "@redefrete/templates/forms": ["libs/templates/Forms/index.ts"],
       "@redefrete/themes/default": ["libs/themes/default.tsx"],
       "@redefrete/helpers": ["libs/helpers/index.ts"],
       "@redefrete/client/routes": ["libs/routes/client.ts"]

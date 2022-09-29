@@ -83,12 +83,6 @@ const AddressForm = ({ form, editData = null }: any) => {
                     maxSize={'2MB'}
                     {...form.register('address.document_file', { require: true })}
                 />
-                {/* 
-                <FormControl isRequired={true} variant={'floating'}>
-                    <FormLabel>Comprovante de residência</FormLabel>
-                    <Input autoComplete={'off'} type={'file'}  {...form.register('phone')} />
-                </FormControl> */}
-
             </Stack>
 
         </div>
