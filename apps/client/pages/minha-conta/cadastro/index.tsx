@@ -58,7 +58,7 @@ function Register({ history }) {
                 <Stack direction={'row'}>
                     <FormControl isRequired={true}>
                         <FormLabel>Placa</FormLabel>
-                        <Input maxLength={7} autoComplete={'off'} placeholder={'Placa do veículo'} type={'tel'}  {...register('licence_plate', { required: true, minLength: 4 })} />
+                        <Input maxLength={7} autoComplete={'off'} placeholder={'Placa do veículo'} {...register('licence_plate', { required: true, minLength: 4 })} />
                     </FormControl>
                     <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>CEP</FormLabel>
