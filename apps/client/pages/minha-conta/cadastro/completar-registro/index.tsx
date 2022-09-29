@@ -10,29 +10,29 @@ import { useRouter } from 'next/router';
 import api from 'apps/client/pages/api';
 
 
-export async function getServerSideProps(req, res) {
+// export async function getServerSideProps(req, res) {
 
-    return await api.get('/driver/auth/register/verify?trackid=' + req.query.trackid)
-        .then(response => {
-            return {
-                props: {
-                    driver: response.data.data
-                }
-            }
-        })
-        .catch(error => {
-            return {
-                redirect: {
-                    permanent: true,
-                    destination: '/minha-conta/login'
-                }
-            }
-        })
-}
+//     return await api.get('/driver/auth/register/verify?trackid=' + req.query.trackid)
+//         .then(response => {
+//             return {
+//                 props: {
+//                     driver: response.data.data
+//                 }
+//             }
+//         })
+//         .catch(error => {
+//             return {
+//                 redirect: {
+//                     permanent: true,
+//                     destination: '/minha-conta/login'
+//                 }
+//             }
+//         })
+// }
 
 function RegisterComplete({ history, driver }) {
     
-    // driver = { "id": 9, "name": "Joao Doe", "email": "souzavito@hsfotmail.com", "register_complete": 0 }
+    driver = { "id": 9, "name": "Joao Doe", "email": "souzavito@hsfotmail.com", "register_complete": 0 }
 
     const registerForm = useForm<UseFormProps | any>({ mode: 'onChange', defaultValues: { licence: { name: driver.name }, driver_id: driver.id } });
 
