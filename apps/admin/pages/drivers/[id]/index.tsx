@@ -10,18 +10,17 @@ import {
     AccordionIcon,
     Box,
 } from '@chakra-ui/react'
-import { AddressForm, BankForm, DriverForm, PasswordForm, VehicleForm } from '@redefrete/templates/forms';
+import { BankForm, DriverForm, PasswordForm } from '@redefrete/templates/forms';
 import { useForm } from "react-hook-form";
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverRepository } from '@redefrete/interfaces';
-import { GetServerSideProps, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { DriverProfileProps } from '@redefrete/types';
 import { DataGrid } from '@redefrete/components';
 import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
 import Link from 'next/link';
-import { suspenseResource } from '@redefrete/helpers';
-import api from '../../api';
 import { useRouter } from 'next/router';
+
 
 const driverRepository = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
 
@@ -32,28 +31,14 @@ const columns: Array<IColumn> = [
 
 ];
 
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-
-
-    // const resource = await suspenseResource(driverRepository.show, 9).read()
-
-
-    return {
-        props: {
-            driverId: 'resource'
-        },
-    }
-}
-
-driverRepository.show(9).then(response => console.log(response))
-
-const Driver: Page = (driverId) => {
+const Driver: Page = () => {
 
     const [driver, setDriver] = React.useState<DriverProfileProps>({})
 
+    const router = useRouter();
+    
     React.useEffect(() => {
-        driverRepository.show(9).then(response => setDriver(response.data))
+        driverRepository.show(router.query.id).then(response => setDriver(response.data))
     }, [])
 
     const driverDataForm = useForm({ mode: 'onChange' });
