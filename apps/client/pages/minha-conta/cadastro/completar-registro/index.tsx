@@ -51,7 +51,7 @@ function RegisterComplete({ history, driver }) {
         
         await driverAuthService.completeRegister(driver).then(() => { setRegisterSuccess(true) })
     }
-    console.log(registerForm.formState.errors)
+    
     if (!registerSuccess) {
         return (
             <form onSubmit={registerForm.handleSubmit(handleFinishRegister)}>
