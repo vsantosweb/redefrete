@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 
 export const AppWrapper = styled.div`
 flex-grow: 1;
-height: 100%;
+height: auto;
 `
 export const AppContent = styled.div`
 flex-grow: 1;
@@ -14,6 +14,7 @@ export const Wrapper = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
+  flex: 1;
 `;
 export const AccountHeaderWrapper = styled.header`
   flex-direction: column;
@@ -22,9 +23,10 @@ export const AccountHeaderWrapper = styled.header`
 `;
 
 export const SideBar = styled.aside`
-  height: 100%;
-  width: 248px;
-  min-width: 248px;
+  height: auto;
+  min-height: 100%;
+  width: 17em;
+  min-width: 17em;
   text-align: left;
   transition: width, left, right, 0.3s;
   position: relative;

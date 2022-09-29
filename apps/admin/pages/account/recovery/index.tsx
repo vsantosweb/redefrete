@@ -52,8 +52,8 @@ export const Recovery = ({ layout, history }: any) => {
 
 Recovery.config = {
     title: 'Recuperar Senha',
-    layout:'AuthLayout'
-  }
-  
+    layout: 'AuthLayout'
+}
+
 
 export default Recovery;

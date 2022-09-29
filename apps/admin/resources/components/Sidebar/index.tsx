@@ -14,12 +14,12 @@ function SidebarMenu() {
         <Styled.Sidebar>
             <Styled.SidebarInner>
                 <Styled.SidebarHeader>
-                    <div><img src={'/redefrete.png'} width={"110px"} /></div>
+                    <div><img src={'/redefrete-white.png'} width={"130px"} /></div>
 
                 </Styled.SidebarHeader>
                 <Styled.SidebarContent>
                     <Styled.SidebarMenu>
-                        <ul>
+                        <div>
                             {_nav.map(route => <Styled.SidebarMenuItem key={route.path} active={router.pathname === route.path}>
                                 <Link href={route.path}><a> <div className={`innerItem`} >
                                     <div className={'icon-wrapper'}>
@@ -30,7 +30,7 @@ function SidebarMenu() {
                                 </div></a></Link>
                             </Styled.SidebarMenuItem>)}
 
-                        </ul>
+                        </div>
 
                     </Styled.SidebarMenu>
                 </Styled.SidebarContent>

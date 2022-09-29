@@ -1,45 +1,100 @@
 import React from 'react';
 import { Page } from './_app';
-
+import {
+  Stat,
+  StatLabel,
+  StatNumber,
+  StatHelpText,
+  StatArrow,
+  StatGroup,
+  Stack,
+} from '@chakra-ui/react'
 import * as echarts from 'echarts';
 
 
 const Home: Page = () => {
 
-  React.useEffect(() => {
-    var chartDom = document.getElementById('main');
-    var myChart = echarts.init(chartDom);
-    var option;
-
-    option = {
-      xAxis: {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [
-        {
-          data: [120, 200, 150, 80, 70, 110, 130],
-          type: 'bar'
-        }
-      ]
-    };
-
-    option && myChart.setOption(option);
-
-  }, [])
 
   return (
-      <div style={{width: '500px', height: '300px'}} id={'main'}></div>
+    <Stack>
+      <StatGroup gap={3}>
+        <Stat border={'solid 1px #eee'} p={3}>
+          <StatLabel>Customers</StatLabel>
+          <StatNumber>345,670</StatNumber>
+          <StatHelpText>
+            <StatArrow type='increase' />
+            23.36%
+          </StatHelpText>
+        </Stat>
+
+        <Stat border={'solid 1px #eee'} p={3}>
+          <StatLabel>Customers</StatLabel>
+          <StatNumber>45</StatNumber>
+          <StatHelpText>
+            <StatArrow type='decrease' />
+            9.05%
+          </StatHelpText>
+        </Stat>
+        <Stat border={'solid 1px #eee'} p={3}>
+          <StatLabel>Customers</StatLabel>
+          <StatNumber>45</StatNumber>
+          <StatHelpText>
+            <StatArrow type='decrease' />
+            9.05%
+          </StatHelpText>
+        </Stat>
+        <Stat border={'solid 1px #eee'} p={3}>
+          <StatLabel>Customers</StatLabel>
+          <StatNumber>45</StatNumber>
+          <StatHelpText>
+            <StatArrow type='decrease' />
+            9.05%
+          </StatHelpText>
+        </Stat>
+      </StatGroup>
+      <StatGroup gap={3}>
+        <Stat border={'solid 1px #eee'} p={3}>
+          <StatLabel>Customers</StatLabel>
+          <StatNumber>345,670</StatNumber>
+          <StatHelpText>
+            <StatArrow type='increase' />
+            23.36%
+          </StatHelpText>
+        </Stat>
+
+        <Stat border={'solid 1px #eee'} p={3}>
+          <StatLabel>Customers</StatLabel>
+          <StatNumber>45</StatNumber>
+          <StatHelpText>
+            <StatArrow type='decrease' />
+            9.05%
+          </StatHelpText>
+        </Stat>
+        <Stat border={'solid 1px #eee'} p={3}>
+          <StatLabel>Customers</StatLabel>
+          <StatNumber>45</StatNumber>
+          <StatHelpText>
+            <StatArrow type='decrease' />
+            9.05%
+          </StatHelpText>
+        </Stat>
+        <Stat border={'solid 1px #eee'} p={3}>
+          <StatLabel>Customers</StatLabel>
+          <StatNumber>45</StatNumber>
+          <StatHelpText>
+            <StatArrow type='decrease' />
+            9.05%
+          </StatHelpText>
+        </Stat>
+      </StatGroup>
+    </Stack>
   )
 }
 
 
 Home.config = {
   title: 'Dashboard',
-  layout:'AccountLayout'
+  layout: 'AccountLayout'
 }
 
 export default Home

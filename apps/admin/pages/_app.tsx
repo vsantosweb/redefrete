@@ -10,6 +10,7 @@ import { RouteGuard } from '../RouteGuard';
 import '@inovua/reactdatagrid-enterprise/index.css';
 import '@inovua/reactdatagrid-enterprise/theme/pink-light.css';
 import 'libs/fonts/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css';
+
 type PageConfigProps = {
   title?: string,
   description?: string
@@ -39,16 +40,8 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
           onExitComplete={() => window.scrollTo(0, 0)}
         >
           <Layout title={Component?.config?.title} layout={Component?.config?.layout || 'DefaultLayout'}>
-            <motion.div
-              style={{ height: '100%' }}
-              variants={{ hidden: { opacity: 0, }, enter: { opacity: 1, }, exit: { opacity: 0, }, }} // Pass the variant object into Framer Motion 
-              initial="hidden" // Set the initial state to variants.hidden
-              animate="enter" // Animated state to variants.enter
-              exit="exit" // Exit state (used later) to variants.exit
-              transition={{ type: 'linear' }} // Set the transition to linear
-            >
+            
               <Component {...pageProps} />
-            </motion.div>
           </Layout>
         </AnimatePresence>
       </RouteGuard>

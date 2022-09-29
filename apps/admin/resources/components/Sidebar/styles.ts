@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 
 export const Sidebar = styled.div`
-  color: #323130;
+  color: #b5b5b5;
   height: 100%;
-  width: 248px;
-  min-width: 248px;
+  width: 17em;
+  min-width: 17em;
   text-align: left;
   transition: width, left, right, 0.3s;
   position: relative;
@@ -13,7 +13,8 @@ export const Sidebar = styled.div`
 `;
 
 export const SidebarInner = styled.div`
-  background: #fff;
+  background: ${({ theme }:any) => theme.colors.primary};
+  color: #989898;
   height: 100%;
   position: relative;
   z-index: 101;
@@ -29,29 +30,26 @@ export const SidebarLayout = styled.div`
   z-index: 101;
 `;
 export const SidebarHeader = styled.div`
-  border-bottom: solid 1px #ddd;
-  padding: 12px 20px;
-  height: 52px;
+  /* border-bottom: solid 1px #ddd; */
+  padding: 18px 20px;
 `;
 export const SidebarContent = styled.div``;
 
 export const SidebarMenu = styled.nav`
-  padding: 10px 0;
 `;
 export const SidebarMenuItem = styled.div`
   .innerItem {
     position: relative;
     display: flex;
     align-items: center;
-    padding: 8px 35px 8px 20px;
+    padding: 1.05em 1em;
     cursor: pointer;
     .itemLink {
       flex: 1;
     }
     .icon-wrapper {
-      background-color: #ddd;
       border-radius: 50%;
-      margin-right: 10px;
+      margin-right: 19px;
       font-size: 14px;
       width: 28px;
       height: 28px;
@@ -64,16 +62,16 @@ export const SidebarMenuItem = styled.div`
         align-items: center;
         justify-content: center;
         i{
-          font-size: 18px;
+          font-size: 26px;
 
         } 
       }
     }
     &:hover {
-      background-color: #edebe9;
+      background-color: #222;
     }
     ${({ active }: { active: boolean }) =>
-      active && "background-color:#edebe9;"}
+      active && "background-color:#222;"}
     .itemLink {
     }
   }
