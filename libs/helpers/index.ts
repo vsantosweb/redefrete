@@ -1,7 +1,7 @@
 import { Banks } from './Banks';
 import base64FileConverter from './base64FileConverter';
 import CPFValidation from './CPFValidation';
-import { stateList } from './stateList';
+import { stateList } from './StateList';
 import suspenseResource from './suspenseResource';
 
 export {
