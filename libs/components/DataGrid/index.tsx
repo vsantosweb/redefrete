@@ -8,8 +8,8 @@ const DataGrid = ({ columns, dataSource, onSelectionChange, idProperty = 'id', .
         idProperty="id"
         showZebraRows={false}
         showCellBorders={'horizontal'}
-        onSelectionChange={onSelectionChange}
-        checkboxColumn
+        // onSelectionChange={onSelectionChange}
+        // checkboxColumn
         style={{ height: '100%' }}
 
         columns={columns}
