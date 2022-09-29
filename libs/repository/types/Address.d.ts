@@ -1,4 +1,4 @@
-type AddressProps = {
+export type AddressProps = {
     zipcode: string
     address_1: string
     address_2: string
@@ -7,9 +7,6 @@ type AddressProps = {
     number: string
     complement: string
     document_file?: any
-
 }
 
-
-export default AddressProps
 

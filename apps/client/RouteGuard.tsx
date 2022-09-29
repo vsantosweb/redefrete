@@ -5,6 +5,8 @@ import _nav, { NavProps } from './nav';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverAuthRepository } from '@redefrete/interfaces';
 
+import routes from '@redefrete/client/routes';
+
 type RouteGuard = {
     user: any,
     authorized: boolean,
@@ -17,7 +19,7 @@ const RouteGuardContext = React.createContext<RouteGuard>({
     rendering: null,
 });
 
-const privatePaths = _nav.filter((nav: NavProps) => nav.private).map(x => x.path);
+const privatePaths = routes.filter((nav: NavProps) => nav.private).map(x => x.path);
 
 const driverAuth = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
 

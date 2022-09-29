@@ -1,5 +1,5 @@
 import _nav from '../nav'
-import Navigation from '../resources/components/Navigation'
+import { Navigation } from '@redefrete/components'
 import { Page } from './_app'
 
 const Home: Page = () => {

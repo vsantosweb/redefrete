@@ -1,7 +1,7 @@
 import React from 'react'
 import * as Styled from './styles';
 import { Box, Link } from '@chakra-ui/react';
-import ServiceHeader from '../../components/ServiceHeader';
+import { ServiceHeader } from '@redefrete/components';
 import Image from 'next/image';
 
 export default function AuthLayout({ children }) {

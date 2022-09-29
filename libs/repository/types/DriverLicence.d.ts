@@ -1,4 +1,4 @@
-type DriverLicenceProps = {
+export type DriverLicenceProps = {
     name: string
     birth_date: string
     gender: string
@@ -14,4 +14,3 @@ type DriverLicenceProps = {
     document_file?: any
 }
 
-export default DriverLicenceProps

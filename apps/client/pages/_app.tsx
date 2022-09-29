@@ -1,17 +1,12 @@
-import React, { ReactElement, ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './styles.css';
 import type { AppProps } from 'next/app'
-import Theme from '../theme'
+import Theme from '@redefrete/themes/default';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { withRouter } from 'next/router'
 import type { NextPage } from 'next';
 import { layout, Layout, LayoutProps } from '../resources/layouts';
 // import "../resources/fonts/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css";
-import { RouteGuard, RouteGuardContext } from '../RouteGuard';
-
-import { IDriverAuthRepository } from '@redefrete/interfaces';
+import { RouteGuard } from '../RouteGuard';
 
 type PageConfigProps = {
   title?: string,

@@ -1,6 +1,5 @@
-type DriverPasswordProps = {
-    password: string
-    password_confirmation: string
+export type DriverPasswordProps = {
+    password?: string
+    password_confirmation?: string
 }
 
-export default DriverPasswordProps

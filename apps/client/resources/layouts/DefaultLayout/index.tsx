@@ -1,7 +1,5 @@
 
-import React from 'react';
-import { theme } from '../../../theme';
-import ServiceHeader from '../../components/ServiceHeader';
+import { ServiceHeader } from '@redefrete/components';
 import * as Styled from './styles';
 
 export default function DefaultLayout({ children }: any) {

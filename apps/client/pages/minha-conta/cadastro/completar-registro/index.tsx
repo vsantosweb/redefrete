@@ -1,33 +1,17 @@
 import React from 'react'
 import { useForm, UseFormProps } from 'react-hook-form'
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Heading, Stack } from '@chakra-ui/react';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Stack } from '@chakra-ui/react';
 import * as Styled from '../../styles';
-// import { Step, Steps, useSteps } from 'chakra-ui-steps';
-
-import api from '../../../api';
-
-import { AddressForm, LicenceForm, BankForm, VehicleForm } from '../../../../resources/components/forms';
-import base64FileConverter from '../../../../resources/helpers/base64FileConverter';
-import PasswordForm from '../../../../resources/components/forms/PasswordForm';
-
+import { AddressForm, LicenceForm, BankForm, VehicleForm, PasswordForm } from '@redefrete/templates/forms';
+import { base64FileConverter } from '@redefrete/helpers';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverAuthRepository } from '@redefrete/interfaces';
 import { useRouter } from 'next/router';
+import api from 'apps/client/pages/api';
 
-
-const content = (
-    <h2>step content</h2>
-);
-
-const steps = [
-    { label: 'Dados Cadastrais', content },
-    { label: 'Endereço', content },
-    { label: 'Dados Bancários', content },
-    { label: 'Veículo', content },
-];
 
 export async function getServerSideProps(req, res) {
-    
+
     return await api.get('/driver/auth/register/verify?trackid=' + req.query.trackid)
         .then(response => {
             return {
@@ -46,20 +30,16 @@ export async function getServerSideProps(req, res) {
         })
 }
 
-
 function RegisterComplete({ history, driver }) {
+    
     // driver = { "id": 9, "name": "Joao Doe", "email": "souzavito@hsfotmail.com", "register_complete": 0 }
 
     const registerForm = useForm<UseFormProps | any>({ mode: 'onChange', defaultValues: { licence: { name: driver.name }, driver_id: driver.id } });
 
     const [registerSuccess, setRegisterSuccess] = React.useState<boolean>(false);
 
-    // const { nextStep, prevStep, setStep, reset, activeStep } = useSteps({
-    //     initialStep: 0,
-    // });
-
     const router = useRouter();
-    
+
     const driverAuthService = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
 
     const handleFinishRegister = async (driver) => {
@@ -67,10 +47,11 @@ function RegisterComplete({ history, driver }) {
         driver.licence.document_file = await base64FileConverter(driver.licence.document_file[0]);
         driver.address.document_file = await base64FileConverter(driver.address.document_file[0]);
         driver.vehicle.document_file = await base64FileConverter(driver.vehicle.document_file[0]);
-
+        console.log(driver)
+        
         await driverAuthService.completeRegister(driver).then(() => { setRegisterSuccess(true) })
     }
-
+    console.log(registerForm.formState.errors)
     if (!registerSuccess) {
         return (
             <form onSubmit={registerForm.handleSubmit(handleFinishRegister)}>
@@ -78,7 +59,7 @@ function RegisterComplete({ history, driver }) {
                     <div className="md:grid md:grid-cols-3 md:gap-6">
                         <div className="md:col-span-1">
                             <div className="px-4 sm:px-0">
-                                <h3 className="text-lg font-medium leading-6 text-gray-900">Informações Pessoais</h3>
+                                <h3 className="text-xl font-medium leading-6 text-gray-900">Informações Pessoais</h3>
                                 <p className="mt-1 text-sm text-gray-600">Informe os dados da sua CNH e em seguida crie uma senha de acesso.</p>
                             </div>
                         </div>
@@ -102,7 +83,7 @@ function RegisterComplete({ history, driver }) {
                     <div className="md:grid md:grid-cols-3 md:gap-6">
                         <div className="md:col-span-1">
                             <div className="px-4 sm:px-0">
-                                <h3 className="text-lg font-medium leading-6 text-gray-900">Endereço</h3>
+                                <h3 className="text-xl font-medium leading-6 text-gray-900">Endereço</h3>
                                 <p className="mt-1 text-sm text-gray-600">Informe o endereço da sua residência.</p>
                             </div>
                         </div>
@@ -126,7 +107,7 @@ function RegisterComplete({ history, driver }) {
                     <div className="md:grid md:grid-cols-3 md:gap-6">
                         <div className="md:col-span-1">
                             <div className="px-4 sm:px-0">
-                                <h3 className="text-lg font-medium leading-6 text-gray-900">Dados bancários</h3>
+                                <h3 className="text-xl font-medium leading-6 text-gray-900">Dados bancários</h3>
                                 <p className="mt-1 text-sm text-gray-600">Insira sua conta bancária para recebimento de pagamentos.</p>
                             </div>
                         </div>
@@ -150,7 +131,7 @@ function RegisterComplete({ history, driver }) {
                     <div className="md:grid md:grid-cols-3 md:gap-6">
                         <div className="md:col-span-1">
                             <div className="px-4 sm:px-0">
-                                <h3 className="text-lg font-medium leading-6 text-gray-900">Dados do veículo</h3>
+                                <h3 className="text-xl font-medium leading-6 text-gray-900">Dados do veículo</h3>
                                 <p className="mt-1 text-sm text-gray-600">Informe os dados do veículo no qual ira operar.</p>
                             </div>
                         </div>
@@ -168,8 +149,8 @@ function RegisterComplete({ history, driver }) {
                     <div className="md:grid md:grid-cols-3 md:gap-6">
                         <div className="md:col-span-1">
                             <div className="px-4 sm:px-0">
-                                <h3 className="text-lg font-medium leading-6 text-gray-900">Senha</h3>
-                                <p className="mt-1 text-sm text-gray-600">Crie uma senha para acessar sua conta Redefrete.</p>
+                                <h3 className="text-xl font-medium leading-6 text-gray-900">Crie uma senha</h3>
+                                <p className="mt-1 text-sm text-gray-600">A senha será usada para acessar sua conta Redefrete.</p>
                             </div>
                         </div>
                         <div className="mt-5 md:col-span-2 md:mt-0">
@@ -205,7 +186,6 @@ function RegisterComplete({ history, driver }) {
                 <AlertTitle mt={4} mb={1} fontSize='lg'>Cadastro efetuado com sucesso!</AlertTitle>
                 <AlertDescription maxWidth='sm'>Obrigado por fazer parte do time Redefrete. Seu cadastro foi enviado para análise e em breve você você fará parte da nossa equipe.</AlertDescription>
             </Alert>
-            <Styled.AccountButton onClick={() => router.push('/minha-conta/login')} colorScheme={'primary'}>Acessar minha conta<i className={'las la-arrow-right'}></i></Styled.AccountButton>
 
         </Stack>
 

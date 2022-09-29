@@ -2,8 +2,6 @@ import React from "react";
 import { Global, ThemeProvider } from "@emotion/react";
 import { extendTheme, withDefaultProps, ChakraProvider } from "@chakra-ui/react";
 import GlobalStyles, { ViewPort } from "./GlobalStyles";
-import type { ComponentStyleConfig } from '@chakra-ui/theme'
-// import { StepsStyleConfig as Steps } from 'chakra-ui-steps';
 
 export type ThemeProps = {
   defaultContainer: any
@@ -44,6 +42,7 @@ const variantOutlined = () => ({
   field: {
     _focus: {
       borderColor: theme.colors.primary,
+      boxShadow:'rgba(149, 157, 165, 0.2) 0px 8px 24px;'
     }
   }
 });

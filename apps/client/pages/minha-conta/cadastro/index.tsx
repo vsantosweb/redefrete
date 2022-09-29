@@ -1,12 +1,21 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Alert, AlertDescription, AlertIcon, AlertTitle, FormControl, FormLabel, Input, Stack } from '@chakra-ui/react';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, FormControl, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
 import * as Styled from '../styles';
 import InputMask from 'react-input-mask';
 
 import { container, SERVICE_KEYS } from '@redefrete/container';
-import { IDriverAuthRepository } from '@redefrete/interfaces';
+import { IDriverAuthRepository, IVehicleTypeRepository } from '@redefrete/interfaces';
 import { useRouter } from 'next/router';
+import { InputCustom } from '@redefrete/components';
+
+const driverAuthService = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
+
+const vehicleTypes = [
+    { id: 1, name: 'Carro', value: 'carros' },
+    { id: 2, name: 'Moto', value: 'motos' },
+    { id: 3, name: 'Caminhão', value: 'caminhoes' },
+]
 
 function Register({ history }) {
 
@@ -15,28 +24,26 @@ function Register({ history }) {
     const { handleSubmit, register, watch, formState: { isValid, errors, isSubmitting, isSubmitSuccessful } } = useForm({ mode: 'onChange' });
     const [errorMessage, setErrorMessage] = React.useState();
     const [registerSuccess, setRegisterSuccess] = React.useState<boolean>(false);
-
-    const driverAuthService = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
-
-    const handleSubmitRegister = async (driver) => (
+    
+    const handleSubmitRegister = async (driver) => {
         driverAuthService.sampleRegister(driver).then((response) => setRegisterSuccess(true))
-            .catch(error => setErrorMessage(error.response.data.message))
-    )
+        .catch(error => setErrorMessage(error.response.data.message))
+    }
 
     if (!registerSuccess) {
         return <form onSubmit={handleSubmit(handleSubmitRegister)}>
             <Stack spacing={3}>
 
-                <FormControl>
+                <FormControl isRequired={true}>
                     <FormLabel>Nome</FormLabel>
                     <Input autoComplete={'off'} placeholder={'Nome completo'} {...register('name', { required: true, minLength: 4 })} />
                 </FormControl>
-                <FormControl>
-                    <FormLabel >Endereço de email</FormLabel>
+                <FormControl isRequired={true}>
+                    <FormLabel>Endereço de email</FormLabel>
                     <Input autoComplete={'off'} type={'email'} placeholder='Seu melhor email'{...register('email', { required: true, minLength: 4 })} />
                 </FormControl>
 
-                <FormControl>
+                <FormControl isRequired={true}>
                     <FormLabel>Telefone/WhatsApp</FormLabel>
                     <InputMask
                         mask={'(99) 99999-9999'}
@@ -48,16 +55,33 @@ function Register({ history }) {
                     </InputMask>
                 </FormControl>
 
-                {/* <Stack direction={'row'}>
-                    <FormControl >
+                <Stack direction={'row'}>
+                    <FormControl isRequired={true}>
                         <FormLabel>Placa</FormLabel>
-                        <Input maxLength={7} autoComplete={'off'} placeholder={'Placa do veículo'} type={'tel'}  {...register('vehicle.licence_plate', { required: true, minLength: 4 })} />
+                        <Input maxLength={7} autoComplete={'off'} placeholder={'Placa do veículo'} type={'tel'}  {...register('licence_plate', { required: true, minLength: 4 })} />
                     </FormControl>
-                    <FormControl >
-                        <FormLabel>Cep</FormLabel>
-                        <InputCustom placeholder={'000000000'} accept={'number'} maxLength={8}   {...register('address.zipcode', { required: true, minLength: 4 })} />
+                    <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>CEP</FormLabel>
+                    <InputMask
+                        alwaysShowMask={true}
+                        maskChar={null}
+                        mask={'99999-999'}
+                        {...register('zipcode', {
+                            required: true,
+                            maxLength: 8,
+                            setValueAs: v => v.replace(/[^\d]/g, ''),
+                        })}>
+                        {(inputProps => <Input type={'tel'} {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
+                    </InputMask>
+                </FormControl>
+                </Stack>
+
+                <FormControl isRequired={true} variant={'floating'}>
+                        <FormLabel>Tipo de veículo</FormLabel>
+                        <Select  placeholder={'Selecione...'} {...register('vehicle_type', { required: true, })}  >
+                            {vehicleTypes.map((type, index) => <option value={type.value} key={index}>{type.name} </option>)}
+                        </Select>
                     </FormControl>
-                </Stack> */}
 
                 <Styled.AccountButton disabled={!isValid} isLoading={isSubmitting} type={'submit'} colorScheme={'secondary'}>Registrar-se <i className={'las la-arrow-right'}></i></Styled.AccountButton>
                 {errorMessage && <Alert variant={'solid'} status='error'>
