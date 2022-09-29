@@ -39,13 +39,9 @@ const CaptationLead: Page = () => {
     
 
     const loadData = ({ skip, sortInfo, limit }) => {
-        return axios.get('http://api.redefrete.local/api/private/capture-leads' + '?skip=' + skip + '&limit=' + limit )
+        return axios.get('https://redefrete-backend.azurewebsites.net/api/private/capture-leads' + '?skip=' + skip + '&limit=' + limit )
           .then(response => {
             return { data:response.data.data, count: response.data.count };
-              console.log(response.data)
-            // return response.json().then((data) => {
-            //   return { data, count: data };
-            // })
           })
       }
       const dataSource = React.useCallback(loadData, [])
