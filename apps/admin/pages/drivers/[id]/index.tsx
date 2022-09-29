@@ -14,7 +14,6 @@ import { BankForm, DriverForm, PasswordForm } from '@redefrete/templates/forms';
 import { useForm } from "react-hook-form";
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverRepository } from '@redefrete/interfaces';
-import { DriverProfileProps } from '@redefrete/types';
 import { DataGrid } from '@redefrete/components';
 import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
 import Link from 'next/link';
@@ -32,7 +31,7 @@ const columns: Array<IColumn> = [
 
 const Driver: Page = () => {
 
-    const [driver, setDriver] = React.useState<DriverProfileProps>({})
+    const [driver, setDriver] = React.useState<any>({})
 
     const router = useRouter();
     

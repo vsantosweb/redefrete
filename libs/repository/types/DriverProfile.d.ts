@@ -7,7 +7,7 @@ import DriverLicenceProps from "./DriverLicence"
 import DriverPasswordProps from "./DriverPassword"
 import VehicleProps from "./Vehicle"
 
-export interface DriverProfileProps extends DriverProps {
+export interface DriverProfile extends DriverProps {
     licence?: DriverLicenceProps
     address?: AddressProps
     banks?: Array<BankProps>
