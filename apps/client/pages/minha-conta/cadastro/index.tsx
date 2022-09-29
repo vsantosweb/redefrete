@@ -68,7 +68,7 @@ function Register({ history }) {
                         mask={'99999-999'}
                         {...register('zipcode', {
                             required: true,
-                            maxLength: 8,
+                            minLength: 8,
                             setValueAs: v => v.replace(/[^\d]/g, ''),
                         })}>
                         {(inputProps => <Input type={'tel'} {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}

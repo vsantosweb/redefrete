@@ -81,7 +81,7 @@ const VehicleForm = ({ form, vehicle}:any) => {
                 <Stack direction={'row'}>
                     <FormControl isRequired={true} >
                         <FormLabel>Placa</FormLabel>
-                        <InputCustom autoComplete={'off'} accept={'alpha'} maxLength={7} {...form.register('vehicle.licence_plate', { required: true })} />
+                        <Input autoComplete={'off'} maxLength={7} {...form.register('vehicle.licence_plate', { required: true })} />
                     </FormControl>
                     <FormControl isRequired={true} variant={'floating'}>
                         <FormLabel>Renavam</FormLabel>
