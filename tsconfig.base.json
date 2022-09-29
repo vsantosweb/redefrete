@@ -17,7 +17,7 @@
     "paths": {
       "@redefrete/container": ["libs/repository/Services/container.ts"],
       "@redefrete/interfaces": ["libs/repository/Interfaces/index.ts"],
-      "@redefrete/types": ["libs/repository/Types/index.d.ts"],
+      "@redefrete/types": ["libs/repository/Types/index.ts"],
       "@redefrete/teste": ["libs/teste/src/index.ts"],
       "@redefrete/components": ["libs/components/index.ts"],
       "@redefrete/templates/forms": ["libs/templates/Forms/index.ts"],
