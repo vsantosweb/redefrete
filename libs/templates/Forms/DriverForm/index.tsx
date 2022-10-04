@@ -1,48 +1,71 @@
 import React from 'react'
-import { FormControl, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
+import { FormControl, FormErrorMessage, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
 import { InputCustom } from '@redefrete/components';
-import { container, SERVICE_KEYS } from '@redefrete/container';
-import { IDriverRepository } from '@redefrete/interfaces';
-import { suspenseResource } from '@redefrete/helpers';
+import { CPFValidation, suspenseResource } from '@redefrete/helpers';
+import InputMask from 'react-input-mask';
 
-const driverRepository = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
+import { Path, UseFormRegister } from 'react-hook-form';
 
-const statusList = suspenseResource(driverRepository.statusList);
+interface IFormValues {
+    "First Name": string;
+    Age: number;
+}
+
+type InputProps = {
+    label: Path<IFormValues>;
+    register: UseFormRegister<IFormValues>;
+    required: boolean;
+};
 
 const DriverForm = ({ form, driver }: any) => {
-    
+
     return (
         <Stack spacing={3}>
             <FormControl isRequired={true} variant={'floating'}>
-                <FormLabel>Nome do motorista</FormLabel>
-                <InputCustom accept={'alpha'} defaultValue={driver.name || null} {...form.register('name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
+                <FormLabel>Nome Completo</FormLabel>
+                <InputCustom accept={'alpha'} defaultValue={driver?.name || null} {...form.register('name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
             </FormControl>
+            
+            <FormControl isInvalid={form.formState.errors?.document_1} isRequired={true} variant={'floating'}>
+                <FormLabel>CPF</FormLabel>
 
-            <FormControl variant={'floating'}>
+                <InputMask
+                    alwaysShowMask={true}
+                    maskChar={null}
+                    mask={'999.999.999-99'}
+                    type={'tel'}
+                    {...form.register('document_1', {
+                        required: true,
+                        setValueAs: v => v.replace(/[^\d]/g, ''),
+                        validate: v => CPFValidation(v)
+                    })}>
+                    {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'000.000.000-00'} />)}
+                    
+                </InputMask>
+                <FormErrorMessage>CPF Inválido</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired={true} variant={'floating'}>
                 <FormLabel>Email</FormLabel>
-                <Input type={'email'} defaultValue={driver.email || null} {...form.register('email', { required: true, minLength: 8 })} />
+                <Input type={'email'} defaultValue={driver?.email || null} {...form.register('email', { required: true, minLength: 8 })} />
             </FormControl>
-
+            <FormControl isRequired={true} variant={'floating'}>
+                <FormLabel>Data de nascimento</FormLabel>
+                <Input type={'date'} autoComplete={'off'} placeholder={'000.000.000-00'} {...form.register('birth_date', { required: true, minLength: 4 })} />
+            </FormControl>
             <FormControl variant={'floating'}>
                 <FormLabel>Telefone/Whatsapp</FormLabel>
-                <Input type={'tel'} defaultValue={driver.phone || null} {...form.register('phone', { required: true, minLength: 8 })} />
+                <Input type={'tel'} defaultValue={driver?.phone || null} {...form.register('phone', { required: true, minLength: 8 })} />
             </FormControl>
 
             <FormControl variant={'floating'}>
                 <FormLabel>Gênero</FormLabel>
-                <Select placeholder={'Selecione...'} defaultValue={driver.gender || null}>
+                <Select placeholder={'Selecione...'} {...form.register('gender', { required: true })} defaultValue={driver?.gender || null}>
                     <option>Masculino</option>
                     <option>Feminino</option>
                     <option>Outro</option>
                 </Select>
             </FormControl>
 
-            <FormControl variant={'floating'}>
-                <FormLabel>Status</FormLabel>
-                <Select defaultValue={driver.status || null}>
-                    {statusList.read().data.map((status, index) => <option key={index}>{status.name}</option>)}
-                </Select>
-            </FormControl>
         </Stack>
     )
 }

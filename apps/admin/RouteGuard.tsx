@@ -49,7 +49,7 @@ function RouteGuard({ children }) {
     const authCheck = async (url) => {
 
         const path = url.split('?')[0];
-
+        console.log(privatePaths.includes(router.pathname))
         return await authService.session().then((user) => {
             console.log(user)
             if (user && router.pathname === AuthEndpoints.LOGIN) {

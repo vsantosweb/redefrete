@@ -51,8 +51,7 @@ flex-direction: column;
 
 export const ProfileInfoLabel = styled.div`
 font-weight: bold;
-color: #8f8f8f;
-font-size: 16px;
+font-size: 18px;
 `
 export const ProfileInfoValue = styled.div`
 color: #000;

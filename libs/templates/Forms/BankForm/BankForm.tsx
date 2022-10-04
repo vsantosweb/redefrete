@@ -43,7 +43,7 @@ const BankForm = ({ form, bank }:any) => {
                     </FormControl>
                 </Stack>
 
-                <FormControl isInvalid={form.formState.errors?.driver_bank?.document} isRequired={true} variant={'floating'}>
+                <FormControl isInvalid={form.formState.errors?.driver_bank?.document} isRequired={true}>
                     <FormLabel>CPF Titular</FormLabel>
                     <InputMask
                         alwaysShowMask={true}

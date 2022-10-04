@@ -4,14 +4,7 @@ import axios from 'axios';
 import InputMask from 'react-input-mask';
 import { InputFile } from '@redefrete/components';
 
-const AddressForm = ({ form, editData = null }: any) => {
-
-    if (editData) {
-        form.setValue('address.address_1', editData.address_1)
-        form.setValue('address.address_2', editData.address_2)
-        form.setValue('address.city', editData.city)
-        form.setValue('address.state', editData.state)
-    }
+const AddressForm = ({ form, driver = null }: any) => {
 
     const resetAddress = () => {
         form.setValue('address.address_1', '')
@@ -27,6 +20,8 @@ const AddressForm = ({ form, editData = null }: any) => {
                     <InputMask
                         alwaysShowMask={true}
                         maskChar={null}
+                        type={'tel'}
+                        defaultValue={driver?.address?.zipcode}
                         mask={'99999-999'}
                         {...form.register('address.zipcode', {
                             required: true,
@@ -42,51 +37,52 @@ const AddressForm = ({ form, editData = null }: any) => {
                                 }) : resetAddress()
                             }
                         })}>
-                        {(inputProps => <Input type={'tel'} {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
+                        {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
                     </InputMask>
+
                 </FormControl>
 
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Endereço</FormLabel>
-                    <Input autoComplete={'off'}  {...form.register('address.address_1', { required: true })} />
+                    <Input defaultValue={driver?.address?.address_1} autoComplete={'off'}  {...form.register('address.address_1', { required: true })} />
                 </FormControl>
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Bairro</FormLabel>
-                    <Input autoComplete={'off'}  {...form.register('address.address_2', { required: true })} />
+                    <Input defaultValue={driver?.address?.address_2} autoComplete={'off'}  {...form.register('address.address_2', { required: true })} />
                 </FormControl>
 
                 <Stack direction={'row'}>
                     <FormControl isRequired={true} variant={'floating'}>
                         <FormLabel>Cidade</FormLabel>
-                        <Input autoComplete={'off'} {...form.register('address.city', { required: true })} />
+                        <Input defaultValue={driver?.address?.city} autoComplete={'off'} {...form.register('address.city', { required: true })} />
                     </FormControl>
                     <FormControl isRequired={true} variant={'floating'}>
                         <FormLabel>Estado</FormLabel>
-                        <Input autoComplete={'off'}  {...form.register('address.state', { required: true })} />
+                        <Input defaultValue={driver?.address?.state} autoComplete={'off'}  {...form.register('address.state', { required: true })} />
                     </FormControl>
                 </Stack>
                 <Stack direction={'row'}>
                     <FormControl isRequired={true} variant={'floating'}>
                         <FormLabel>Nº</FormLabel>
-                        <Input autoComplete={'off'} type={'tel'}  {...form.register('address.number', { required: true })} />
+                        <Input defaultValue={driver?.address?.number} autoComplete={'off'} type={'tel'}  {...form.register('address.number', { required: true })} />
                     </FormControl>
                     <FormControl variant={'floating'}>
                         <FormLabel>Complemento</FormLabel>
-                        <Input autoComplete={'off'} {...form.register('address.complement')} />
+                        <Input defaultValue={driver?.address?.complement} autoComplete={'off'} {...form.register('address.complement')} />
                     </FormControl>
                 </Stack>
-
+                
                 <InputFile
                     required
+                    // defaultValue={driver?.address?.document_file}
                     label={'Comprovante de residência'}
                     acceptFiles={['PNG', 'JPG', 'GIF']}
                     maxSize={'2MB'}
                     {...form.register('address.document_file', { require: true })}
                 />
             </Stack>
-
         </div>
     )
 }
 
-export default AddressForm;
+export default React.memo(AddressForm);

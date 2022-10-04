@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 
 export const Sidebar = styled.div`
   color: #b5b5b5;
-  height: 100vh;
+  height: 100%;
   width: 17em;
   min-width: 17em;
   text-align: left;
@@ -10,6 +10,7 @@ export const Sidebar = styled.div`
   position: relative;
   z-index: 1009;
   border-right: solid 1px #ddd; ;
+  box-shadow: 0 5px 5px #999;
 `;
 
 export const SidebarInner = styled.div`

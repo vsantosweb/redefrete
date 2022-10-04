@@ -10,7 +10,7 @@ type InputFileProps = {
 
 
 const InputFile = React.forwardRef(({ label, acceptFiles, maxSize, ...rest }: InputFileProps | any, ref) => {
-
+    
     return (
         <div>
             <label className="block text-sm font-medium text-gray-700">{label}</label>
@@ -21,4 +21,4 @@ const InputFile = React.forwardRef(({ label, acceptFiles, maxSize, ...rest }: In
 })
 
 
-export default InputFile;
+export default React.memo(InputFile);

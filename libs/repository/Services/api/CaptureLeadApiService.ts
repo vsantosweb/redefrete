@@ -8,5 +8,5 @@ import api from "./";
 
 export default class CaptureLeadApiService implements ICaptureLead {
 
-    get = () => api.get('/capture-leads').then(response => response.data.data)
+    get = (params) => api().get('/capture-leads'+params).then(response => response.data)
 }

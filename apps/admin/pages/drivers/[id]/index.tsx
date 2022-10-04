@@ -9,18 +9,25 @@ import {
     AccordionPanel,
     AccordionIcon,
     Box,
+    Select,
+    FormControl,
+    FormLabel,
+    Link,
+    Switch,
 } from '@chakra-ui/react'
-import { BankForm, DriverForm, PasswordForm } from '@redefrete/templates/forms';
+import { AddressForm, BankForm, DriverForm, LicenceForm, PasswordForm } from '@redefrete/templates/forms';
 import { useForm } from "react-hook-form";
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverRepository } from '@redefrete/interfaces';
 import { DataGrid } from '@redefrete/components';
 import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
+import suspenseResource from 'apps/admin/suspenseResource';
 
 
 const driverRepository = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
+
+const statusList = suspenseResource(driverRepository.statusList);
 
 const columns: Array<IColumn> = [
     { name: 'id', header: 'id', defaultVisible: false },
@@ -34,12 +41,12 @@ const Driver: Page = () => {
     const [driver, setDriver] = React.useState<any>({})
 
     const router = useRouter();
-    
+
     React.useEffect(() => {
         driverRepository.show(router.query.id).then(response => setDriver(response.data))
     }, [])
 
-    const driverDataForm = useForm({ mode: 'onChange' });
+    const driverDataForm = useForm({ mode: 'onChange'});
 
     const handleupdateDriverData = async (formData) => {
         console.log(formData)
@@ -49,18 +56,24 @@ const Driver: Page = () => {
         <Styled.ProfileWrapper>
             <Styled.ProfileDetails>
                 <Styled.ProfileInfoContainer>
-                    <Avatar name={driver.name} />
+                    <Avatar size={'lg'} name={driver.name} />
                     <Styled.ProfileInfo>
                         <Styled.ProfileInfoLabel>{driver.name}</Styled.ProfileInfoLabel>
                         <Styled.ProfileInfoValue>{driver.email}</Styled.ProfileInfoValue>
+                        <Select size={'xs'} defaultValue={driver.status || null}>
+                            {statusList.read().data.map((status, index) => <option key={index}>{status.name}</option>)}
+                        </Select>
                     </Styled.ProfileInfo>
                 </Styled.ProfileInfoContainer>
             </Styled.ProfileDetails>
             <Styled.ProfileOverView>
+
                 <Tabs variant={'enclosed'} colorScheme={'red'}>
 
                     <TabList>
                         <Tab>Dados do motorista</Tab>
+                        <Tab>Endereço</Tab>
+                        <Tab>CNH</Tab>
                         <Tab>Documentos</Tab>
                         <Tab>Dados bancários</Tab>
                         <Tab>Veículos</Tab>
@@ -80,11 +93,49 @@ const Driver: Page = () => {
                             </form>
                         </TabPanel>
 
+                        <TabPanel px={0}>
+                            <Heading mb={3} size={'md'}>Endereço</Heading>
+                            <form onSubmit={handleupdateDriverData}>
+                                <Stack spacing={3}>
+
+                                    <Box display={'flex'} gap={4}>
+                                        <Link color={'red'} target={'_blank'} href={driver?.licence?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
+                                        <FormControl flex={1} display='flex' alignItems='center'>
+                                            <FormLabel htmlFor='email-alerts' mb='0'> O documento é válido?</FormLabel>
+                                            <Switch isChecked id='email-alerts' />
+                                        </FormControl>
+                                    </Box>
+
+                                    {driver.address && <AddressForm form={driverDataForm} driver={driver} />}
+
+                                    <Divider />
+                                    <Box gap={4} display={'flex'}>
+                                        <Button disabled={!driverDataForm.formState.isValid || driverDataForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
+                                    </Box>
+                                </Stack>
+                            </form>
+                        </TabPanel>
                         <TabPanel>
-                            <DataGrid
-                                columns={columns}
-                                dataSource={driver.documents || []}
-                            />
+                        <Heading mb={3} size={'md'}>CNH</Heading>
+                            <form onSubmit={handleupdateDriverData}>
+                                <Stack spacing={3}>
+
+                                    <Box display={'flex'} gap={4}>
+                                        <Link color={'red'} target={'_blank'} href={driver?.address?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
+                                        <FormControl flex={1} display='flex' alignItems='center'>
+                                            <FormLabel htmlFor='email-alerts' mb='0'> O documento é válido?</FormLabel>
+                                            <Switch isChecked id='email-alerts' />
+                                        </FormControl>
+                                    </Box>
+
+                                    {driver.licence && <LicenceForm form={driverDataForm} driver={driver} />}
+
+                                    <Divider />
+                                    <Box gap={4} display={'flex'}>
+                                        <Button disabled={!driverDataForm.formState.isValid || driverDataForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
+                                    </Box>
+                                </Stack>
+                            </form>
                         </TabPanel>
 
                         <TabPanel>
@@ -111,7 +162,7 @@ const Driver: Page = () => {
                             </Accordion>
                         </TabPanel>
                         <TabPanel>
-                            <DataGrid
+                            {/* <DataGrid
                                 columns={[
                                     { name: 'id', header: 'id', defaultVisible: false },
                                     { name: 'brand', header: 'Marca' },
@@ -121,7 +172,7 @@ const Driver: Page = () => {
                                     { name: 'document_url', header: 'Document', defaultFlex: 1.3, render: ({ value, ...rest }) => <Link target={'_blank'} href={rest.data.document_url}><ChakraLink>{rest.data.document_url}</ChakraLink></Link> },
                                 ]}
                                 dataSource={driver.vehicles || []}
-                            />
+                            /> */}
 
                         </TabPanel>
 
@@ -129,6 +180,7 @@ const Driver: Page = () => {
                             <PasswordForm form={driverDataForm} />
                         </TabPanel>
                     </TabPanels>
+
                 </Tabs>
             </Styled.ProfileOverView>
         </Styled.ProfileWrapper>

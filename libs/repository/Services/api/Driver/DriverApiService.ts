@@ -18,8 +18,8 @@ export default class DriverApiService implements IDriverRepository {
   email: string
   phone: string
 
-  list = () => api.get('/drivers').then(response => response.data.data)
-  show = async (id: number) => await api.get('/drivers/' + id).then(response => response.data)
-  statusList = async () => await api.get('/driver-statuses').then(response => response.data)
+  list = () => api().get('/drivers').then(response => response.data.data)
+  show = async (id: number) => await api().get('/drivers/' + id).then(response => response.data)
+  statusList = async () => await api().get('/driver-statuses').then(response => response.data)
 
 }

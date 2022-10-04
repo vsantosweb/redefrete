@@ -1,25 +1,23 @@
-import styled from "@emotion/styled";
-
+import styled from '@emotion/styled';
 
 export const AppWrapper = styled.div`
-flex: 1;
-display: flex;
-flex-direction: column;
-/* height: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* height: auto;
 position: relative; */
-`
+`;
 export const AppContent = styled.div`
-padding: 12px;
-height: 100%;
-position: relative;
-
-
-`
+  padding: 0 3em;
+  position: relative;
+  flex: 1;
+`;
 export const Wrapper = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
-position: relative;
+  height: auto;
+  min-height: 100%;
+  position: relative;
 
   /* flex: 1; */
 `;

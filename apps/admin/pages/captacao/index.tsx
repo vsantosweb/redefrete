@@ -8,10 +8,9 @@ import { ICaptureLead } from '@redefrete/interfaces';
 import { DataGrid } from '@redefrete/components';
 import axios from 'axios';
 
-// const leads = container.get<ICaptureLead>(SERVICE_KEYS.CAPTURE_LEAD_REPOSITORY);
+const leads = container.get<ICaptureLead>(SERVICE_KEYS.CAPTURE_LEAD_REPOSITORY);
 
 
-// const resource = suspenseResource(leads.get)
 
 const columns: Array<IColumn> = [
     { name: 'id', header: 'id', defaultVisible: false },
@@ -28,22 +27,16 @@ const columns: Array<IColumn> = [
 
 const CaptationLead: Page = () => {
 
-    // const [lead, setlead] = React.useState(resource.read());
-    const [search, setSearch] = React.useState('');
     const [loading, setLoading] = React.useState(false);
 
-    // const onSelectionChange = React.useCallback(({ data }) => { Router.push(`/lead/${data[0].id}`) }, [])
-
-    // const filterlead = search.length > 0 ? lead.filter(driver => driver.phone.includes(search)) : []
-
-    
-
     const loadData = ({ skip, sortInfo, limit }) => {
-        return axios.get('https://redefrete-backend.azurewebsites.net/api/private/capture-leads' + '?skip=' + skip + '&limit=' + limit )
+        return leads.get('?skip=' + skip + '&limit=' + limit )
           .then(response => {
-            return { data:response.data.data, count: response.data.count };
+            console.log(response, 'porraaaa')
+            return { data:response.data, count: response.count };
           })
       }
+
       const dataSource = React.useCallback(loadData, [])
 
     return (
@@ -51,13 +44,10 @@ const CaptationLead: Page = () => {
             <Stack h={'100%'}>
                 
                 <DataGrid
-                    // onSelectionChange={onSelectionChange}
                     pagination
-                    
                     columns={columns}
                     dataSource={dataSource}
                     onLoadingChange={setLoading}
-
                 />
             </Stack>
         </React.Suspense>

@@ -20,7 +20,7 @@ function SidebarMenu() {
                 <Styled.SidebarContent>
                     <Styled.SidebarMenu>
                         <div>
-                            {_nav.map(route => <Styled.SidebarMenuItem key={route.path} active={router.pathname === route.path}>
+                            {_nav.map(route => route.visible && <Styled.SidebarMenuItem key={route.path} active={router.pathname === route.path}>
                                 <Link href={route.path}><a> <div className={`innerItem`} >
                                     <div className={'icon-wrapper'}>
                                         <div className={'icon'}>{route.icon}</div>

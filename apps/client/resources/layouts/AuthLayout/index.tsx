@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 export default function AuthLayout({ children }) {
     return (
-        <React.Fragment>
+        <div style={{display: 'flex', 'flexDirection': 'column', height: 'auto', 'minHeight': '100%'}}>
             <ServiceHeader />
             <Styled.AuthContainer>
 
@@ -33,6 +33,6 @@ export default function AuthLayout({ children }) {
                     </Styled.AuthFooter>
                 </Styled.AuthWrapper>
             </Styled.AuthContainer>
-        </React.Fragment>
+        </div>
     )
 }

@@ -20,7 +20,7 @@ export class DriverAuthApiService implements IDriverAuthRepository {
 
 
     login(credentials): Promise<any> {
-        return api.post(AuthEndpoints.LOGIN, credentials)
+        return api().post(AuthEndpoints.LOGIN, credentials)
             .then(response => {
 
                 Cookie.set('token', response.data.data);
@@ -30,7 +30,7 @@ export class DriverAuthApiService implements IDriverAuthRepository {
 
 
     logout() {
-        return api.post(AuthEndpoints.LOGOUT)
+        return api().post(AuthEndpoints.LOGOUT)
             .then(() => {
                 Cookie.remove('token')
                 this.redirect('/minha-conta/login')
@@ -43,7 +43,7 @@ export class DriverAuthApiService implements IDriverAuthRepository {
 
         if (token) {
 
-            return await api.get(AuthEndpoints.SESSION)
+            return await api().get(AuthEndpoints.SESSION)
                 .then(response => response.data)
                 .catch(() => false)
         }
@@ -56,7 +56,7 @@ export class DriverAuthApiService implements IDriverAuthRepository {
         window.location.href = to || '/'
     }
 
-    sampleRegister(data): Promise<any> { return api.post(AuthEndpoints.SAMPLE_REGISTER, data) }
+    sampleRegister(data): Promise<any> { return api().post(AuthEndpoints.SAMPLE_REGISTER, data) }
 
-    completeRegister(data): Promise<any> { return api.post(AuthEndpoints.COMPLETE_REGISTER, data) }
+    completeRegister(data): Promise<any> { return api().post(AuthEndpoints.COMPLETE_REGISTER, data) }
 }

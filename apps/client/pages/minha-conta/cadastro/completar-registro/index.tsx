@@ -2,7 +2,7 @@ import React from 'react'
 import { useForm, UseFormProps } from 'react-hook-form'
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Stack } from '@chakra-ui/react';
 import * as Styled from '../../styles';
-import { AddressForm, LicenceForm, BankForm, VehicleForm, PasswordForm } from '@redefrete/templates/forms';
+import { AddressForm, LicenceForm, BankForm, VehicleForm, PasswordForm, DriverForm } from '@redefrete/templates/forms';
 import { base64FileConverter } from '@redefrete/helpers';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverAuthRepository } from '@redefrete/interfaces';
@@ -31,7 +31,7 @@ export async function getServerSideProps(req, res) {
 }
 
 function RegisterComplete({ history, driver }) {
-    
+
     // driver = { "id": 9, "name": "Joao Doe", "email": "souzavito@hsfotmail.com", "register_complete": 0 }
 
     const registerForm = useForm<UseFormProps | any>({ mode: 'onChange', defaultValues: { licence: { name: driver.name }, driver_id: driver.id } });
@@ -47,11 +47,12 @@ function RegisterComplete({ history, driver }) {
         driver.licence.document_file = await base64FileConverter(driver.licence.document_file[0]);
         driver.address.document_file = await base64FileConverter(driver.address.document_file[0]);
         driver.vehicle.document_file = await base64FileConverter(driver.vehicle.document_file[0]);
-        console.log(driver)
         
+        // console.log(driver)
+
         await driverAuthService.completeRegister(driver).then(() => { setRegisterSuccess(true) })
     }
-    
+
     if (!registerSuccess) {
         return (
             <form onSubmit={registerForm.handleSubmit(handleFinishRegister)}>
@@ -59,7 +60,31 @@ function RegisterComplete({ history, driver }) {
                     <div className="md:grid md:grid-cols-3 md:gap-6">
                         <div className="md:col-span-1">
                             <div className="px-4 sm:px-0">
-                                <h3 className="text-xl font-medium leading-6 text-gray-900">Informações Pessoais</h3>
+                                <h3 className="text-xl font-medium leading-6 text-gray-900">Dados do Motorista</h3>
+                                <p className="mt-1 text-sm text-gray-600"></p>
+                            </div>
+                        </div>
+                        <div className="mt-5 md:col-span-2 md:mt-0">
+                            <div className="shadow sm:overflow-hidden sm:rounded-md">
+                                <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+                                    <DriverForm form={registerForm} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="hidden sm:block" aria-hidden="true">
+                    <div className="py-5">
+                        <div className="border-t border-gray-200"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div className="md:grid md:grid-cols-3 md:gap-6">
+                        <div className="md:col-span-1">
+                            <div className="px-4 sm:px-0">
+                                <h3 className="text-xl font-medium leading-6 text-gray-900">Carteira de Habilitação</h3>
                                 <p className="mt-1 text-sm text-gray-600">Informe os dados da sua CNH e em seguida crie uma senha de acesso.</p>
                             </div>
                         </div>
