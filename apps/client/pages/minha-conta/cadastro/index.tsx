@@ -21,12 +21,12 @@ function Register({ history }) {
 
     const router = useRouter();
 
-    const { handleSubmit, register, watch, formState: { isValid, errors, isSubmitting, isSubmitSuccessful } } = useForm({ mode: 'onChange' });
+    const { handleSubmit, register, watch, formState: { isValid, isSubmitting, isSubmitSuccessful } } = useForm({ mode: 'onChange' });
     const [errorMessage, setErrorMessage] = React.useState();
     const [registerSuccess, setRegisterSuccess] = React.useState<boolean>(false);
     
     const handleSubmitRegister = async (driver) => {
-        driverAuthService.sampleRegister(driver).then((response) => setRegisterSuccess(true))
+       await driverAuthService.sampleRegister(driver).then((response) => setRegisterSuccess(true))
         .catch(error => setErrorMessage(error.response.data.message))
     }
 
