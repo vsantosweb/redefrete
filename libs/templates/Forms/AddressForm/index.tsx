@@ -85,4 +85,4 @@ const AddressForm = ({ form, driver = null }: any) => {
     )
 }
 
-export default React.memo(AddressForm);
+export default AddressForm;

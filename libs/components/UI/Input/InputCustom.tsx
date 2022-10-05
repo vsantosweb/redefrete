@@ -25,7 +25,7 @@ const acceptFormats = {
 
 const InputCustom = React.forwardRef(({ accept, ...props }: InputCustomProps | any, ref) => {
 
-    return <Input ref={ref} maxLength={45} type={'text'} onChangeCapture={acceptFormats[accept].validate} {...props} />
+    return <Input ref={ref} maxLength={45} onChangeCapture={acceptFormats[accept].validate} {...props} />
 })
 
 export default InputCustom;

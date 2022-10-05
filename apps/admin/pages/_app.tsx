@@ -1,3 +1,4 @@
+import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import './styles.css';
 import type { AppProps } from 'next/app'
@@ -10,6 +11,9 @@ import { RouteGuard } from '../RouteGuard';
 import '@inovua/reactdatagrid-enterprise/index.css';
 import '@inovua/reactdatagrid-enterprise/theme/pink-light.css';
 import 'libs/fonts/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css';
+import NProgress from 'nprogress'
+import { useRouter } from 'next/router';
+import { LoaderTracker } from '@redefrete/components';
 
 type PageConfigProps = {
   title?: string,
@@ -27,6 +31,32 @@ type AppPropsWithLayout = AppProps & {
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
 
+  const router = useRouter();
+
+  const [pageLoader, setPageLoader] = React.useState(false);
+
+
+  const handleStart = () => { setPageLoader(true) }
+  const handleStop = () => { setPageLoader(false) }
+
+
+  React.useEffect(() => {
+
+
+    router.events.on('routeChangeStart', handleStart)
+    router.events.on('routeChangeComplete', handleStop)
+    router.events.on('routeChangeError', handleStop)
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart)
+      router.events.off('routeChangeComplete', handleStop)
+      router.events.off('routeChangeError', handleStop)
+    }
+
+
+  }, [router])
+
+  console.log(pageLoader)
   return (
     <Theme>
       <Head>
@@ -34,16 +64,10 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <title>{Component?.config?.title || null}</title>
       </Head>
       <RouteGuard>
-        <AnimatePresence
-          exitBeforeEnter
-          initial={false}
-          onExitComplete={() => window.scrollTo(0, 0)}
-        >
-          <Layout title={Component?.config?.title} layout={Component?.config?.layout || 'DefaultLayout'}>
-            
-              <Component {...pageProps} />
-          </Layout>
-        </AnimatePresence>
+        <LoaderTracker promisse={pageLoader} />
+        <Layout title={Component?.config?.title} layout={Component?.config?.layout || 'DefaultLayout'}>
+          <Component {...pageProps} />
+        </Layout>
       </RouteGuard>
     </Theme>
 

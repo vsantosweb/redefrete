@@ -41,6 +41,7 @@ const GlobalStyles = css`
     display: none !important;
   }
   .InovuaReactDataGrid__row{}
+  
 `;
 export const ViewPort = styled.main`
   margin: auto;

@@ -3,8 +3,8 @@ import styled from "@emotion/styled";
 export const Sidebar = styled.div`
   color: #b5b5b5;
   height: 100%;
-  width: 17em;
-  min-width: 17em;
+  width: 250px;
+  min-width: 250px;
   text-align: left;
   transition: width, left, right, 0.3s;
   position: relative;
@@ -43,10 +43,12 @@ export const SidebarMenuItem = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-    padding: 1.05em 1em;
+    padding: .8em 1em;
+    border-right: solid 3px transparent;
     cursor: pointer;
     .itemLink {
       flex: 1;
+      font-size: 14px;
     }
     .icon-wrapper {
       border-radius: 50%;
@@ -63,7 +65,7 @@ export const SidebarMenuItem = styled.div`
         align-items: center;
         justify-content: center;
         i{
-          font-size: 26px;
+          font-size: 24px;
 
         } 
       }
@@ -71,8 +73,13 @@ export const SidebarMenuItem = styled.div`
     &:hover {
       background-color: #222;
     }
-    ${({ active }: { active: boolean }) =>
-      active && "background-color:#222;"}
+    ${({ active }: {active: boolean}) =>
+      active && 
+      `background-color:#222;
+       color: #fff;
+       border-right: solid 3px red;
+      `
+      }
     .itemLink {
     }
   }

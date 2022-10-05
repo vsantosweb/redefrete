@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox, CheckboxGroup, FormControl, FormErrorMessage, FormLabel, Input, Radio, RadioGroup, Select, Stack } from '@chakra-ui/react';
+import { CheckboxGroup, FormControl, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
 import InputMask from 'react-input-mask';
 import { stateList, CPFValidation, suspenseResource } from '@redefrete/helpers';
 import { InputCustom, InputFile } from '@redefrete/components';
@@ -9,12 +9,11 @@ import { container, SERVICE_KEYS } from '@redefrete/container';
 
 const driverLicence = container.get<IDriverLicenceRepository>(SERVICE_KEYS.DRIVER_LICENCE_REPOSITORY);
 
-const driverLicenceCategoriesResource = suspenseResource(driverLicence.getCategories);
-
 const LicenceForm = ({ form, driver = null }) => {
 
-    const driverLicenceCategories = driverLicenceCategoriesResource.read();
-    
+    const [driverLicenceCategories, setDriverLicenceCategories] = React.useState([])
+
+    React.useEffect(() => {  driverLicence.getCategories().then(response => setDriverLicenceCategories(response.data)) }, [])
 
     return (
         <Stack spacing={3}>
@@ -50,9 +49,9 @@ const LicenceForm = ({ form, driver = null }) => {
 
                 <Select
                     placeholder={'Selecione...'}
-                    defaultValue={driverLicenceCategories.filter(category => category.id === driver?.licence.driver_licence_category_id)[0]?.id}
+                    defaultValue={driverLicenceCategories?.filter(category => category.id === driver?.licence.driver_licence_category_id)[0]?.id}
                     {...form.register('licence.driver_licence_category_id', { required: true })}>
-                    {driverLicenceCategories.map((category, index) => <option value={category.id} key={index}>{category.name}</option>)}
+                    {driverLicenceCategories?.map((category, index) => <option value={category.id} key={index}>{category.name}</option>)}
                 </Select>
 
             </FormControl>
@@ -73,7 +72,7 @@ const LicenceForm = ({ form, driver = null }) => {
 
             <FormControl isRequired={true} variant={'floating'}>
                 <FormLabel>Nome da mãe</FormLabel>
-                <InputCustom defaultValue={driver?.licence?.mother_name || ''}  accept={'alpha'}  {...form.register('licence.mother_name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
+                <InputCustom defaultValue={driver?.licence?.mother_name || ''} accept={'alpha'}  {...form.register('licence.mother_name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
             </FormControl>
 
             <InputFile
@@ -89,4 +88,4 @@ const LicenceForm = ({ form, driver = null }) => {
     )
 }
 
-export default React.memo(LicenceForm);
+export default LicenceForm;

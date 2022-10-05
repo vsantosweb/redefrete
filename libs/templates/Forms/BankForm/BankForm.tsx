@@ -5,7 +5,7 @@ import { Banks, CPFValidation } from '@redefrete/helpers';
 import { InputCustom } from '@redefrete/components';
 
 const BankForm = ({ form, bank }:any) => {
-
+    console.log(bank)
     return (
         <div>
             <Heading my={3} size={'md'}>Dados Bancários</Heading>
@@ -31,15 +31,15 @@ const BankForm = ({ form, bank }:any) => {
                 <Stack direction={'row'}>
                     <FormControl isRequired={true} variant={'floating'}>
                         <FormLabel>Agencia</FormLabel>
-                        <InputCustom defaultValue={bank?.bank_agency || ''} accept={'number'} maxLength={6} autoComplete={'off'} {...form.register('driver_bank.bank_agency', { required: true })} />
+                        <InputCustom defaultValue={bank?.bank_agency || ''} type={'tel'} accept={'number'} maxLength={6} autoComplete={'off'} {...form.register('driver_bank.bank_agency', { required: true })} />
                     </FormControl>
                     <FormControl variant={'floating'}>
                         <FormLabel>Número</FormLabel>
-                        <InputCustom defaultValue={bank?.bank_number || ''} accept={'number'} maxLength={6} autoComplete={'off'} {...form.register('driver_bank.bank_number', { required: true })} />
+                        <InputCustom defaultValue={bank?.bank_number || ''} type={'tel'} accept={'number'} maxLength={6} autoComplete={'off'} {...form.register('driver_bank.bank_number', { required: true })} />
                     </FormControl>
                     <FormControl variant={'floating'}>
                         <FormLabel>Digito</FormLabel>
-                        <InputCustom defaultValue={bank?.bank_digit || ''} accept={'number'} autoComplete={'off'} maxLength={1}  {...form.register('driver_bank.bank_digit', { required: true })} />
+                        <InputCustom defaultValue={bank?.bank_digit || ''} type={'tel'} accept={'number'} autoComplete={'off'} maxLength={1}  {...form.register('driver_bank.bank_digit', { required: true })} />
                     </FormControl>
                 </Stack>
 

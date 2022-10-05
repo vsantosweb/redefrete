@@ -23,9 +23,19 @@ import { DataGrid } from '@redefrete/components';
 import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
 import { useRouter } from 'next/router';
 import suspenseResource from 'apps/admin/suspenseResource';
-
+import { GetServerSideProps } from 'next';
 
 const driverRepository = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
+
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//     console.log(context.query.id)
+
+//     const driver = driverRepository.show(context.query.id).then(response => response.data)
+
+//     return {
+//         props: driver
+//     }
+// }
 
 const statusList = suspenseResource(driverRepository.statusList);
 
@@ -39,29 +49,34 @@ const columns: Array<IColumn> = [
 const Driver: Page = () => {
 
     const [driver, setDriver] = React.useState<any>({})
+    const [driverStatuses, setDriverStatuses] = React.useState<any>([])
 
+    console.log(driver)
     const router = useRouter();
 
     React.useEffect(() => {
+
         driverRepository.show(router.query.id).then(response => setDriver(response.data))
+        driverRepository.statusList().then().then(response => setDriverStatuses(response.data))
+
     }, [])
 
-    const driverDataForm = useForm({ mode: 'onChange'});
+    const driverDataForm = useForm({ mode: 'onChange' });
 
     const handleupdateDriverData = async (formData) => {
         console.log(formData)
     }
 
     return (
-        <Styled.ProfileWrapper>
+        driver? <Styled.ProfileWrapper>
             <Styled.ProfileDetails>
                 <Styled.ProfileInfoContainer>
                     <Avatar size={'lg'} name={driver.name} />
                     <Styled.ProfileInfo>
                         <Styled.ProfileInfoLabel>{driver.name}</Styled.ProfileInfoLabel>
                         <Styled.ProfileInfoValue>{driver.email}</Styled.ProfileInfoValue>
-                        <Select size={'xs'} defaultValue={driver.status || null}>
-                            {statusList.read().data.map((status, index) => <option key={index}>{status.name}</option>)}
+                        <Select size={'xs'} defaultValue={driver.status}>
+                            {driverStatuses?.map((status, index) => <option key={index}>{status.name}</option>)}
                         </Select>
                     </Styled.ProfileInfo>
                 </Styled.ProfileInfoContainer>
@@ -74,7 +89,6 @@ const Driver: Page = () => {
                         <Tab>Dados do motorista</Tab>
                         <Tab>Endereço</Tab>
                         <Tab>CNH</Tab>
-                        <Tab>Documentos</Tab>
                         <Tab>Dados bancários</Tab>
                         <Tab>Veículos</Tab>
                         <Tab>Senha</Tab>
@@ -102,7 +116,7 @@ const Driver: Page = () => {
                                         <Link color={'red'} target={'_blank'} href={driver?.licence?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
                                         <FormControl flex={1} display='flex' alignItems='center'>
                                             <FormLabel htmlFor='email-alerts' mb='0'> O documento é válido?</FormLabel>
-                                            <Switch isChecked id='email-alerts' />
+                                            <Switch defaultChecked={driver?.address?.status} id='email-alerts' />
                                         </FormControl>
                                     </Box>
 
@@ -116,7 +130,7 @@ const Driver: Page = () => {
                             </form>
                         </TabPanel>
                         <TabPanel>
-                        <Heading mb={3} size={'md'}>CNH</Heading>
+                            <Heading mb={3} size={'md'}>CNH</Heading>
                             <form onSubmit={handleupdateDriverData}>
                                 <Stack spacing={3}>
 
@@ -162,7 +176,7 @@ const Driver: Page = () => {
                             </Accordion>
                         </TabPanel>
                         <TabPanel>
-                            {/* <DataGrid
+                            <DataGrid
                                 columns={[
                                     { name: 'id', header: 'id', defaultVisible: false },
                                     { name: 'brand', header: 'Marca' },
@@ -172,7 +186,7 @@ const Driver: Page = () => {
                                     { name: 'document_url', header: 'Document', defaultFlex: 1.3, render: ({ value, ...rest }) => <Link target={'_blank'} href={rest.data.document_url}><ChakraLink>{rest.data.document_url}</ChakraLink></Link> },
                                 ]}
                                 dataSource={driver.vehicles || []}
-                            /> */}
+                            />
 
                         </TabPanel>
 
@@ -183,7 +197,7 @@ const Driver: Page = () => {
 
                 </Tabs>
             </Styled.ProfileOverView>
-        </Styled.ProfileWrapper>
+        </Styled.ProfileWrapper> : <div>Loading...</div>
     )
 }
 
@@ -192,4 +206,4 @@ Driver.config = {
     layout: 'AccountLayout'
 }
 
-export default (Driver);
+export default Driver;
