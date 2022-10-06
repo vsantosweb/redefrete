@@ -13,7 +13,7 @@ const LicenceForm = ({ form, driver = null }) => {
 
     const [driverLicenceCategories, setDriverLicenceCategories] = React.useState([])
 
-    React.useEffect(() => {  driverLicence.getCategories().then(response => setDriverLicenceCategories(response.data)) }, [])
+    React.useEffect(() => {  driverLicence.getCategories().then(response => setDriverLicenceCategories(response)) }, [])
 
     return (
         <Stack spacing={3}>
