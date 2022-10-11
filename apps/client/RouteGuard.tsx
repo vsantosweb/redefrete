@@ -5,7 +5,7 @@ import _nav, { NavProps } from './nav';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverAuthRepository } from '@redefrete/interfaces';
 
-import { Driver } from '@redefrete/types-teste';
+import { Driver } from '@redefrete/types';
 
 import routes from '@redefrete/client/routes';
 
