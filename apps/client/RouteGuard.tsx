@@ -4,12 +4,12 @@ import { AuthEndpoints, authService } from './services';
 import _nav, { NavProps } from './nav';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverAuthRepository } from '@redefrete/interfaces';
+import { Driver } from '@redefrete/types';
 
 import routes from '@redefrete/client/routes';
-import { DriverProps } from '@redefrete/types';
 
 type RouteGuard = {
-    user: DriverProps,
+    user: Driver,
     authorized: boolean,
     rendering: boolean
 }

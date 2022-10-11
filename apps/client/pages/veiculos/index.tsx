@@ -19,7 +19,6 @@ import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverVehicleRepository, IVehicleTypeRepository } from '@redefrete/interfaces';
 import { base64FileConverter } from '@redefrete/helpers';
 import { trackPromise } from 'react-promise-tracker';
-import { DriverProps } from '@redefrete/types';
 
 const driverVehicleService = container.get<IDriverVehicleRepository>(SERVICE_KEYS.DRIVER_VEHICLE_REPOSITORY);
 
