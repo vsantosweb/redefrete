@@ -6,9 +6,10 @@ import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverAuthRepository } from '@redefrete/interfaces';
 
 import routes from '@redefrete/client/routes';
+import { DriverProps } from '@redefrete/types';
 
 type RouteGuard = {
-    user: any,
+    user: DriverProps,
     authorized: boolean,
     rendering: boolean
 }

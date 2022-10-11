@@ -5,11 +5,14 @@ export const AccountWrapper = styled.div`
 display: flex;
 width: 100%;
 flex-direction: column;
+background: #f1f1f1;
+height: auto;
+min-height: 100%;
+gap: 10px;
 `
 export const AccountHeaderWrapper = styled.header`
   flex-direction: column;
   background-color: #fff ;
-  margin: auto;
   border-bottom: solid 1px #ddd;
   width: 100%;
 

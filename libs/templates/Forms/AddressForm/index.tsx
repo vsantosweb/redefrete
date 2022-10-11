@@ -6,11 +6,36 @@ import { InputFile } from '@redefrete/components';
 
 const AddressForm = ({ form, driver = null }: any) => {
 
+
+    React.useEffect(() => {
+
+        let zipcode = driver?.address?.zipcode || driver?.zipcode;
+
+        if(zipcode){
+            fillAddressFields(zipcode)
+            form.setValue('address.zipcode', zipcode)
+        }
+        
+
+    }, [driver])
+
     const resetAddress = () => {
         form.setValue('address.address_1', '')
         form.setValue('address.address_2', '')
         form.setValue('address.city', '')
         form.setValue('address.state', '')
+    }
+
+    const fillAddressFields = (zipcode: string) => {
+
+        axios.get(`https://viacep.com.br/ws/${zipcode}/json`).then(response => {
+            if (response.data.erro) return resetAddress()
+            form.setValue('address.address_1', response.data.logradouro)
+            form.setValue('address.address_2', response.data.bairro)
+            form.setValue('address.city', response.data.localidade)
+            form.setValue('address.state', response.data.uf)
+        })
+
     }
     return (
         <div>
@@ -21,20 +46,14 @@ const AddressForm = ({ form, driver = null }: any) => {
                         alwaysShowMask={true}
                         maskChar={null}
                         type={'tel'}
-                        defaultValue={driver?.address?.zipcode}
+                        defaultValue={driver?.address?.zipcode || driver?.zipcode}
                         mask={'99999-999'}
                         {...form.register('address.zipcode', {
                             required: true,
                             maxLength: 8,
                             setValueAs: v => v.replace(/[^\d]/g, ''),
                             validate: async (value) => {
-                                value.length === 8 ? axios.get(`https://viacep.com.br/ws/${value}/json`).then(response => {
-                                    if (response.data.erro) return resetAddress()
-                                    form.setValue('address.address_1', response.data.logradouro)
-                                    form.setValue('address.address_2', response.data.bairro)
-                                    form.setValue('address.city', response.data.localidade)
-                                    form.setValue('address.state', response.data.uf)
-                                }) : resetAddress()
+                                value.length === 8 ? fillAddressFields(value) : resetAddress()
                             }
                         })}>
                         {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
@@ -71,7 +90,7 @@ const AddressForm = ({ form, driver = null }: any) => {
                         <Input defaultValue={driver?.address?.complement} autoComplete={'off'} {...form.register('address.complement')} />
                     </FormControl>
                 </Stack>
-                
+
                 <InputFile
                     required
                     // defaultValue={driver?.address?.document_file}

@@ -49,7 +49,7 @@ export const Login = () => {
         </div>
 
         <Styled.AccountButton type={'submit'}
-          colorScheme={'primary'} {...buttonState} isLoading={isSubmitting}
+          colorScheme={'primary'} disabled={!isValid || isSubmitting} isLoading={isSubmitting}
           rightIcon={<i className={'las la-arrow-right'}></i>}>Entrar</Styled.AccountButton>
         <small style={{ color: 'red' }}>{errorMessage}</small>
         <p>Não tem uma conta na Redefrete?</p>

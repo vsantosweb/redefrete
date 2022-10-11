@@ -1,27 +1,65 @@
 import React from 'react'
-import { FormControl, FormErrorMessage, FormLabel, Heading, Input, Select, Stack } from '@chakra-ui/react';
+import { Checkbox, FormControl, FormErrorMessage, FormLabel, Heading, Input, Select, Stack } from '@chakra-ui/react';
 import InputMask from 'react-input-mask';
 import { Banks, CPFValidation } from '@redefrete/helpers';
 import { InputCustom } from '@redefrete/components';
 
-const BankForm = ({ form, bank }:any) => {
-    console.log(bank)
+const BankForm = ({ form, bank }: any) => {
+
+    const [ownerAccount, setOwnerAccount] = React.useState(true);
+
+    React.useEffect(() => {
+
+        if (ownerAccount) {
+            form.setValue('driver_bank.name', form.watch('name'), { shouldValidate: true })
+            form.setValue('driver_bank.document', form.watch('document_1'), { shouldValidate: true })
+            return;
+        }
+
+        form.setValue('driver_bank.name', '')
+        form.setValue('driver_bank.document', '')
+
+    }, [form.watch('name'), form.watch('document_1'), ownerAccount])
+
     return (
         <div>
             <Heading my={3} size={'md'}>Dados Bancários</Heading>
             <Stack spacing={3}>
-                <FormControl variant={'floating'}>
-                    <FormLabel>Nome do Titular</FormLabel>
-                    <InputCustom defaultValue={bank?.name || ''} accept={'alpha'} autoComplete={'off'} {...form.register('driver_bank.name',)} />
-                </FormControl>
+                <Checkbox defaultChecked={ownerAccount} onChange={() => setOwnerAccount(prev => !prev)}>Eu sou responsável pela conta</Checkbox>
+                {
+                    !ownerAccount && <>
+                        <FormControl isInvalid={form.formState.errors?.driver_bank?.document} isRequired={true}>
+                            <FormLabel>CPF Titular</FormLabel>
+                            <InputMask
+                                alwaysShowMask={true}
+                                maskChar={null}
+                                type={'tel'}
+                                defaultValue={bank?.document || ''}
+                                mask={'999.999.999-99'}
+                                {...form.register('driver_bank.document', {
+                                    required: true,
+                                    setValueAs: v => v.replace(/[^\d]/g, ''),
+                                    validate: v => CPFValidation(v)
+                                })}>
+                                {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'000.000.000-00'} />)}
+                            </InputMask>
+                            <FormErrorMessage>CPF Inválido</FormErrorMessage>
+                        </FormControl>
+                        <FormControl isRequired={true}>
+                            <FormLabel>Nome do Titular</FormLabel>
+                            <InputCustom defaultValue={bank?.name || ''} accept={'alpha'} autoComplete={'off'} {...form.register('driver_bank.name', { require: true })} />
+                        </FormControl>
+                    </>
+                }
+
                 <Stack direction={'row'}>
-                    <FormControl isRequired={true} isReadOnly variant={'floating'}>
+                    <FormControl isRequired={true}>
                         <FormLabel>Banco</FormLabel>
                         <Select defaultValue={bank?.bank_name || ''} placeholder={'Selecione'} {...form.register('driver_bank.bank_name', { required: true })}>
                             {Banks.map((bank, index) => <option key={index}>{bank.name} - {bank.value}</option>)}
                         </Select>
                     </FormControl>
-                    <FormControl isRequired={true} isReadOnly variant={'floating'}>
+                    <FormControl isRequired={true}>
                         <FormLabel>Tipo</FormLabel>
                         <Select defaultValue={bank?.type || ''} placeholder={'Selecione'} {...form.register('driver_bank.type', { required: true })}>
                             {['Conta Corrente', 'Conta Poupança'].map((type) => <option key={type}>{type}</option>)}
@@ -29,7 +67,7 @@ const BankForm = ({ form, bank }:any) => {
                     </FormControl>
                 </Stack>
                 <Stack direction={'row'}>
-                    <FormControl isRequired={true} variant={'floating'}>
+                    <FormControl isRequired={true}>
                         <FormLabel>Agencia</FormLabel>
                         <InputCustom defaultValue={bank?.bank_agency || ''} type={'tel'} accept={'number'} maxLength={6} autoComplete={'off'} {...form.register('driver_bank.bank_agency', { required: true })} />
                     </FormControl>
@@ -43,23 +81,7 @@ const BankForm = ({ form, bank }:any) => {
                     </FormControl>
                 </Stack>
 
-                <FormControl isInvalid={form.formState.errors?.driver_bank?.document} isRequired={true}>
-                    <FormLabel>CPF Titular</FormLabel>
-                    <InputMask
-                        alwaysShowMask={true}
-                        maskChar={null}
-                        type={'tel'}
-                        defaultValue={bank?.document || ''}
-                        mask={'999.999.999-99'}
-                        {...form.register('driver_bank.document', {
-                            required: true,
-                            setValueAs: v => v.replace(/[^\d]/g, ''),
-                            validate: v => CPFValidation(v)
-                        })}>
-                        {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'000.000.000-00'} />)}
-                    </InputMask>
-                    <FormErrorMessage>CPF Inválido</FormErrorMessage>
-                </FormControl>
+
             </Stack>
         </div>
     )

@@ -48,13 +48,12 @@ function RegisterComplete({ history, driver }) {
         driver.address.document_file = await base64FileConverter(driver.address.document_file[0]);
         driver.vehicle.document_file = await base64FileConverter(driver.vehicle.document_file[0]);
         
-        // console.log(driver)
-
         await driverAuthService.completeRegister(driver).then(() => { setRegisterSuccess(true) })
     }
-
+    console.log(registerForm.formState.errors, registerForm.formState.isValid)
     if (!registerSuccess) {
         return (
+
             <form onSubmit={registerForm.handleSubmit(handleFinishRegister)}>
                 <div>
                     <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -67,7 +66,7 @@ function RegisterComplete({ history, driver }) {
                         <div className="mt-5 md:col-span-2 md:mt-0">
                             <div className="shadow sm:overflow-hidden sm:rounded-md">
                                 <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                                    <DriverForm form={registerForm} />
+                                    <DriverForm form={registerForm} driver={driver} />
                                 </div>
                             </div>
                         </div>
@@ -115,7 +114,7 @@ function RegisterComplete({ history, driver }) {
                         <div className="mt-5 md:col-span-2 md:mt-0">
                             <div className="shadow sm:overflow-hidden sm:rounded-md">
                                 <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                                    <AddressForm form={registerForm} />
+                                    <AddressForm form={registerForm} driver={driver} />
                                 </div>
                             </div>
                         </div>
@@ -163,7 +162,7 @@ function RegisterComplete({ history, driver }) {
                         <div className="mt-5 md:col-span-2 md:mt-0">
                             <div className="shadow sm:overflow-hidden sm:rounded-md">
                                 <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
-                                    <VehicleForm form={registerForm} />
+                                    <VehicleForm form={registerForm} driver={driver} />
                                 </div>
                             </div>
                         </div>
@@ -187,7 +186,7 @@ function RegisterComplete({ history, driver }) {
                             <Styled.AccountButton
                                 isLoading={registerForm.formState.isSubmitting}
                                 type={'submit'}
-                                disabled={registerForm.formState.isSubmitting}
+                                // disabled={registerForm.formState.isValid}
                                 colorScheme={'primary'}>Finalizar cadastro<i className={'las la-arrow-right'}></i></Styled.AccountButton>
                         </div>
 
@@ -219,7 +218,7 @@ function RegisterComplete({ history, driver }) {
 
 
 RegisterComplete.config = {
-    title: 'Cadastre-se',
+    title: 'Complete seu cadastro',
     // layout: 'AuthLayout'
 }
 

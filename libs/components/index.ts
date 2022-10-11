@@ -5,7 +5,7 @@ import InputCustom from './UI/Input/InputCustom';
 import ServiceHeader from './ServiceHeader';
 import DataGrid from './DataGrid';
 import DocumentInput from './DocumentInput';
-import LoaderTracker from './LoaderTracker';
+import {LoaderTracker, Loader} from './Loader';
 
 export {
     InputFile,
@@ -16,4 +16,5 @@ export {
     DataGrid,
     DocumentInput,
     LoaderTracker,
+    Loader
 }

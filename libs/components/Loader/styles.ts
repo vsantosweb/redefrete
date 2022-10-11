@@ -7,14 +7,14 @@ export const Container: any = styled.div`
   flex-direction: column;
   opacity: 1;
   gap: 10px;
-  background-color: #00000080;
+  background-color: ${({ fullScreen }: any) => fullScreen ? '#00000080' : 'none'};
   transition: all 0.5s;
   width: 100%;
   z-index: 12;
   width: 100%;
   height: 100%;
-  position: ${({ fullContainer }: any) =>
-    fullContainer ? 'absolute' : 'relative'};
+  position: ${({ fullScreen }: any) =>
+    fullScreen ? 'absolute' : 'relative'};
   z-index: 999999;
   top: 0;
   right: 0;

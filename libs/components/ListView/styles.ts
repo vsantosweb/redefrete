@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 
 export const ListContainer = styled.div`
  list-style: none;
+ background: #fff;
 `
 export const List = styled.div`
 `

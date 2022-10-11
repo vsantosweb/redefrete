@@ -13,13 +13,13 @@ const ListView = ({ list }): JSX.Element => {
     return (
         <Styled.ListContainer>
             <Styled.List>
-                {list.map(item =>
-                    <Link href={item.path}>
+                {list.map((item, index) =>
+                    <Link key={index} href={item.path}>
                         <a>
 
                             <Styled.ListListItem>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                    <i className={'las la-car'}></i>
+                                    <i style={{fontSize: '1.6em'}} className={'las la-car'}></i>
                                     <Styled.ListItemContent>
                                         <Styled.ListTitle>{item.name}</Styled.ListTitle>
                                     </Styled.ListItemContent>

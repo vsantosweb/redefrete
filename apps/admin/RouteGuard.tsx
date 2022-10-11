@@ -24,7 +24,6 @@ function RouteGuard({ children }) {
     const [rendering, setRendering] = React.useState<boolean>(true);
     const router = useRouter();
 
-    console.log(router)
     React.useEffect(() => {
         // on initial load - run auth check 
         authCheck(router.asPath)
@@ -49,7 +48,7 @@ function RouteGuard({ children }) {
     const authCheck = async (url) => {
 
         const path = url.split('?')[0];
-        console.log(privatePaths.includes(router.pathname))
+        
         return await authService.session().then((user) => {
             console.log(user)
             if (user && router.pathname === AuthEndpoints.LOGIN) {

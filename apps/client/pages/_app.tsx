@@ -5,8 +5,8 @@ import Theme from '@redefrete/themes/default';
 import Head from 'next/head';
 import type { NextPage } from 'next';
 import { layout, Layout, LayoutProps } from '../resources/layouts';
-// import "../resources/fonts/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css";
 import { RouteGuard } from '../RouteGuard';
+import 'libs/fonts/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css';
 
 type PageConfigProps = {
   title?: string,

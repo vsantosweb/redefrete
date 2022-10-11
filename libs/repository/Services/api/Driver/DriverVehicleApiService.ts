@@ -1,14 +1,17 @@
 import api from "..";
-import { DriverVehicleProps, IDriverVehicleRepository } from "../../../Interfaces/Driver/IDriverVehicleRepository";
+import {  IDriverVehicleRepository } from '@redefrete/interfaces';
+import { injectable } from "inversify";
 
+@injectable()
 
-export class DriverVehicleApiService implements IDriverVehicleRepository
-{
-    get(id: string): Promise<DriverVehicleProps> {
-        return
+export class DriverVehicleApiService implements IDriverVehicleRepository {
+
+    getVehicles(): Promise<any> {
+        return api().get('/driver/vehicles').then(response => response.data)
     }
-    
-    create(data: string): Promise<DriverVehicleProps> {
-        return
+
+    createVehicle(data): Promise<any>{
+        return api().post('/driver/vehicles', data).then(response => response.data)
     }
+
 }

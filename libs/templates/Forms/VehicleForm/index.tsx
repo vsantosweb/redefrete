@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormControl, FormErrorMessage, FormLabel, Heading, Input, Select, Stack } from '@chakra-ui/react';
+import { Checkbox, FormControl, FormErrorMessage, FormLabel, Heading, Input, Select, Spinner, Stack } from '@chakra-ui/react';
 import axios from 'axios';
 import InputMask from 'react-input-mask';
 import { CPFValidation } from '@redefrete/helpers';
@@ -10,10 +10,25 @@ const vehicleTypes = [
     { id: 2, name: 'Moto', value: 'motos' },
     { id: 3, name: 'Caminhão', value: 'caminhoes' },
 ]
-const VehicleForm = ({ form, vehicle}:any) => {
+const VehicleForm = ({ form, vehicle }: any) => {
 
     const [vehicleBrands, setVehicleBrands] = React.useState(null);
     const [vehicleModels, setVehicleModels] = React.useState(null);
+    const [ownerAccount, setOwnerAccount] = React.useState(true);
+
+    React.useEffect(() => {
+
+        if (ownerAccount) {
+            form.setValue('vehicle.owner_name', form.watch('name'), { shouldValidate: true })
+            form.setValue('vehicle.owner_document', form.watch('document_1'), { shouldValidate: true })
+            return;
+        }
+
+        form.setValue('vehicle.owner_name', '')
+        form.setValue('vehicle.owner_document', '')
+
+    }, [form.watch('name'), form.watch('document_1'), ownerAccount])
+
 
     const getBrands = (e) => {
 
@@ -34,7 +49,7 @@ const VehicleForm = ({ form, vehicle}:any) => {
     }
 
     const getModels = (e) => {
-
+        console.log(form.getValues('vehicle.type'), e.target.value)
         axios.get('https://parallelum.com.br/fipe/api/v1/' + form.getValues('vehicle.type') + '/marcas/' + e.target.value + '/modelos')
             .then(response => {
                 setVehicleModels(response.data.modelos);
@@ -52,11 +67,38 @@ const VehicleForm = ({ form, vehicle}:any) => {
             <input type={'hidden'} {...form.register('vehicle.vehicle_type_id', { required: true, })} />
 
             <Stack spacing={3}>
+                <Checkbox defaultChecked={ownerAccount} onChange={() => setOwnerAccount(prev => !prev)}>Eu sou o responsável do veículo</Checkbox>
+                {
+                    !ownerAccount && <>
+                        <FormControl isInvalid={form.formState.errors?.vehicle?.owner_document} isRequired={true}>
+                            <FormLabel>CPF Titular</FormLabel>
+                            <InputMask
+                                alwaysShowMask={true}
+                                maskChar={null}
+                                type={'tel'}
+                                defaultValue={vehicle?.document || ''}
+                                mask={'999.999.999-99'}
+                                {...form.register('vehicle.owner_document', {
+                                    required: true,
+                                    setValueAs: v => v.replace(/[^\d]/g, ''),
+                                    validate: v => CPFValidation(v)
+                                })}>
+                                {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'000.000.000-00'} />)}
+                            </InputMask>
+                            <FormErrorMessage>CPF Inválido</FormErrorMessage>
+                        </FormControl>
+                        <FormControl isRequired={true}>
+                            <FormLabel>Nome do Titular</FormLabel>
+                            <InputCustom accept={'alpha'} autoComplete={'off'} {...form.register('vehicle.owner_name', { required: true })} />
+                        </FormControl>
+                    </>
+                }
+
                 <Stack direction={'row'}>
 
                     <FormControl isRequired={true} variant={'floating'}>
                         <FormLabel>Tipo</FormLabel>
-                        <Select onChangeCapture={getBrands} placeholder={'Tipo de veículo'} {...form.register('vehicle.type', { required: true, })}  >
+                        <Select onChangeCapture={getBrands} placeholder={'Tipo de veículo'} {...form.register('vehicle.type', { required: true })}  >
                             {vehicleTypes.map((type, index) => <option value={type.value} key={index}>{type.name} </option>)}
                         </Select>
                     </FormControl>
@@ -81,7 +123,7 @@ const VehicleForm = ({ form, vehicle}:any) => {
                 <Stack direction={'row'}>
                     <FormControl isRequired={true} >
                         <FormLabel>Placa</FormLabel>
-                        <Input autoComplete={'off'} maxLength={7} {...form.register('vehicle.licence_plate', { required: true })} />
+                        <Input style={{textTransform: 'uppercase'}} autoComplete={'off'} maxLength={7} {...form.register('vehicle.licence_plate', { required: true })} />
                     </FormControl>
                     <FormControl isRequired={true} variant={'floating'}>
                         <FormLabel>Renavam</FormLabel>
@@ -97,33 +139,12 @@ const VehicleForm = ({ form, vehicle}:any) => {
                     </FormControl>
                 </Stack>
 
-                <FormControl isRequired={true} variant={'floating'}>
-                    <FormLabel>Nome do Responsável</FormLabel>
-                    <InputCustom accept={'alpha'} autoComplete={'off'} {...form.register('vehicle.owner_name', { required: true })} />
-                </FormControl>
-                <FormControl isInvalid={form.formState.errors?.vehicle?.owner_document} isRequired={true} variant={'floating'}>
-                    <FormLabel>CPF Responsável</FormLabel>
-                    <InputMask
-                        alwaysShowMask={true}
-                        maskChar={null}
-                        type={'tel'}
-                        mask={'999.999.999-99'}
-                        {...form.register('vehicle.owner_document', {
-                            required: true,
-                            setValueAs: v => v.replace(/[^\d]/g, ''),
-                            validate: v => CPFValidation(v)
-                        })}>
-                        {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'000.000.000-00'} />)}
-                    </InputMask>
-                    <FormErrorMessage>CPF Inválido</FormErrorMessage>
-                </FormControl>
-
                 <InputFile
                     required
                     label={'Documento do veículo'}
                     acceptFiles={['PNG', 'JPG', 'GIF']}
                     maxSize={'2MB'}
-                    {...form.register('vehicle.document_file', { require: true })}
+                    {...form.register('vehicle.document_file', { required: true })}
                 />
 
             </Stack>

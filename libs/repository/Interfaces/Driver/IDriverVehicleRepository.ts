@@ -13,7 +13,9 @@ export type DriverVehicleProps = {
     owner_phone?: string,
 }
 
-interface IDriverVehicleRepository extends IRepository<DriverVehicleProps>
+export interface IDriverVehicleRepository
 {
-
+    getVehicles():Promise<any>
+    createVehicle(data):Promise<any>
+    // createVehicle():Promise<any>
 }

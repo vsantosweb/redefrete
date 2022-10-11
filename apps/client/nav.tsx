@@ -12,7 +12,11 @@ export type NavProps = {
 const _nav: Array<NavProps> = [
     { name: 'Painel de Controle', path: '/', visible: false, icon: <i className="las la-trophy"></i>, private: true },
     {
-        name: 'Veículos', path: '/veiculos', visible: true, icon: <i className={'las la-users'}></i>, private: true,
+        name: 'Meus Veículos', path: '/veiculos', visible: true, icon: <i className={'las la-users'}></i>, private: true,
+        description: 'Cadastre e gerencie seus veiculos'
+    },
+    {
+        name: 'Veículos Cedidos', path: '/veiculos', visible: true, icon: <i className={'las la-users'}></i>, private: true,
         description: 'Cadastre e gerencie seus veiculos'
     },
     {

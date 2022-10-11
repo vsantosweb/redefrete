@@ -1,11 +1,12 @@
 export type DriverProps = {
-    name?: string
-    email?: string
-    phone?: string
-    id?: string
+    id?: number
     uuid?: string
     name?: string
     email?: string
+    phone?: string
+    name?: string
+    email?: string
+    document_1?: string
     password?: string
     phone?: string
     gender?: string
@@ -16,8 +17,8 @@ export type DriverProps = {
     last_activity?: string
     home_dir?: string
     first_time?: string
-    driver_status_id?: string
-    accepted_terms?: string
+    driver_status_id?: number
+    accepted_terms?: boolean
     user_agent?: string
     ip?: string
 }

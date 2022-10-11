@@ -56,7 +56,6 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
   }, [router])
 
-  console.log(pageLoader)
   return (
     <Theme>
       <Head>

@@ -68,7 +68,8 @@ const variantFlushed = () => ({
 const charkaExtendThemeConfig = {
 
   config: {
-    useSystemColorMode: true,
+    initialColorMode: 'light',
+    useSystemColorMode: false,
   },
   colors: {
     primary: {
