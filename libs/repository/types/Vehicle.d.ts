@@ -1,4 +1,4 @@
-type VehicleProps = {
+export type Vehicle = {
     id?: number
     brand?: string
     vehicle_type_id?: number
@@ -14,4 +14,3 @@ type VehicleProps = {
 }
 
 
-export default VehicleProps

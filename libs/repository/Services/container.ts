@@ -15,6 +15,8 @@ import VehicleTypeApiService from './api/Vehicle/VehicleTypeApiService';
 import CaptureLeadApiService from './api/CaptureLeadApiService';
 import { DriverLicenceApiService } from './api/Driver/DriverLicenceApiService';
 import { DriverVehicleApiService } from './api/Driver/DriverVehicleApiService';
+import { IVehicleRepository } from '../Interfaces/Vehicle/IVehicleRepository';
+import VehicleApiService from './api/Vehicle/VehicleApiService';
 // import { VehicleInMemoryRepository } from "./inMemory/Vehicle/VehicleInMemoryRepository";
 
 
@@ -27,6 +29,7 @@ export const SERVICE_KEYS = {
     DRIVER_VEHICLE_REPOSITORY: Symbol('DRIVER_VEHICLE_REPOSITORY'),
 
     VEHICLE_TYPE_REPOSITORY: Symbol('VEHICLE_TYPE_REPOSITORY'),
+    VEHICLE_REPOSITORY: Symbol('VEHICLE_REPOSITORY'),
     CAPTURE_LEAD_REPOSITORY: Symbol('CAPTURE_LEAD_REPOSITORY')
     /* Other services would live here, e.g. ORDER_REPOSITORY */
 };
@@ -42,6 +45,7 @@ _container.bind<DriverVehicleApiService>(SERVICE_KEYS.DRIVER_VEHICLE_REPOSITORY)
 
 
 _container.bind<IVehicleTypeRepository>(SERVICE_KEYS.VEHICLE_TYPE_REPOSITORY).to(VehicleTypeApiService).inSingletonScope();
+_container.bind<IVehicleRepository>(SERVICE_KEYS.VEHICLE_REPOSITORY).to(VehicleApiService).inSingletonScope();
 _container.bind<ICaptureLead>(SERVICE_KEYS.CAPTURE_LEAD_REPOSITORY).to(CaptureLeadApiService).inSingletonScope();
 
 export const container = _container;

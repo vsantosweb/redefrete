@@ -1,6 +1,7 @@
 import api from "..";
-import {  IDriverVehicleRepository } from '@redefrete/interfaces';
+import { IDriverVehicleRepository } from '@redefrete/interfaces';
 import { injectable } from "inversify";
+import { Vehicle } from '@redefrete/types';
 
 @injectable()
 
@@ -10,8 +11,15 @@ export class DriverVehicleApiService implements IDriverVehicleRepository {
         return api().get('/driver/vehicles').then(response => response.data)
     }
 
-    createVehicle(data): Promise<any>{
+    showVehicle(licencePlate: string): Promise<any> {
+        return api().get('/driver/vehicles/' + licencePlate).then(response => response.data)
+    }
+
+    createVehicle(data: Vehicle): Promise<any> {
         return api().post('/driver/vehicles', data).then(response => response.data)
     }
 
+    deleteVehicle(id: number): Promise<any> {
+        return api().delete('/driver/vehicles/' + id).then(response => response.data)
+    }
 }

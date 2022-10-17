@@ -2,6 +2,8 @@ import { IRepository } from "../IRepository";
 
 export type Vehicle = {};
 
-export interface IVehicleRepository extends IRepository<Vehicle> {
-    get(id: string): Promise<Vehicle | null>;
-  }
+export interface IVehicleRepository  {
+  get(id: string): Promise<Vehicle | null>;
+
+  checkVehicleExists(licencePlate: string): Promise<any>;
+}

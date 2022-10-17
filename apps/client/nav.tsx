@@ -29,6 +29,10 @@ const _nav: Array<NavProps> = [
         description: 'Vincule multiplas contas bancárias na sua conta redefrete'
     },
     {
+        name: 'Notificações', path: '/#', visible: true, icon: <i className={'las la-users'}></i>, private: true,
+        description: 'Veja suas notificações'
+    },
+    {
         name: 'Extrato', path: '/#', visible: true, icon: <i className={'las la-users'}></i>, private: true,
         description: 'Veja seu extrato e relatórios'
     },

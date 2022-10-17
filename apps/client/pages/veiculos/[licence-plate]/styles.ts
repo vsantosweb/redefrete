@@ -1,19 +1,21 @@
 import styled from "@emotion/styled";
 
 export const VehicleViewWrapper = styled.div`
-
 `
 export const PhotoCarousel = styled.div`
 
 `
 
 export const VehicleDetailsWrapper = styled.div`
+background-color: #fff;
+margin-bottom: 16px;
+padding: 1em;
+
 
 `
 
 
 export const VehcleDetailList = styled.ul`
-padding: 1em;
 `
 export const VehcleDetailListItem = styled.li`
     padding: 10px 8px 10px 0;

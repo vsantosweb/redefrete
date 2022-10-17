@@ -5,6 +5,11 @@ import InputMask from 'react-input-mask';
 import { CPFValidation } from '@redefrete/helpers';
 import { InputCustom, InputFile } from '@redefrete/components';
 
+import { container, SERVICE_KEYS } from '@redefrete/container';
+import { IVehicleRepository } from 'libs/repository/Interfaces/Vehicle/IVehicleRepository';
+
+const vehicleRepository = container.get<IVehicleRepository>(SERVICE_KEYS.VEHICLE_REPOSITORY);
+
 const vehicleTypes = [
     { id: 1, name: 'Carro', value: 'carros' },
     { id: 2, name: 'Moto', value: 'motos' },
@@ -15,6 +20,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
     const [vehicleBrands, setVehicleBrands] = React.useState(null);
     const [vehicleModels, setVehicleModels] = React.useState(null);
     const [ownerAccount, setOwnerAccount] = React.useState(true);
+    const [licenceVehicleMessage, setLicenceVehicleMessage] = React.useState(null);
 
     React.useEffect(() => {
 
@@ -57,7 +63,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
             })
             .catch(error => console.log(error.response))
     }
-
+    console.log(form.formState.errors)
     return (
 
         <div>
@@ -116,14 +122,30 @@ const VehicleForm = ({ form, vehicle }: any) => {
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Modelo</FormLabel>
                     <Select placeholder={'Marca do veículo'} isDisabled={!vehicleModels} {...form.register('vehicle.model', { required: true, })}>
-                        {vehicleModels?.map((model, index) => <option key={index} value={model.codigo}>{model.nome}</option>)}
+                        {vehicleModels?.map((model, index) => <option key={index} value={model.nome}>{model.nome}</option>)}
                     </Select>
                 </FormControl>
 
                 <Stack direction={'row'}>
-                    <FormControl isRequired={true} >
+                    <FormControl isInvalid={form.formState.errors?.vehicle?.licence_plate} isRequired={true} >
                         <FormLabel>Placa</FormLabel>
-                        <Input style={{textTransform: 'uppercase'}} autoComplete={'off'} maxLength={7} {...form.register('vehicle.licence_plate', { required: true })} />
+                        <Input
+                            style={{ textTransform: 'uppercase' }}
+                            autoComplete={'off'}
+                            maxLength={7}
+                            {...form.register('vehicle.licence_plate', {
+                                required: true,
+                                validate: async (licencePlate: string) => (
+                                    licencePlate.length >= 7 ? await vehicleRepository.checkVehicleExists(licencePlate)
+                                        .then(response => {
+                                            setLicenceVehicleMessage(response.message)
+                                            return response.success
+                                        }) : setLicenceVehicleMessage(null)
+                                )
+
+                            })}
+                        />
+                        <FormErrorMessage>{licenceVehicleMessage}</FormErrorMessage>
                     </FormControl>
                     <FormControl isRequired={true} variant={'floating'}>
                         <FormLabel>Renavam</FormLabel>

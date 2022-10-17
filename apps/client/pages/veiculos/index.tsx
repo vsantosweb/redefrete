@@ -16,7 +16,7 @@ import {
 import { VehicleForm } from '@redefrete/templates/forms';
 import { useForm, UseFormProps } from 'react-hook-form';
 import { container, SERVICE_KEYS } from '@redefrete/container';
-import { IDriverVehicleRepository, IVehicleTypeRepository } from '@redefrete/interfaces';
+import { IDriverVehicleRepository } from '@redefrete/interfaces';
 import { base64FileConverter } from '@redefrete/helpers';
 import { trackPromise } from 'react-promise-tracker';
 
@@ -66,8 +66,8 @@ const Vehicles: Page = () => {
   }
   return (
     <Box display={'flex'} flexDirection={'column'} gap={3}>
-      <div style={{textAlign:'right'}}><Button onClick={onOpen}  colorScheme={'primary'} >+ Adicionar novo</Button></div>
       <Loader isPromisse={true} area={'fetch-vehicles'}>
+        <div style={{ textAlign: 'right' }}><Button onClick={onOpen} colorScheme={'primary'} >+ Adicionar novo</Button></div>
         <ListView list={vehicles} />
       </Loader>
       <>
@@ -82,9 +82,10 @@ const Vehicles: Page = () => {
                   <VehicleForm form={vehicleForm} />
                   <FormControl isInvalid={false}>
                     <FormLabel>Conta para pagamento</FormLabel>
-                    {/* <Select {...vehicleForm.register('driver_bank_id', { required: false })}>
-                      <option>Nubank - Pagamentos </option>
-                    </Select> */}
+                    <Select placeholder={'Selecione...'} {...vehicleForm.register('driver_bank_id', { required: true })}>
+                      {user.banks.map(bank => <option value={bank.id}> {bank.bank_name} </option>)}
+                    </Select>
+                    <small>Adicionar conta bancária +</small>
                   </FormControl>
                 </Stack>
               </ModalBody>

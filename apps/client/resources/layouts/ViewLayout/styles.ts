@@ -20,7 +20,7 @@ export const AccountHeaderWrapper = styled.header`
 
 export const ViewContent = styled.div`
   width: ${({ theme }: any) => theme.defaultContainer.width} ;
-  margin: auto;
+  margin:0 auto;
   @media (max-width: 1024px){
   max-width: 100%;
 

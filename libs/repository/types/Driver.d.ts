@@ -1,3 +1,5 @@
+import { BankProps } from "./Bank"
+
 export type Driver = {
     id?: number,
     uuid?: string,
@@ -17,6 +19,7 @@ export type Driver = {
     driver_status_id?: number,
     accepted_terms?: boolean,
     user_agent?: string,
+    banks?: Array<BankProps>,
     ip?: string,
 }
 

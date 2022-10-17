@@ -4,6 +4,6 @@ export type Vehicle = {};
 
 export interface IVehicleTypeRepository {
 
-  get();
+  get(): Promise<any>;
 
 }
