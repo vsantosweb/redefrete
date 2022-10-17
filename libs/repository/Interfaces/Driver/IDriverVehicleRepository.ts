@@ -1,4 +1,4 @@
-import { Vehicle } from '@redefrete/types';
+import { Vehicle } from 'libs/Types';
 export interface IDriverVehicleRepository {
     getVehicles(): Promise<any>
     createVehicle(data: Vehicle): Promise<any>

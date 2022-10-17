@@ -1,7 +1,7 @@
 import api from "..";
 import { IDriverVehicleRepository } from '@redefrete/interfaces';
 import { injectable } from "inversify";
-import { Vehicle } from '@redefrete/types';
+import { Vehicle } from 'libs/Types';
 
 @injectable()
 

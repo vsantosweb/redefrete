@@ -8,7 +8,7 @@ import { IDriverVehicleRepository } from '@redefrete/interfaces';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { trackPromise } from 'react-promise-tracker';
 import { useRouter } from 'next/router';
-import { Vehicle } from '@redefrete/types';
+import { Vehicle } from 'libs/Types';
 import { Heading, IconButton } from '@chakra-ui/react';
 
 const driverVehicleService = container.get<IDriverVehicleRepository>(SERVICE_KEYS.DRIVER_VEHICLE_REPOSITORY);
