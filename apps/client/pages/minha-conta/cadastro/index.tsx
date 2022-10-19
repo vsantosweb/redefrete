@@ -5,9 +5,8 @@ import * as Styled from '../styles';
 import InputMask from 'react-input-mask';
 
 import { container, SERVICE_KEYS } from '@redefrete/container';
-import { IDriverAuthRepository, IVehicleTypeRepository } from '@redefrete/interfaces';
+import { IDriverAuthRepository } from '@redefrete/interfaces';
 import { useRouter } from 'next/router';
-import { InputCustom } from '@redefrete/components';
 
 const driverAuthService = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
 
@@ -17,17 +16,25 @@ const vehicleTypes = [
     { id: 3, name: 'Caminhão', value: 'caminhoes' },
 ]
 
-function Register({ history }) {
+type FormProps = {
+    name: string,
+    email: string,
+    phone: string,
+    licence_plate: string,
+    zipcode: string,
+    vehicle_type: string,
+}
+function Register() {
 
     const router = useRouter();
 
-    const { handleSubmit, register, watch, formState: { isValid, isSubmitting, isSubmitSuccessful } } = useForm({ mode: 'onChange' });
+    const { handleSubmit, register, formState: { isValid, isSubmitting } } = useForm({ mode: 'onChange' });
     const [errorMessage, setErrorMessage] = React.useState();
     const [registerSuccess, setRegisterSuccess] = React.useState<boolean>(false);
-    
-    const handleSubmitRegister = async (driver) => {
-       await driverAuthService.sampleRegister(driver).then((response) => setRegisterSuccess(true))
-        .catch(error => setErrorMessage(error.response.data.message))
+
+    const handleSubmitRegister = async (driver: FormProps) => {
+        await driverAuthService.sampleRegister(driver).then((response) => setRegisterSuccess(true))
+            .catch(error => setErrorMessage(error.response.data.message))
     }
 
     if (!registerSuccess) {
@@ -58,30 +65,30 @@ function Register({ history }) {
                 <Stack direction={'row'}>
                     <FormControl isRequired={true}>
                         <FormLabel>Placa</FormLabel>
-                        <Input style={{textTransform: 'uppercase'}} maxLength={7} autoComplete={'off'} placeholder={'eee9999'} {...register('licence_plate', { required: true, minLength: 4 })} />
+                        <Input style={{ textTransform: 'uppercase' }} maxLength={7} autoComplete={'off'} placeholder={'eee9999'} {...register('licence_plate', { required: true, minLength: 4 })} />
                     </FormControl>
                     <FormControl isRequired={true} variant={'floating'}>
-                    <FormLabel>CEP</FormLabel>
-                    <InputMask
-                        alwaysShowMask={true}
-                        maskChar={null}
-                        mask={'99999-999'}
-                        {...register('zipcode', {
-                            required: true,
-                            minLength: 8,
-                            setValueAs: v => v.replace(/[^\d]/g, ''),
-                        })}>
-                        {(inputProps => <Input type={'tel'} {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
-                    </InputMask>
-                </FormControl>
+                        <FormLabel>CEP</FormLabel>
+                        <InputMask
+                            alwaysShowMask={true}
+                            maskChar={null}
+                            mask={'99999-999'}
+                            {...register('zipcode', {
+                                required: true,
+                                minLength: 8,
+                                setValueAs: v => v.replace(/[^\d]/g, ''),
+                            })}>
+                            {(inputProps => <Input type={'tel'} {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
+                        </InputMask>
+                    </FormControl>
                 </Stack>
 
                 <FormControl isRequired={true} variant={'floating'}>
-                        <FormLabel>Tipo de veículo</FormLabel>
-                        <Select  placeholder={'Selecione...'} {...register('vehicle_type', { required: true, })}  >
-                            {vehicleTypes.map((type, index) => <option value={type.value} key={index}>{type.name} </option>)}
-                        </Select>
-                    </FormControl>
+                    <FormLabel>Tipo de veículo</FormLabel>
+                    <Select placeholder={'Selecione...'} {...register('vehicle_type', { required: true, })}  >
+                        {vehicleTypes.map((type, index) => <option value={type.value} key={index}>{type.name} </option>)}
+                    </Select>
+                </FormControl>
 
                 <Styled.AccountButton disabled={!isValid} isLoading={isSubmitting} type={'submit'} colorScheme={'secondary'}>Registrar-se <i className={'las la-arrow-right'}></i></Styled.AccountButton>
                 {errorMessage && <Alert variant={'solid'} status='error'>

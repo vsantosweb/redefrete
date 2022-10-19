@@ -1,6 +1,6 @@
 import { injectable } from "inversify";
 import api from "..";
-import {  IDriverAuthRepository } from '@redefrete/interfaces';
+import { IDriverAuthRepository } from '@redefrete/interfaces';
 
 import Cookie from 'js-cookie';
 import DriverApiService from "./DriverApiService";
@@ -10,7 +10,8 @@ export enum AuthEndpoints {
     LOGOUT = '/driver/auth/logout',
     SESSION = '/driver/auth/session',
     SAMPLE_REGISTER = '/driver/auth/register',
-    COMPLETE_REGISTER = '/driver/auth/register/complete'
+    COMPLETE_REGISTER = '/driver/auth/register/complete',
+    VERIFY_REGISTER = '/driver/auth/register/verify?trackid='
 }
 
 @injectable()
@@ -19,7 +20,7 @@ export class DriverAuthApiService implements IDriverAuthRepository {
 
 
 
-    login(credentials): Promise<any> {
+    login(credentials: { email: string, password: string }): Promise<any> {
         return api().post(AuthEndpoints.LOGIN, credentials)
             .then(response => {
 
@@ -52,11 +53,15 @@ export class DriverAuthApiService implements IDriverAuthRepository {
 
     }
 
-    redirect(to = null) {
+    redirect(to: string): void {
         window.location.href = to || '/'
     }
 
-    sampleRegister(data): Promise<any> { return api().post(AuthEndpoints.SAMPLE_REGISTER, data) }
+    sampleRegister(data: any): Promise<any> { return api().post(AuthEndpoints.SAMPLE_REGISTER, data) }
 
-    completeRegister(data): Promise<any> { return api().post(AuthEndpoints.COMPLETE_REGISTER, data) }
+    completeRegister(data: any): Promise<any> { return api().post(AuthEndpoints.COMPLETE_REGISTER, data) }
+
+    verifyAccountRegister(uuid: string): Promise<any> {
+        return api().get(AuthEndpoints.VERIFY_REGISTER + uuid)
+    }
 }

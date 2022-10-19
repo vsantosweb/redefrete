@@ -9,7 +9,6 @@ import {
     IDriverLicenceRepository,
     IDriverRepository,
     IVehicleTypeRepository,
-    IDriverVehicleRepository
 } from '@redefrete/interfaces';
 import VehicleTypeApiService from './api/Vehicle/VehicleTypeApiService';
 import CaptureLeadApiService from './api/CaptureLeadApiService';
@@ -17,7 +16,6 @@ import { DriverLicenceApiService } from './api/Driver/DriverLicenceApiService';
 import { DriverVehicleApiService } from './api/Driver/DriverVehicleApiService';
 import { IVehicleRepository } from '../Interfaces/Vehicle/IVehicleRepository';
 import VehicleApiService from './api/Vehicle/VehicleApiService';
-// import { VehicleInMemoryRepository } from "./inMemory/Vehicle/VehicleInMemoryRepository";
 
 
 

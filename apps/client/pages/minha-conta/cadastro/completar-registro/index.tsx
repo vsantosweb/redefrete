@@ -1,18 +1,19 @@
 import React from 'react'
-import { useForm, UseFormProps } from 'react-hook-form'
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Stack } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form'
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, Stack } from '@chakra-ui/react';
 import * as Styled from '../../styles';
 import { AddressForm, LicenceForm, BankForm, VehicleForm, PasswordForm, DriverForm } from '@redefrete/templates/forms';
 import { base64FileConverter } from '@redefrete/helpers';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverAuthRepository } from '@redefrete/interfaces';
-import { useRouter } from 'next/router';
-import api from 'apps/client/pages/api';
+import Link from 'next/link';
 
+
+const driverAuthService = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
 
 export async function getServerSideProps(req, res) {
 
-    return await api.get('/driver/auth/register/verify?trackid=' + req.query.trackid)
+    return await driverAuthService.verifyAccountRegister(req.query.trackid)
         .then(response => {
             return {
                 props: {
@@ -34,23 +35,19 @@ function RegisterComplete({ history, driver }) {
 
     // driver = { "id": 9, "name": "Joao Doe", "email": "souzavito@hsfotmail.com", "register_complete": 0 }
 
-    const registerForm = useForm<UseFormProps | any>({ mode: 'onChange', defaultValues: { licence: { name: driver.name }, driver_id: driver.id } });
+    const registerForm = useForm({ mode: 'onChange', defaultValues: { licence: { name: driver.name }, driver_id: driver.id } });
 
     const [registerSuccess, setRegisterSuccess] = React.useState<boolean>(false);
-
-    const router = useRouter();
-
-    const driverAuthService = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
 
     const handleFinishRegister = async (driver) => {
 
         driver.licence.document_file = await base64FileConverter(driver.licence.document_file[0]);
         driver.address.document_file = await base64FileConverter(driver.address.document_file[0]);
         driver.vehicle.document_file = await base64FileConverter(driver.vehicle.document_file[0]);
-        
+
         await driverAuthService.completeRegister(driver).then(() => { setRegisterSuccess(true) })
     }
-    console.log(registerForm.formState.errors, registerForm.formState.isValid)
+
     if (!registerSuccess) {
         return (
 
@@ -208,7 +205,8 @@ function RegisterComplete({ history, driver }) {
             >
                 <AlertIcon boxSize='40px' mr={0} />
                 <AlertTitle mt={4} mb={1} fontSize='lg'>Cadastro efetuado com sucesso!</AlertTitle>
-                <AlertDescription maxWidth='sm'>Obrigado por fazer parte do time Redefrete. Seu cadastro foi enviado para análise e em breve você você fará parte da nossa equipe.</AlertDescription>
+                <AlertDescription mb={4} maxWidth='sm'>Obrigado por fazer parte do time Redefrete. Seu cadastro foi enviado para análise e em breve você você fará parte da nossa equipe.</AlertDescription>
+                <Button href={'https://redefrete.com.br'} as={Link} colorScheme={'primary'}><a>Voltar para o Site</a></Button>
             </Alert>
 
         </Stack>

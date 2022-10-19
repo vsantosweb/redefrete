@@ -14,13 +14,9 @@ export const Login = () => {
 
   const { handleSubmit, register, reset, formState: { isValid, isSubmitting } } = useForm({ mode: 'onChange' });
   const [errorMessage, setErrorMessage] = React.useState(null);
-  const [buttonState, setButonState] = React.useState<any>({ disabled: !isValid, isLoading: false })
   const router = useRouter();
 
-
-  React.useEffect(() => setButonState({ disabled: !isValid }), [isValid])
-
-  const submitCredentials = async (credentials) => {
+  const submitCredentials = async (credentials: { email: string, password: string }) => {
 
     await driverAuth.login(credentials)
       .then((response) => driverAuth.redirect())
