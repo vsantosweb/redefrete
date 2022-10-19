@@ -3,4 +3,5 @@ export interface IAuthRepository  {
     logout(): Promise<any>;
     session(): any;
     redirect(to: string): any;
+    redirectToLogin(): void;
 }

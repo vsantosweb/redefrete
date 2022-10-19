@@ -7,6 +7,7 @@ import InputMask from 'react-input-mask';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverAuthRepository } from '@redefrete/interfaces';
 import { useRouter } from 'next/router';
+import { InputCustom } from '@redefrete/components';
 
 const driverAuthService = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
 
@@ -43,7 +44,7 @@ function Register() {
 
                 <FormControl isRequired={true}>
                     <FormLabel>Nome</FormLabel>
-                    <Input autoComplete={'off'} placeholder={'Nome completo'} {...register('name', { required: true, minLength: 4 })} />
+                    <InputCustom accept={'alpha'} autoComplete={'off'} placeholder={'Nome completo'} {...register('name', { required: true, minLength: 4 })} />
                 </FormControl>
                 <FormControl isRequired={true}>
                     <FormLabel>Endereço de email</FormLabel>
@@ -65,7 +66,14 @@ function Register() {
                 <Stack direction={'row'}>
                     <FormControl isRequired={true}>
                         <FormLabel>Placa</FormLabel>
-                        <Input style={{ textTransform: 'uppercase' }} maxLength={7} autoComplete={'off'} placeholder={'eee9999'} {...register('licence_plate', { required: true, minLength: 4 })} />
+                        <InputCustom
+                            style={{ textTransform: 'uppercase' }}
+                            maxLength={7}
+                            autoComplete={'off'}
+                            placeholder={'eee9999'}
+                            accept={'noSpecialChar'}
+                            {...register('licence_plate', { required: true, minLength: 4 })}
+                        />
                     </FormControl>
                     <FormControl isRequired={true} variant={'floating'}>
                         <FormLabel>CEP</FormLabel>

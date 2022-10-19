@@ -1,21 +1,17 @@
 import React from "react";
-import type { NextPage } from "next";
-import { Alert, AlertDescription, AlertIcon, AlertTitle, FormControl, FormLabel, Input, Stack, Text } from "@chakra-ui/react";
+import { FormControl, FormLabel, Input, Stack, Text } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import * as Styled from '../styles';
-import Link from "next/link";
 import { authService } from "../../../services";
 
 
 export const Login = () => {
 
-  const { handleSubmit, register, formState: { isValid, errors, isSubmitting } } = useForm({ mode: 'onChange' });
+  const { handleSubmit, register, formState: { isValid, isSubmitting } } = useForm({ mode: 'onChange' });
   const [errorMessage, setErrorMessage] = React.useState(null);
-  const [buttonState, setButonState] = React.useState<any>({ disabled: !isValid, isLoading: false })
   const router = useRouter();
 
-  React.useEffect(() => setButonState({ disabled: !isValid }), [isValid])
 
   const submitCredentials = async (credentials) => {
 

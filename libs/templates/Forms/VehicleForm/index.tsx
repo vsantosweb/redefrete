@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox, FormControl, FormErrorMessage, FormLabel, Heading, Input, Select, Spinner, Stack } from '@chakra-ui/react';
+import { Checkbox, FormControl, FormErrorMessage, FormLabel, Heading, Input, Select, Stack } from '@chakra-ui/react';
 import axios from 'axios';
 import InputMask from 'react-input-mask';
 import { CPFValidation } from '@redefrete/helpers';
@@ -22,18 +22,22 @@ const VehicleForm = ({ form, vehicle }: any) => {
     const [ownerAccount, setOwnerAccount] = React.useState(true);
     const [licenceVehicleMessage, setLicenceVehicleMessage] = React.useState(null);
 
+    const formField: {name?: string, document_1?: string} = {
+        name: form.watch('name'),
+        document_1: form.watch('document_1')
+    }
     React.useEffect(() => {
 
         if (ownerAccount) {
-            form.setValue('vehicle.owner_name', form.watch('name'), { shouldValidate: true })
-            form.setValue('vehicle.owner_document', form.watch('document_1'), { shouldValidate: true })
+            form.setValue('vehicle.owner_name', formField.name, { shouldValidate: true })
+            form.setValue('vehicle.owner_document', formField.document_1, { shouldValidate: true })
             return;
         }
 
         form.setValue('vehicle.owner_name', '')
         form.setValue('vehicle.owner_document', '')
 
-    }, [form.watch('name'), form.watch('document_1'), ownerAccount])
+    }, [formField?.name, formField?.document_1, ownerAccount, form])
 
 
     const getBrands = (e) => {
@@ -129,7 +133,8 @@ const VehicleForm = ({ form, vehicle }: any) => {
                 <Stack direction={'row'}>
                     <FormControl isInvalid={form.formState.errors?.vehicle?.licence_plate} isRequired={true} >
                         <FormLabel>Placa</FormLabel>
-                        <Input
+                        <InputCustom
+                            accept={'noSpecialChar'}
                             style={{ textTransform: 'uppercase' }}
                             autoComplete={'off'}
                             maxLength={7}

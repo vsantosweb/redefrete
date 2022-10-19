@@ -3,7 +3,7 @@ import React from 'react'
 
 
 type InputCustomProps = {
-    accept: 'alpha' | 'number'
+    accept: 'alpha' | 'number' | 'noSpecialChar'
     ref: any
     props?: any
 }
@@ -18,6 +18,11 @@ const acceptFormats = {
     alpha: {
         validate: (e) => {
             e.target.value = e.target.value.replace((/[`!@#¨$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~0-9]/), '')
+        },
+    },
+    noSpecialChar: {
+        validate: (e) => {
+            e.target.value = e.target.value.replace(/[^\w\s]/gi, "")
         },
     },
 

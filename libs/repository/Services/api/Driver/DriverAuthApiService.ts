@@ -57,6 +57,10 @@ export class DriverAuthApiService implements IDriverAuthRepository {
         window.location.href = to || '/'
     }
 
+    redirectToLogin(): void {
+        this.redirect('/minha-conta/login')
+    }
+
     sampleRegister(data: any): Promise<any> { return api().post(AuthEndpoints.SAMPLE_REGISTER, data) }
 
     completeRegister(data: any): Promise<any> { return api().post(AuthEndpoints.COMPLETE_REGISTER, data) }
