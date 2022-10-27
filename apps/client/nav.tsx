@@ -15,6 +15,8 @@ const _nav: Array<NavProps> = [
         name: 'Meus Veículos', path: '/veiculos', visible: true, icon: <i className={'las la-users'}></i>, private: true,
         description: 'Cadastre e gerencie seus veiculos'
     },
+    { name: 'Motoristas', path: '/veiculos/[licence-plate]', icon: <i className={'las la-users'}></i>, private: true, visible: false },
+
     {
         name: 'Veículos Cedidos', path: '/veiculos', visible: true, icon: <i className={'las la-users'}></i>, private: true,
         description: 'Cadastre e gerencie seus veiculos'
@@ -36,6 +38,7 @@ const _nav: Array<NavProps> = [
         name: 'Extrato', path: '/#', visible: true, icon: <i className={'las la-users'}></i>, private: true,
         description: 'Veja seu extrato e relatórios'
     },
+
 ]
 
 export default _nav

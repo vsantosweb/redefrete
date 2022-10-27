@@ -20,64 +20,67 @@ import { useForm } from "react-hook-form";
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverRepository } from '@redefrete/interfaces';
 import { DataGrid } from '@redefrete/components';
-import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
 import { useRouter } from 'next/router';
-import suspenseResource from 'apps/admin/suspenseResource';
-import { GetServerSideProps } from 'next';
+import _ from 'lodash';
+import { DriverProfile } from '@redefrete/types';
 
 const driverRepository = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//     console.log(context.query.id)
 
-//     const driver = driverRepository.show(context.query.id).then(response => response.data)
 
-//     return {
-//         props: driver
-//     }
-// }
-
-const statusList = suspenseResource(driverRepository.statusList);
-
-const columns: Array<IColumn> = [
-    { name: 'id', header: 'id', defaultVisible: false },
-    { name: 'name', header: 'Nome', render: ({ value, ...rest }) => <strong>{rest.data.document.name}</strong> },
-    { name: 'file_path', header: 'URL', defaultFlex: 1.3, render: ({ value, ...rest }) => <Link target={'_blank'} href={rest.data.file_path}><ChakraLink>{rest.data.file_path}</ChakraLink></Link> },
-
-];
 
 const Driver: Page = () => {
 
-    const [driver, setDriver] = React.useState<any>({})
-    const [driverStatuses, setDriverStatuses] = React.useState<any>([])
+    const [driver, setDriver] = React.useState<DriverProfile>(null)
+    const [driverStatuses, setDriverStatuses] = React.useState(null)
 
-    console.log(driver)
     const router = useRouter();
+
+    const showDriver = (driverId) => {
+        return driverRepository.show(driverId).then(response => setDriver(response.data))
+    };
 
     React.useEffect(() => {
 
-        driverRepository.show(router.query.id).then(response => setDriver(response.data))
+        showDriver(router.query.id)
+
         driverRepository.statusList().then().then(response => setDriverStatuses(response.data))
 
-    }, [])
+    }, [router.query.id])
+
+
 
     const driverDataForm = useForm({ mode: 'onChange' });
+
 
     const handleupdateDriverData = async (formData) => {
         console.log(formData)
     }
 
+    const changeStatus = (e) => {
+        driverRepository.changeStatus(router.query.id, { driver_status_id: e.target.value })
+            .then(response => showDriver(router.query.id))
+    }
+    console.log(driver)
     return (
-        driver? <Styled.ProfileWrapper>
+        driver ? <Styled.ProfileWrapper>
             <Styled.ProfileDetails>
                 <Styled.ProfileInfoContainer>
                     <Avatar size={'lg'} name={driver.name} />
                     <Styled.ProfileInfo>
                         <Styled.ProfileInfoLabel>{driver.name}</Styled.ProfileInfoLabel>
                         <Styled.ProfileInfoValue>{driver.email}</Styled.ProfileInfoValue>
-                        <Select size={'xs'} defaultValue={driver.status}>
-                            {driverStatuses?.map((status, index) => <option key={index}>{status.name}</option>)}
-                        </Select>
+
+                        <FormControl isRequired={true}>
+                            {
+                                driver && <Select onChange={changeStatus} size={'xs'} defaultValue={driver?.driver_status_id || ''}>
+                                    {driverStatuses ? driverStatuses?.map((status, index) => {
+                                        return <option value={status.id} key={index}>{status.name}</option>
+                                    }) : ''}
+                                </Select>
+                            }
+                        </FormControl>
+
                     </Styled.ProfileInfo>
                 </Styled.ProfileInfoContainer>
             </Styled.ProfileDetails>
@@ -111,14 +114,7 @@ const Driver: Page = () => {
                             <Heading mb={3} size={'md'}>Endereço</Heading>
                             <form onSubmit={handleupdateDriverData}>
                                 <Stack spacing={3}>
-
-                                    <Box display={'flex'} gap={4}>
-                                        <Link color={'red'} target={'_blank'} href={driver?.licence?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
-                                        <FormControl flex={1} display='flex' alignItems='center'>
-                                            <FormLabel htmlFor='email-alerts' mb='0'> O documento é válido?</FormLabel>
-                                            <Switch defaultChecked={driver?.address?.status} id='email-alerts' />
-                                        </FormControl>
-                                    </Box>
+                                    <Link color={'red'} target={'_blank'} href={driver?.licence?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
 
                                     {driver.address && <AddressForm form={driverDataForm} driver={driver} />}
 
@@ -133,14 +129,7 @@ const Driver: Page = () => {
                             <Heading mb={3} size={'md'}>CNH</Heading>
                             <form onSubmit={handleupdateDriverData}>
                                 <Stack spacing={3}>
-
-                                    <Box display={'flex'} gap={4}>
-                                        <Link color={'red'} target={'_blank'} href={driver?.address?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
-                                        <FormControl flex={1} display='flex' alignItems='center'>
-                                            <FormLabel htmlFor='email-alerts' mb='0'> O documento é válido?</FormLabel>
-                                            <Switch isChecked id='email-alerts' />
-                                        </FormControl>
-                                    </Box>
+                                    <Link color={'red'} target={'_blank'} href={driver?.address?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
 
                                     {driver.licence && <LicenceForm form={driverDataForm} driver={driver} />}
 

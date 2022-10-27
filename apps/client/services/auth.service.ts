@@ -9,9 +9,9 @@ type SignInCredentials = {
 }
 
 export enum AuthEndpoints {
-    LOGIN = '/driver/auth/login',
-    LOGOUT = '/driver/auth/logout',
-    SESSION = '/driver/auth/session'
+    LOGIN = '/drivers/auth/login',
+    LOGOUT = '/drivers/auth/logout',
+    SESSION = '/drivers/auth/session'
 }
 
 interface JWTtoken { token: string }
@@ -25,7 +25,7 @@ const signIn = async ({ email, password }: SignInCredentials) => api.post(AuthEn
     })
 
 
-const signOut = async (redirect: string = '/minha-conta/login') => api.post('/driver/auth/logout')
+const signOut = async (redirect: '/minha-conta/login') => api.post('/driver/auth/logout')
     .then(() => {
         Cookie.remove('token')
         Router.push(redirect)
@@ -39,7 +39,7 @@ async function session() {
 
     if (token) {
 
-        return await api.get('/driver/auth/session')
+        return await api.get('/drivers/auth/session')
             .then(response => response.data)
             .catch(() => false)
     }

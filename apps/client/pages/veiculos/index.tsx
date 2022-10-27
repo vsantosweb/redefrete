@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, FormControl, FormLabel, Select, Stack, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Heading, Select, Stack, useDisclosure } from '@chakra-ui/react';
 import { ListView, Loader } from '@redefrete/components';
 import { Page } from '../_app';
 import { RouteGuardContext } from '../../RouteGuard';
@@ -67,7 +67,11 @@ const Vehicles: Page = () => {
   return (
     <Box display={'flex'} flexDirection={'column'} gap={3}>
       <Loader isPromisse={true} area={'fetch-vehicles'}>
-        <div style={{ textAlign: 'right' }}><Button onClick={onOpen} colorScheme={'primary'} >+ Adicionar novo</Button></div>
+        <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} style={{ textAlign: 'right' }}>
+          <Heading size={'md'}>Meus Veículos</Heading>
+          <Button onClick={onOpen} leftIcon={<i className={'las la-plus'}></i>} colorScheme={'primary'}>Adicionar novo</Button>
+        </Box>
+
         <ListView list={vehicles} />
       </Loader>
       <>

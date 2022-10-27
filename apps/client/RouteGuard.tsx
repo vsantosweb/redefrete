@@ -21,7 +21,7 @@ const RouteGuardContext = React.createContext<RouteGuard>({
     rendering: null,
 });
 
-const privatePaths = routes.filter((nav: NavProps) => nav.private).map(x => x.path);
+const privatePaths = _nav.filter((nav: NavProps) => nav.private).map(x => x.path);
 
 const driverAuth = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
 
@@ -52,16 +52,13 @@ function RouteGuard({ children }) {
     }, [router.asPath]);
 
     const authCheck = async (url) => {
-
-        const path = url.split('?')[0];
-
-        return await driverAuth.session().then((user) => {
-
+        
+        return await authService.session().then((user) => {
+            console.log(user)
             if (user && router.pathname === AuthEndpoints.LOGIN) {
                 router.push(`/`)
             }
-
-            if (!user && privatePaths.includes(window.location.pathname)) {
+            if (!user && privatePaths.includes(router.pathname) ) {
                 router.push('/minha-conta/login');
                 setAuthorized(false);
                 setUser({})
@@ -71,13 +68,11 @@ function RouteGuard({ children }) {
             setRendering(false)
 
         }).catch(() => {
-
             setAuthorized(false);
             router.push('/minha-conta/login');
             setUser({});
             setRendering(false);
         })
-
 
     }
 

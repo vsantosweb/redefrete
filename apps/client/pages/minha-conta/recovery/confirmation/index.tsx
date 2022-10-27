@@ -1,8 +1,10 @@
-import { NextPage } from 'next'
 import React from 'react'
 import { Button, Heading, Stack, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router';
 
 export const RecoveryConfirmation = ({ layout , history}: any) => {
+
+    const router = useRouter();
 
     return (
         <Stack spacing={3}>
@@ -11,7 +13,7 @@ export const RecoveryConfirmation = ({ layout , history}: any) => {
                 Acabamos de enviar instruções e um link para você redefinir a senha para
                 <strong> souzavito@hotmail.com</strong>. Pode levar alguns minutinhos para chegar.
             </Text>
-            <Button variant={'outline'} onClick={() => history.push('/minha-conta/login')} colorScheme={'primary'}>Voltar para o login</Button>
+            <Button variant={'outline'} onClick={() => router.push('/minha-conta/login')} colorScheme={'primary'}>Voltar para o login</Button>
         </Stack>
     )
 }

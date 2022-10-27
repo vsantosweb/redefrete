@@ -22,12 +22,12 @@ const DriverForm = ({ form, driver }: any) => {
 
     return (
         <Stack spacing={3}>
-            <FormControl  isRequired={true} variant={'floating'}>
+            <FormControl isRequired={true} variant={'floating'}>
                 <FormLabel>Nome Completo</FormLabel>
                 <InputCustom accept={'alpha'} defaultValue={driver?.name || ''} {...form.register('name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
             </FormControl>
 
-            <FormControl  isRequired={true} variant={'floating'}>
+            <FormControl isRequired={true} variant={'floating'}>
                 <FormLabel>Email</FormLabel>
                 <Input type={'email'} defaultValue={driver?.email || ''} {...form.register('email', { required: true, minLength: 8 })} />
             </FormControl>
@@ -56,8 +56,9 @@ const DriverForm = ({ form, driver }: any) => {
                 <Input
                     type={'date'}
                     autoComplete={'off'}
+                    defaultValue={driver?.birthday || ''}
                     max={moment().subtract(18, 'years').format('YYYY-MM-DD')}
-                    {...form.register('birth_date', { required: true, minLength: 4 })}
+                    {...form.register('birthday', { required: true, minLength: 4 })}
                 />
             </FormControl>
 

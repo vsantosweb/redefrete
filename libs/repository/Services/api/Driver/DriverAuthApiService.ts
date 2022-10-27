@@ -3,21 +3,19 @@ import api from "..";
 import { IDriverAuthRepository } from '@redefrete/interfaces';
 
 import Cookie from 'js-cookie';
-import DriverApiService from "./DriverApiService";
 
 export enum AuthEndpoints {
-    LOGIN = '/driver/auth/login',
-    LOGOUT = '/driver/auth/logout',
-    SESSION = '/driver/auth/session',
-    SAMPLE_REGISTER = '/driver/auth/register',
-    COMPLETE_REGISTER = '/driver/auth/register/complete',
-    VERIFY_REGISTER = '/driver/auth/register/verify?trackid='
+    LOGIN = '/drivers/auth/login',
+    LOGOUT = '/drivers/auth/logout',
+    SESSION = '/drivers/auth/session',
+    SAMPLE_REGISTER = '/drivers/auth/register',
+    COMPLETE_REGISTER = '/drivers/auth/register/complete',
+    VERIFY_REGISTER = '/drivers/auth/register/verify?trackid='
 }
 
 @injectable()
 
 export class DriverAuthApiService implements IDriverAuthRepository {
-
 
 
     login(credentials: { email: string, password: string }): Promise<any> {

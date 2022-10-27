@@ -23,7 +23,7 @@ export interface LayoutProps {
 
 export const Layout = ({ children, layout, title }: LayoutProps) => {
 
-    let Component = layouts[layout] || React.Fragment;
+    const Component = layouts[layout] || React.Fragment;
     return <Component title={title}>{children}</Component>;
 
 };

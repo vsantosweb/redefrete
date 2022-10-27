@@ -30,7 +30,7 @@ export const RecoverySuccess = ({ history }: any) => {
             <Text>
                 Agora você pode acessar sua conta com sua nova senha e continuar navegando na tripler.
             </Text>
-            <Button variant={'outline'} onClick={() => history.push('/account/login')} colorScheme={'primary'}>Voltar para o login</Button>
+            <Button variant={'outline'} onClick={() => router.push('/account/login')} colorScheme={'primary'}>Voltar para o login</Button>
         </Stack>
     )
 }

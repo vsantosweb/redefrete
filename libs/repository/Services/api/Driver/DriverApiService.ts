@@ -8,18 +8,20 @@ import api from "..";
 
 export default class DriverApiService implements IDriverRepository {
 
-  driver
-  licence
-  address
-  driver_bank
-  password
-  vehicle
-  name: string
-  email: string
-  phone: string
-
   list = () => api().get('/drivers').then(response => response.data.data)
+
   show = async (id: number) => await api().get('/drivers/' + id).then(response => response.data)
+
   statusList = async () => await api().get('/driver-statuses').then(response => response.data)
+
+  changeStatus = async (customerId: number, status: object) => {
+   return await api().put(`/drivers/${customerId}/change-status`, status)
+      .then(response => response.data)
+  }
+
+  liveSearch(email: string): Promise<any> {
+    return api().post('/drivers/live-search', {email: email})
+    .then(response => response.data.data)
+  }
 
 }

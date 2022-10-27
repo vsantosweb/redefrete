@@ -31,30 +31,8 @@ type AppPropsWithLayout = AppProps & {
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
 
-  const router = useRouter();
 
-  const [pageLoader, setPageLoader] = React.useState(false);
-
-
-  const handleStart = () => { setPageLoader(true) }
-  const handleStop = () => { setPageLoader(false) }
-
-
-  React.useEffect(() => {
-
-
-    router.events.on('routeChangeStart', handleStart)
-    router.events.on('routeChangeComplete', handleStop)
-    router.events.on('routeChangeError', handleStop)
-
-    return () => {
-      router.events.off('routeChangeStart', handleStart)
-      router.events.off('routeChangeComplete', handleStop)
-      router.events.off('routeChangeError', handleStop)
-    }
-
-
-  }, [router])
+  // const [pageLoader, setPageLoader] = React.useState(false);
 
   return (
     <Theme>
@@ -63,7 +41,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <title>{Component?.config?.title || null}</title>
       </Head>
       <RouteGuard>
-        <LoaderTracker promisse={pageLoader} />
+        {/* <LoaderTracker promisse={pageLoader} /> */}
         <Layout title={Component?.config?.title} layout={Component?.config?.layout || 'DefaultLayout'}>
           <Component {...pageProps} />
         </Layout>

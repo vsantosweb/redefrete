@@ -34,7 +34,3 @@ const InputCustom = React.forwardRef(({ accept, ...props }: InputCustomProps | a
 })
 
 export default InputCustom;
-
-
-
-// e.target.value.replace(/[^\w ]/g, '')

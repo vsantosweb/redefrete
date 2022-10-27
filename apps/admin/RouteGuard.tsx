@@ -46,11 +46,9 @@ function RouteGuard({ children }) {
     }, [router.asPath]);
 
     const authCheck = async (url) => {
-
-        const path = url.split('?')[0];
         
         return await authService.session().then((user) => {
-            console.log(user)
+
             if (user && router.pathname === AuthEndpoints.LOGIN) {
                 router.push(`/`)
             }
@@ -69,7 +67,6 @@ function RouteGuard({ children }) {
             setUser({});
             setRendering(false);
         })
-
 
     }
 

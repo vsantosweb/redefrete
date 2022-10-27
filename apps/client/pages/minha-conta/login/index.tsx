@@ -19,7 +19,7 @@ export const Login = () => {
   const submitCredentials = async (credentials: { email: string, password: string }) => {
 
     await driverAuth.login(credentials)
-      .then((response) => driverAuth.redirectToLogin())
+      .then((response) => driverAuth.redirect('/'))
       .catch(error => {
         setErrorMessage(error.response.data.message)
         reset()

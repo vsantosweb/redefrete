@@ -4,7 +4,10 @@ import { extendTheme, withDefaultProps, ChakraProvider } from "@chakra-ui/react"
 import GlobalStyles, { ViewPort } from "./GlobalStyles";
 
 export type ThemeProps = {
-  defaultContainer: any
+  defaultContainer: {
+    width: string,
+    spacing: string
+  }
   colors: any
   fonts: any
   defaultRadius: string

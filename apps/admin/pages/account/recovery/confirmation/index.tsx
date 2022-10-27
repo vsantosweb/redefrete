@@ -1,8 +1,7 @@
-import { NextPage } from 'next'
 import React from 'react'
 import { Button, Heading, Stack, Text } from '@chakra-ui/react'
 
-export const RecoveryConfirmation = ({ layout, history }: any) => {
+export const RecoveryConfirmation = () => {
 
     return (
         <Stack spacing={3}>

@@ -11,9 +11,9 @@ const driverLicence = container.get<IDriverLicenceRepository>(SERVICE_KEYS.DRIVE
 
 const LicenceForm = ({ form, driver = null }) => {
 
-    const [driverLicenceCategories, setDriverLicenceCategories] = React.useState([])
+    const [driverLicenceCategories, setDriverLicenceCategories] = React.useState(null)
 
-    React.useEffect(() => {  driverLicence.getCategories().then(response => setDriverLicenceCategories(response)) }, [])
+    React.useEffect(() => { driverLicence.getCategories().then(response => setDriverLicenceCategories(response)) }, [])
 
     return (
         <Stack spacing={3}>
@@ -44,16 +44,15 @@ const LicenceForm = ({ form, driver = null }) => {
                 </FormControl>
 
             </Stack>
+            
             <FormControl variant={'floating'}>
                 <FormLabel>Categoria</FormLabel>
-
-                <Select
+                {driverLicenceCategories && <Select
                     placeholder={'Selecione...'}
-                    defaultValue={driverLicenceCategories?.filter(category => category.id === driver?.licence.driver_licence_category_id)[0]?.id}
+                    defaultValue={driver?.licence.driver_licence_category_id || ''}
                     {...form.register('licence.driver_licence_category_id', { required: true })}>
                     {driverLicenceCategories?.map((category, index) => <option value={category.id} key={index}>{category.name}</option>)}
-                </Select>
-
+                </Select>}
             </FormControl>
 
             <Stack direction={'row'}>

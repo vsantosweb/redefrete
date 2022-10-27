@@ -5,7 +5,6 @@ export const AccountWrapper = styled.div`
 display: flex;
 width: 100%;
 flex-direction: column;
-background: #f1f1f1;
 height: auto;
 min-height: 100%;
 gap: 10px;
