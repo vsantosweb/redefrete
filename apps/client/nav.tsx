@@ -18,8 +18,8 @@ const _nav: Array<NavProps> = [
     { name: 'Motoristas', path: '/veiculos/[licence-plate]', icon: <i className={'las la-users'}></i>, private: true, visible: false },
 
     {
-        name: 'Veículos Cedidos', path: '/veiculos', visible: true, icon: <i className={'las la-users'}></i>, private: true,
-        description: 'Cadastre e gerencie seus veiculos'
+        name: 'Veículos Parceiros', path: '/veiculos-parceiros', visible: true, icon: <i className={'las la-users'}></i>, private: true,
+        description: 'Aqui estão os veículo que foram cedidos para você trabalhar.'
     },
     {
         name: 'Escalas', path: '/#', visible: true, icon: <i className={'las la-users'}></i>, private: true,

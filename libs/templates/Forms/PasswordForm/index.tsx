@@ -9,20 +9,20 @@ const PasswordForm = ({ form }) => {
 
             <FormControl variant={'floating'}>
                 <FormLabel>Senha</FormLabel>
-                <Input type={'password'} placeholder='••••••••••' {...form.register('licence.password', { required: true, minLength: 8 })} />
+                <Input type={'password'} placeholder='••••••••••' {...form.register('password', { required: true, minLength: 8 })} />
             </FormControl>
 
             <input hidden {...form.register('accepted_terms')} defaultValue={1} />
 
-            <FormControl isInvalid={form.formState?.errors?.licence?.password_confirmation} variant={'floating'}>
+            <FormControl isInvalid={form.formState?.errors?.password_confirmation} variant={'floating'}>
                 <FormLabel>Confirme a senha</FormLabel>
-                <Input isInvalid={form.formState?.errors?.licence?.password_confirmation} type={'password'} placeholder='••••••••••'
-                    {...form.register('licence.password_confirmation', {
+                <Input isInvalid={form.formState?.errors?.password_confirmation} type={'password'} placeholder='••••••••••'
+                    {...form.register('password_confirmation', {
                         required: true,
-                        validate: (value) => value === form.watch('licence.password') || 'As senhas não conferem'
+                        validate: (value) => value === form.watch('password') || 'As senhas não conferem'
                     })}
                 />
-                <FormErrorMessage>{form.formState?.errors?.licence?.password_confirmation?.message as never}</FormErrorMessage>
+                <FormErrorMessage>{form.formState?.errors?.password_confirmation?.message as never}</FormErrorMessage>
             </FormControl>
         </Stack>
 

@@ -10,6 +10,7 @@ export type Vehicle = {
     owner_name?: string
     owner_document?: string
     document_file?: any
+    partners?: array
 
 }
 

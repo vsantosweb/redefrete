@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormControl, FormErrorMessage, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
-import { InputCustom } from '@redefrete/components';
-import { CPFValidation, suspenseResource } from '@redefrete/helpers';
+import { DocumentInput, InputCustom } from '@redefrete/components';
+import { CPFValidation, stateList, suspenseResource } from '@redefrete/helpers';
 import InputMask from 'react-input-mask';
 
 import { Path, UseFormRegister } from 'react-hook-form';
@@ -22,6 +22,7 @@ const DriverForm = ({ form, driver }: any) => {
 
     return (
         <Stack spacing={3}>
+
             <FormControl isRequired={true} variant={'floating'}>
                 <FormLabel>Nome Completo</FormLabel>
                 <InputCustom accept={'alpha'} defaultValue={driver?.name || ''} {...form.register('name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
@@ -33,22 +34,7 @@ const DriverForm = ({ form, driver }: any) => {
             </FormControl>
 
             <FormControl isInvalid={form.formState.errors?.document_1} isRequired={true} variant={'floating'}>
-                <FormLabel>CPF</FormLabel>
-
-                <InputMask
-                    alwaysShowMask={true}
-                    maskChar={null}
-                    mask={'999.999.999-99'}
-                    type={'tel'}
-                    {...form.register('document_1', {
-                        required: true,
-                        setValueAs: v => v.replace(/[^\d]/g, ''),
-                        validate: v => CPFValidation(v)
-                    })}>
-                    {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'000.000.000-00'} />)}
-
-                </InputMask>
-                <FormErrorMessage>CPF Inválido</FormErrorMessage>
+                <DocumentInput field={'document_1'} useForm={form} />
             </FormControl>
 
             <FormControl isRequired={true} variant={'floating'}>
@@ -61,7 +47,6 @@ const DriverForm = ({ form, driver }: any) => {
                     {...form.register('birthday', { required: true, minLength: 4 })}
                 />
             </FormControl>
-
 
             <FormControl variant={'floating'}>
                 <FormLabel>Telefone/Whatsapp</FormLabel>
@@ -76,6 +61,33 @@ const DriverForm = ({ form, driver }: any) => {
                 </InputMask>
             </FormControl>
 
+            <FormControl isRequired={true} variant={'floating'}>
+                <FormLabel>Nº RG</FormLabel>
+                <InputCustom
+                    accept={'noSpecialChar'}
+                    maxLength={9}
+                    autoComplete={'off'}
+                    defaultValue={driver?.birthday || ''}
+                    {...form.register('rg', { required: true, minLength: 4 })}
+                />
+            </FormControl>
+
+            <Stack direction={'row'}>
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Data de emissão</FormLabel>
+                    <Input
+                        defaultValue={driver?.licence?.expire_at || ''}
+                        type={'date'} autoComplete={'off'}
+                        {...form.register('rg_issue', { required: true })} />
+                </FormControl>
+
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>UF</FormLabel>
+                    <Select defaultValue={driver?.licence?.uf || ''} {...form.register('rg_uf', { required: true })}>
+                        {stateList.map(state => <option key={state} value={state}>{state}</option>)}
+                    </Select>
+                </FormControl>
+            </Stack>
             <FormControl variant={'floating'}>
                 <FormLabel>Gênero</FormLabel>
                 <Select placeholder={'Selecione...'} {...form.register('gender', { required: true })} defaultValue={driver?.gender || null}>

@@ -8,6 +8,9 @@ import { layout, Layout, LayoutProps } from '../resources/layouts';
 import { RouteGuard } from '../RouteGuard';
 import 'libs/fonts/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css';
 
+import moment from 'moment';
+import 'moment/locale/pt-br';
+
 type PageConfigProps = {
   title?: string,
   description?: string
@@ -22,8 +25,9 @@ type AppPropsWithLayout = AppProps & {
   Component: Page
 }
 
-function App({ Component, pageProps }: AppPropsWithLayout) {
+moment().locale('pt-br');
 
+function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <Theme>
       <Head>

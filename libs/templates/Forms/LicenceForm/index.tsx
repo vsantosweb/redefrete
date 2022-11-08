@@ -44,7 +44,7 @@ const LicenceForm = ({ form, driver = null }) => {
                 </FormControl>
 
             </Stack>
-            
+
             <FormControl variant={'floating'}>
                 <FormLabel>Categoria</FormLabel>
                 {driverLicenceCategories && <Select
@@ -67,13 +67,19 @@ const LicenceForm = ({ form, driver = null }) => {
                         {stateList.map(state => <option key={state} value={state}>{state}</option>)}
                     </Select>
                 </FormControl>
+
             </Stack>
 
-            <FormControl isRequired={true} variant={'floating'}>
-                <FormLabel>Nome da mãe</FormLabel>
-                <InputCustom defaultValue={driver?.licence?.mother_name || ''} accept={'alpha'}  {...form.register('licence.mother_name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
-            </FormControl>
-
+            <Stack direction={'row'}>
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Nome da mãe</FormLabel>
+                    <InputCustom defaultValue={driver?.licence?.mother_name || ''} accept={'alpha'}  {...form.register('licence.mother_name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
+                </FormControl>
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Data da 1ª habilitação</FormLabel>
+                    <Input defaultValue={driver?.licence?.expire_at || ''} type={'date'} autoComplete={'off'} placeholder={'000.000.000-00'} {...form.register('licence.first_licence_date', { required: true })} />
+                </FormControl>
+            </Stack>
             <InputFile
                 required
                 label={'Foto da CNH frente e verso'}

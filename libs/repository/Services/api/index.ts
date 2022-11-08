@@ -8,7 +8,6 @@ export default function api(type: apiType = null) {
 
     const baseURL = type ? process.env.NEXT_PUBLIC_URL_API : process.env.NEXT_PUBLIC_URL_API_CLIENT
 
-    console.log(baseURL, 'kaspofkospa')
     const api = axios.create({ baseURL: baseURL });
 
     if (Cookie.get('token')) {

@@ -7,6 +7,9 @@ import ServiceHeader from './ServiceHeader';
 import DataGrid from './DataGrid';
 import DocumentInput from './DocumentInput';
 import { LoaderTracker, Loader } from './Loader';
+import DriverPartnerList from './DriverPartnerList';
+import PartnerVehicleList from './PartnerVehicleList';
+
 
 export {
     InputFile,
@@ -18,5 +21,8 @@ export {
     DataGrid,
     DocumentInput,
     LoaderTracker,
-    Loader
+    Loader,
+    DriverPartnerList,
+    PartnerVehicleList
+    
 }

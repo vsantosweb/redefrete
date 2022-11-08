@@ -7,7 +7,9 @@ import {
     ICaptureLead,
     IDriverAuthRepository,
     IDriverLicenceRepository,
+    IDriverPartnerRepository,
     IDriverRepository,
+    IDriverVehicleRepository,
     IVehicleTypeRepository,
 } from '@redefrete/interfaces';
 import VehicleTypeApiService from './api/Vehicle/VehicleTypeApiService';
@@ -16,6 +18,7 @@ import { DriverLicenceApiService } from './api/Driver/DriverLicenceApiService';
 import { DriverVehicleApiService } from './api/Driver/DriverVehicleApiService';
 import { IVehicleRepository } from '../Interfaces/Vehicle/IVehicleRepository';
 import VehicleApiService from './api/Vehicle/VehicleApiService';
+import { DriverPartnerApiService } from './api/Driver/DriverPartnerApiService';
 
 
 
@@ -25,6 +28,7 @@ export const SERVICE_KEYS = {
     DRIVER_REPOSITORY: Symbol('DRIVER_REPOSITORY'),
     DRIVER_LICENCE_REPOSITORY: Symbol('DRIVER_REPOSITORY'),
     DRIVER_VEHICLE_REPOSITORY: Symbol('DRIVER_VEHICLE_REPOSITORY'),
+    DRIVER_PARTNER_REPOSITORY: Symbol('DRIVER_PARTNER_REPOSITORY'),
 
     VEHICLE_TYPE_REPOSITORY: Symbol('VEHICLE_TYPE_REPOSITORY'),
     VEHICLE_REPOSITORY: Symbol('VEHICLE_REPOSITORY'),
@@ -39,7 +43,8 @@ const _container = new Container();
 _container.bind<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH).to(DriverAuthApiService).inSingletonScope();
 _container.bind<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY).to(DriverApiService).inSingletonScope();
 _container.bind<IDriverLicenceRepository>(SERVICE_KEYS.DRIVER_LICENCE_REPOSITORY).to(DriverLicenceApiService).inSingletonScope();
-_container.bind<DriverVehicleApiService>(SERVICE_KEYS.DRIVER_VEHICLE_REPOSITORY).to(DriverVehicleApiService).inSingletonScope();
+_container.bind<IDriverVehicleRepository>(SERVICE_KEYS.DRIVER_VEHICLE_REPOSITORY).to(DriverVehicleApiService).inSingletonScope();
+_container.bind<IDriverPartnerRepository>(SERVICE_KEYS.DRIVER_PARTNER_REPOSITORY).to(DriverPartnerApiService).inSingletonScope();
 
 
 _container.bind<IVehicleTypeRepository>(SERVICE_KEYS.VEHICLE_TYPE_REPOSITORY).to(VehicleTypeApiService).inSingletonScope();

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { InputSelect, ListView } from '@redefrete/components';
+import { DriverPartnerList, InputSelect, ListView } from '@redefrete/components';
 import { Page } from '../../_app';
 
 import * as Styled from './styles';
-import { IDriverVehicleRepository, IDriverRepository } from '@redefrete/interfaces';
+import { IDriverVehicleRepository, IDriverRepository, IDriverPartnerRepository } from '@redefrete/interfaces';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { trackPromise } from 'react-promise-tracker';
 import { useRouter } from 'next/router';
@@ -24,48 +24,44 @@ import {
   ModalCloseButton,
   useDisclosure,
   FormLabel,
-  FormHelperText
+  FormHelperText,
+  FormErrorMessage
 } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
 
 const driverVehicleService = container.get<IDriverVehicleRepository>(SERVICE_KEYS.DRIVER_VEHICLE_REPOSITORY);
-const driverService = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
+const driverPartnerService = container.get<IDriverPartnerRepository>(SERVICE_KEYS.DRIVER_PARTNER_REPOSITORY);
 
-const vehicles = [
-  { name: 'CPF/CNPJ', label: '565.555.888-33', path: '/veiculos/FLV-3465' },
-  { name: 'Telefone', label: '11 9 9898988', path: '/veiculos/FLV-3465' },
-]
 const VehicleView: Page = () => {
 
   const [vehicle, setVehicle] = React.useState<Vehicle>({});
+  const [partnerErrorMessage, setPartnerErrorMessage] = React.useState<string>(null);
   const router = useRouter();
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  React.useEffect(() => {
-    trackPromise(
-      driverVehicleService.showVehicle(router.query['licence-plate'] as string).then(
-        response => setVehicle(response.data)
-      ), 'show-vehicle')
-  }, [])
+  const { handleSubmit, register, reset, formState } = useForm();
+
+  React.useEffect(() => { showVehicle() }, [])
+
+  const showVehicle = () => trackPromise(
+    driverVehicleService.showVehicle(router.query['licence-plate'] as string).then(
+      response => setVehicle(response.data)
+    ), 'show-vehicle')
 
   const deleteVehicle = () => driverVehicleService.deleteVehicle(vehicle.id).then(response => router.push('/veiculos'))
 
-  const promiseOptions = (inputValue: string) => {
+  const invitePartner = async (formData) => {
 
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(driverService.liveSearch(inputValue).then(response => {
-          const data = response.map(x => {
-            return { value: x.id, label: `${x.name} (${x.email})` }
-          })
+    formData.vehicle_id = vehicle.id;
 
-          return data;
+    return await driverPartnerService.invitePartner(formData).then((response) => {
 
-        }));
-      }, 1000);
-
-    });
+      if (!response.success) return setPartnerErrorMessage(response.message)
+      onClose()
+      reset()
+      showVehicle()
+    })
   }
-
 
   return (
     <Styled.VehicleViewWrapper>
@@ -121,7 +117,7 @@ const VehicleView: Page = () => {
       <Stack>
         <Box border={'solid 1px #ddd'} borderRadius={'10px'} bg={'white'} alignItems={'center'} p={4} style={{ 'display': 'flex', gap: '10px', justifyContent: 'flex-end' }}>
           <Heading size={'md'} flex={1}>Motoristas</Heading>
-          <div>
+          {/* <div>
             <FormControl>
               <Input placeholder={'Todos...'} type={'search'} />
             </FormControl>
@@ -130,58 +126,14 @@ const VehicleView: Page = () => {
             <Select placeholder={'Status'}>
               <option>Pendente</option>
             </Select>
-          </FormControl>
+          </FormControl> */}
 
           <Button onClick={onOpen} leftIcon={<i className={'las la-plus'}></i>} colorScheme={'primary'}>Convidar Motorista</Button>
 
         </Box>
 
         <Box border={'solid 1px #ddd'} borderRadius={'10px'} bg={'white'} alignItems={'center'} style={{ gap: '10px' }}>
-          <Styled.TableList>
-            {Array.from({ length: 5 }, (x => x)).map((x, v) =>
-              <Styled.TableListWrapper key={v}>
-                <Styled.TableListContainer flex={1}>
-                  <Styled.TableLisItem>
-                    <p className={'text-sm font-bold text-gray-700'}>MOTORISTA</p>
-                    <p style={{ whiteSpace: 'nowrap' }}>Vitor Laurencio Souza Santos</p>
-                  </Styled.TableLisItem>
-                </Styled.TableListContainer>
-
-                <Styled.TableListContainer flex={1}>
-                  <Styled.TableLisItem>
-                    <p className={'text-sm font-bold'}>STATUS</p>
-                    <p>Pendente</p>
-                  </Styled.TableLisItem>
-                </Styled.TableListContainer>
-
-                <Styled.TableListContainer flex={1}>
-                  <Styled.TableLisItem>
-                    <p className={'text-sm font-bold'}>STATUS</p>
-                    <p>Pendente</p>
-                  </Styled.TableLisItem>
-                </Styled.TableListContainer>
-
-                <Styled.TableListContainer>
-                  <Styled.TableLisItem>
-                    <p className={'text-sm font-bold'}>CRIADO EM</p>
-                    <p>20-10-2022</p>
-                  </Styled.TableLisItem>
-                </Styled.TableListContainer>
-
-                <Styled.TableListContainer>
-                  <Styled.TableLisItem>
-                    <Menu>
-                      <div> <MenuButton as={IconButton} icon={<i className={'las la-ellipsis-v'}></i>} /></div>
-                      <MenuList>
-                        <MenuItem>Cancelar Convite</MenuItem>
-                      </MenuList>
-                    </Menu>
-                  </Styled.TableLisItem>
-                </Styled.TableListContainer>
-
-              </Styled.TableListWrapper>
-            )}
-          </Styled.TableList>
+          {vehicle?.partners?.length > 0 ? <DriverPartnerList showVehicle={showVehicle} partners={vehicle.partners} /> : 'Sem parceiros'}
         </Box>
       </Stack>
 
@@ -189,25 +141,28 @@ const VehicleView: Page = () => {
 
         <Modal isCentered isOpen={isOpen} onClose={onClose} motionPreset='slideInBottom'>
           <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Convidar Motorista</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <div>
-                <FormControl isRequired={true}>
-                  <FormLabel>Email do motorista</FormLabel>
-                  <Input maxLength={50} type={'email'} />
-                  <FormHelperText>O motorista precisa possuir um cadastro Redefrete e ser autêntico, para ser convidado.</FormHelperText>
-                </FormControl>
-              </div>
-            </ModalBody>
+          <form onSubmit={handleSubmit(invitePartner)}>
+            <ModalContent>
+              <ModalHeader>Convidar Motorista</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <div>
+                  <FormControl isRequired={true} isInvalid={partnerErrorMessage ? true : false}>
+                    <FormLabel>Email do motorista</FormLabel>
+                    <Input maxLength={50} type={'email'} {...register('email', { required: true })} />
+                    <FormErrorMessage>{partnerErrorMessage}</FormErrorMessage>
+                    <FormHelperText>O motorista precisa possuir um cadastro Redefrete e ser autêntico, para ser convidado.</FormHelperText>
+                  </FormControl>
+                </div>
+              </ModalBody>
 
-            <ModalFooter>
+              <ModalFooter>
+                <Button onClick={() => [onClose(), reset()]} variant='ghost'>Cancelar</Button>
+                <Button isLoading={formState.isSubmitting} type={'submit'} colorScheme={'primary'} mr={3} >Enviar Solciitação </Button>
+              </ModalFooter>
 
-              <Button variant='ghost'>Cancelar</Button>
-              <Button colorScheme={'primary'} mr={3} onClick={onClose}>Enviar Solciitação </Button>
-            </ModalFooter>
-          </ModalContent>
+            </ModalContent>
+          </form>
         </Modal>
       </>
     </Styled.VehicleViewWrapper>

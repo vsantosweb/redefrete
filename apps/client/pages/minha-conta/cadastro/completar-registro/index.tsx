@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, Stack } from '@chakra-ui/react';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, Stack, Link as ChakraLink } from '@chakra-ui/react';
 import * as Styled from '../../styles';
 import { AddressForm, LicenceForm, BankForm, VehicleForm, PasswordForm, DriverForm } from '@redefrete/templates/forms';
 import { base64FileConverter } from '@redefrete/helpers';
@@ -40,11 +40,11 @@ function RegisterComplete({ history, driver }) {
     const [registerSuccess, setRegisterSuccess] = React.useState<boolean>(false);
 
     const handleFinishRegister = async (driver) => {
-
+        
         driver.licence.document_file = await base64FileConverter(driver.licence.document_file[0]);
         driver.address.document_file = await base64FileConverter(driver.address.document_file[0]);
-        driver.vehicle.document_file = await base64FileConverter(driver.vehicle.document_file[0]);
-
+        // driver.vehicle.document_file = await base64FileConverter(driver.vehicle.document_file[0]);
+        
         await driverAuthService.completeRegister(driver).then(() => { setRegisterSuccess(true) })
     }
 
@@ -148,7 +148,7 @@ function RegisterComplete({ history, driver }) {
                     </div>
                 </div>
 
-                <div className="mt-10 mb-4 sm:mt-0">
+                {/* <div className="mt-10 mb-4 sm:mt-0">
                     <div className="md:grid md:grid-cols-3 md:gap-6">
                         <div className="md:col-span-1">
                             <div className="px-4 sm:px-0">
@@ -164,7 +164,7 @@ function RegisterComplete({ history, driver }) {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="mt-10 sm:mt-0">
                     <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -206,7 +206,7 @@ function RegisterComplete({ history, driver }) {
                 <AlertIcon boxSize='40px' mr={0} />
                 <AlertTitle mt={4} mb={1} fontSize='lg'>Cadastro efetuado com sucesso!</AlertTitle>
                 <AlertDescription mb={4} maxWidth='sm'>Obrigado por fazer parte do time Redefrete. Seu cadastro foi enviado para análise e em breve você você fará parte da nossa equipe.</AlertDescription>
-                <Button href={'https://redefrete.com.br'} as={Link} colorScheme={'primary'}><a>Voltar para o Site</a></Button>
+                <Button as={ChakraLink} colorScheme={'primary'}><Link href={'https://redefrete.com.br'}>Voltar para o Site</Link></Button>
             </Alert>
 
         </Stack>

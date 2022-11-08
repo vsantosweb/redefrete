@@ -2,8 +2,8 @@ import React from 'react'
 import { Checkbox, FormControl, FormErrorMessage, FormLabel, Heading, Input, Select, Stack } from '@chakra-ui/react';
 import axios from 'axios';
 import InputMask from 'react-input-mask';
-import { CPFValidation } from '@redefrete/helpers';
-import { InputCustom, InputFile } from '@redefrete/components';
+import { CPFValidation, stateList } from '@redefrete/helpers';
+import { DocumentInput, InputCustom, InputFile } from '@redefrete/components';
 
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IVehicleRepository } from 'libs/repository/Interfaces/Vehicle/IVehicleRepository';
@@ -22,7 +22,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
     const [ownerAccount, setOwnerAccount] = React.useState(true);
     const [licenceVehicleMessage, setLicenceVehicleMessage] = React.useState(null);
 
-    const formField: {name?: string, document_1?: string} = {
+    const formField: { name?: string, document_1?: string } = {
         name: form.watch('name'),
         document_1: form.watch('document_1')
     }
@@ -80,23 +80,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
                 <Checkbox defaultChecked={ownerAccount} onChange={() => setOwnerAccount(prev => !prev)}>Eu sou o responsável do veículo</Checkbox>
                 {
                     !ownerAccount && <>
-                        <FormControl isInvalid={form.formState.errors?.vehicle?.owner_document} isRequired={true}>
-                            <FormLabel>CPF Titular</FormLabel>
-                            <InputMask
-                                alwaysShowMask={true}
-                                maskChar={null}
-                                type={'tel'}
-                                defaultValue={vehicle?.document || ''}
-                                mask={'999.999.999-99'}
-                                {...form.register('vehicle.owner_document', {
-                                    required: true,
-                                    setValueAs: v => v.replace(/[^\d]/g, ''),
-                                    validate: v => CPFValidation(v)
-                                })}>
-                                {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'000.000.000-00'} />)}
-                            </InputMask>
-                            <FormErrorMessage>CPF Inválido</FormErrorMessage>
-                        </FormControl>
+                        <DocumentInput field={'vehicle.owner_document'} useForm={form} />
                         <FormControl isRequired={true}>
                             <FormLabel>Nome do Titular</FormLabel>
                             <InputCustom accept={'alpha'} autoComplete={'off'} {...form.register('vehicle.owner_name', { required: true })} />
@@ -130,6 +114,19 @@ const VehicleForm = ({ form, vehicle }: any) => {
                     </Select>
                 </FormControl>
 
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Renavam</FormLabel>
+                    <InputMask
+                        alwaysShowMask={true}
+                        maskChar={null}
+                        type={'tel'}
+                        mask={'99999999999'}
+                        {...form.register('vehicle.licence_number', { required: true })}
+                    >
+                        {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'00000000000'} />)}
+                    </InputMask>
+                </FormControl>
+
                 <Stack direction={'row'}>
                     <FormControl isInvalid={form.formState.errors?.vehicle?.licence_plate} isRequired={true} >
                         <FormLabel>Placa</FormLabel>
@@ -152,18 +149,14 @@ const VehicleForm = ({ form, vehicle }: any) => {
                         />
                         <FormErrorMessage>{licenceVehicleMessage}</FormErrorMessage>
                     </FormControl>
+
                     <FormControl isRequired={true} variant={'floating'}>
-                        <FormLabel>Renavam</FormLabel>
-                        <InputMask
-                            alwaysShowMask={true}
-                            maskChar={null}
-                            type={'tel'}
-                            mask={'99999999999'}
-                            {...form.register('vehicle.licence_number', { required: true })}
-                        >
-                            {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'00000000000'} />)}
-                        </InputMask>
+                        <FormLabel>UF</FormLabel>
+                        <Select defaultValue={vehicle?.uf || ''} {...form.register('vehicle.uf', { required: true })}>
+                            {stateList.map(state => <option key={state} value={state}>{state}</option>)}
+                        </Select>
                     </FormControl>
+
                 </Stack>
 
                 <InputFile

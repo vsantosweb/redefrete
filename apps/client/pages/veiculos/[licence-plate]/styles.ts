@@ -35,7 +35,7 @@ export const TableListWrapper = styled.div`
   gap: 22px;
   flex-direction: row;
   border-bottom: solid 1px #ddd;
-  &:nth-last-child(1){
+  &:nth-last-of-type(1){
     border:0;
   }
   padding: 1em 0;
