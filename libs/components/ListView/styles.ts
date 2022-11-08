@@ -4,7 +4,7 @@ export const ListContainer = styled.div`
   list-style: none;
   background: #fff;
   border: solid 1px #ddd;
-  border-radius: ${({ theme }: { theme: ThemeProps }) => theme.defaultRadius};
+  border-radius: ${({ theme }: { theme: any }) => theme.defaultRadius};
 `;
 export const List = styled.div``;
 export const ListListItem = styled.div`
