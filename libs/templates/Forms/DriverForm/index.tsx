@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormControl, FormErrorMessage, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
 import { DocumentInput, InputCustom } from '@redefrete/components';
-import { CPFValidation, stateList, suspenseResource } from '@redefrete/helpers';
+import { stateList } from '@redefrete/helpers';
 import InputMask from 'react-input-mask';
 
 import { Path, UseFormRegister } from 'react-hook-form';
