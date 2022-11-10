@@ -34,7 +34,7 @@ const DriverForm = ({ form, driver }: any) => {
             </FormControl>
 
             <FormControl isInvalid={form.formState.errors?.document_1} isRequired={true} variant={'floating'}>
-                <DocumentInput field={'document_1'} useForm={form} />
+                <DocumentInput defaultValue={driver?.document_1 || ''} field={'document_1'} useForm={form} />
             </FormControl>
 
             <FormControl isRequired={true} variant={'floating'}>

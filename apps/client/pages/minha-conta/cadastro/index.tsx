@@ -98,7 +98,7 @@ function Register() {
                     </Select>
                 </FormControl>
 
-                <Styled.AccountButton disabled={!isValid} isLoading={isSubmitting} type={'submit'} colorScheme={'secondary'}>Registrar-se <i className={'las la-arrow-right'}></i></Styled.AccountButton>
+                <Styled.AccountButton disabled={!isValid || isSubmitting} isLoading={isSubmitting} type={'submit'} colorScheme={'secondary'}>Registrar-se <i className={'las la-arrow-right'}></i></Styled.AccountButton>
                 {errorMessage && <Alert variant={'solid'} status='error'>
                     <AlertIcon />
                     <AlertDescription fontSize={14}>{errorMessage}</AlertDescription>
