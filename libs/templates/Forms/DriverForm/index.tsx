@@ -88,6 +88,7 @@ const DriverForm = ({ form, driver }: any) => {
                     </Select>
                 </FormControl>
             </Stack>
+            
             <FormControl variant={'floating'}>
                 <FormLabel>Gênero</FormLabel>
                 <Select placeholder={'Selecione...'} {...form.register('gender', { required: true })} defaultValue={driver?.gender || null}>

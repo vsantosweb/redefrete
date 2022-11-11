@@ -7,6 +7,7 @@ import { DocumentInput, InputCustom, InputFile } from '@redefrete/components';
 
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IVehicleRepository } from 'libs/repository/Interfaces/Vehicle/IVehicleRepository';
+import moment from 'moment';
 
 const vehicleRepository = container.get<IVehicleRepository>(SERVICE_KEYS.VEHICLE_REPOSITORY);
 
@@ -22,15 +23,28 @@ const VehicleForm = ({ form, vehicle }: any) => {
     const [ownerAccount, setOwnerAccount] = React.useState(true);
     const [licenceVehicleMessage, setLicenceVehicleMessage] = React.useState(null);
 
-    const formField: { name?: string, document_1?: string } = {
+    const formField = {
         name: form.watch('name'),
-        document_1: form.watch('document_1')
+        document_1: form.watch('document_1'),
+        mother_name: form.watch('mother_name'),
+        birthday: form.watch('birthday'),
+        rg: form.watch('rg'),
+        rg_issue: form.watch('rg_issue'),
+        rg_uf: form.watch('rg_uf'),
     }
-    React.useEffect(() => {
 
+    React.useEffect(() => {
+        
         if (ownerAccount) {
+
             form.setValue('vehicle.owner_name', formField.name, { shouldValidate: true })
             form.setValue('vehicle.owner_document', formField.document_1, { shouldValidate: true })
+            form.setValue('vehicle.owner_mother_name', formField.mother_name, { shouldValidate: true })
+            form.setValue('vehicle.owner_birthday', formField.birthday, { shouldValidate: true })
+            form.setValue('vehicle.owner_rg', formField.rg, { shouldValidate: true })
+            form.setValue('vehicle.owner_rg_issue', formField.rg_issue, { shouldValidate: true })
+            form.setValue('vehicle.owner_rg_uf', formField.rg_uf, { shouldValidate: true })
+        
             return;
         }
 
@@ -48,6 +62,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
             form.resetField('vehicle.brand')
             form.resetField('vehicle.brand_code')
             form.resetField('vehicle.model')
+            
         }
         axios.get('https://parallelum.com.br/fipe/api/v1/' + e.target.value + '/marcas').then(response => {
 
@@ -71,13 +86,13 @@ const VehicleForm = ({ form, vehicle }: any) => {
     return (
 
         <div>
-            <Heading my={3} size={'md'}>Dados do Veículo</Heading>
+            <Heading my={3} size={'md'}>Dados do Proprietário</Heading>
 
             <input type={'hidden'} {...form.register('vehicle.brand', { required: true, })} />
             <input type={'hidden'} {...form.register('vehicle.vehicle_type_id', { required: true, })} />
 
             <Stack spacing={3}>
-                <Checkbox defaultChecked={ownerAccount} onChange={() => setOwnerAccount(prev => !prev)}>Eu sou o responsável do veículo</Checkbox>
+                <Checkbox defaultChecked={ownerAccount} onChange={() => setOwnerAccount(prev => !prev)}>Eu sou proprietário do veículo</Checkbox>
                 {
                     !ownerAccount && <>
                         <DocumentInput field={'vehicle.owner_document'} useForm={form} />
@@ -85,8 +100,49 @@ const VehicleForm = ({ form, vehicle }: any) => {
                             <FormLabel>Nome do Titular</FormLabel>
                             <InputCustom accept={'alpha'} autoComplete={'off'} {...form.register('vehicle.owner_name', { required: true })} />
                         </FormControl>
+                        <FormControl isRequired={true}>
+                            <FormLabel>Nome da mãe</FormLabel>
+                            <InputCustom accept={'alpha'} autoComplete={'off'} {...form.register('vehicle.owner_mother_name', { required: true })} />
+                        </FormControl>
+                        <FormControl isRequired={true} variant={'floating'}>
+                            <FormLabel>Data de nascimento</FormLabel>
+                            <Input
+                                type={'date'}
+                                autoComplete={'off'}
+                                max={moment().subtract(18, 'years').format('YYYY-MM-DD')}
+                                {...form.register('vehicle.owner_birthday', { required: true, minLength: 4 })}
+                            />
+                        </FormControl>
+                        <FormControl isRequired={true} variant={'floating'}>
+                            <FormLabel>Nº RG</FormLabel>
+                            <InputCustom
+                                accept={'noSpecialChar'}
+                                maxLength={9}
+                                autoComplete={'off'}
+                                {...form.register('vehicle.owner_rg', { required: true, minLength: 4 })}
+                            />
+                        </FormControl>
+
+                        <Stack direction={'row'}>
+                            <FormControl isRequired={true} variant={'floating'}>
+                                <FormLabel>Data de emissão</FormLabel>
+                                <Input
+                                    type={'date'} autoComplete={'off'}
+                                    {...form.register('vehicle.owner_rg_issue', { required: true })} />
+                            </FormControl>
+
+                            <FormControl isRequired={true} variant={'floating'}>
+                                <FormLabel>UF</FormLabel>
+                                <Select  {...form.register('vechile.owner_rg_uf', { required: true })}>
+                                    {stateList.map(state => <option key={state} value={state}>{state}</option>)}
+                                </Select>
+                            </FormControl>
+                        </Stack>
+                        
                     </>
                 }
+                <hr />
+                <Heading my={3} size={'md'}>Dados do Veículo</Heading>
 
                 <Stack direction={'row'}>
 

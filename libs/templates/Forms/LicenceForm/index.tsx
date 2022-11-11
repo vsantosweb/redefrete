@@ -36,9 +36,9 @@ const LicenceForm = ({ form, driver = null }) => {
                         defaultValue={driver?.licence?.security_code || ''}
                         accept={'number'}
                         type={'tel'}
-                        maxLength={3}
+                        maxLength={12}
                         autoComplete={'off'}
-                        placeholder={'000'}
+                        placeholder={'000000000000'}
                         {...form.register('licence.security_code', { required: true })}
                     />
                 </FormControl>

@@ -14,7 +14,8 @@ const driverPartnerService = container.get<IDriverPartnerRepository>(SERVICE_KEY
 
 const statusList = {
     1: 'Aceito',
-    2: 'Pendente'
+    2: 'Pendente',
+    3: 'Enviado para análise'
 }
 
 export default function PartnerVehicleList() {

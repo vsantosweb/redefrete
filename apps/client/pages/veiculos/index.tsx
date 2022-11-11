@@ -32,8 +32,8 @@ const Vehicles: Page = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const vehicleForm = useForm<UseFormProps | any>({ mode: 'onChange', defaultValues: { name: user.name, document_1: user.document_1 } });
-
+  const vehicleForm = useForm<UseFormProps | any>({ mode: 'onChange', defaultValues: { ...user } });
+  
   React.useEffect(() => {
     trackPromise(
       driverVehicleService.getVehicles().then(
@@ -51,7 +51,7 @@ const Vehicles: Page = () => {
   }, [vehicleCreated])
 
   const handleCreateVehicle = async (formData) => {
-    let data = { ...formData.vehicle, }
+    const data = { ...formData.vehicle, }
 
     data.document_file = await base64FileConverter(data.document_file[0]);
     data.driver_bank_id = formData.driver_bank_id
@@ -75,10 +75,10 @@ const Vehicles: Page = () => {
         <ListView list={vehicles} />
       </Loader>
       <>
-        <Modal size={'xl'} isCentered isOpen={isOpen} onClose={onClose}>
+        <Modal scrollBehavior={'inside'} size={'xl'} isCentered isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-          <ModalContent>
             <form onSubmit={vehicleForm.handleSubmit(handleCreateVehicle)}>
+          <ModalContent>
               <ModalHeader>Cadastrar novo Veículo</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
@@ -87,7 +87,7 @@ const Vehicles: Page = () => {
                   <FormControl isInvalid={false}>
                     <FormLabel>Conta para pagamento</FormLabel>
                     <Select placeholder={'Selecione...'} {...vehicleForm.register('driver_bank_id', { required: true })}>
-                      {user.banks.map(bank => <option value={bank.id}> {bank.bank_name} </option>)}
+                      {user.banks.map((bank, index) => <option key={index} value={bank.id}> {bank.bank_name} </option>)}
                     </Select>
                     <small>Adicionar conta bancária +</small>
                   </FormControl>
@@ -96,8 +96,8 @@ const Vehicles: Page = () => {
               <ModalFooter>
                 <Button type={'submit'} disabled={!vehicleForm.formState.isValid} isLoading={vehicleForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
               </ModalFooter>
-            </form>
           </ModalContent>
+            </form>
         </Modal>
       </>
     </Box>
