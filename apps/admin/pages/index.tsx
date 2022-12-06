@@ -33,29 +33,29 @@ const Home: Page = () => {
 
     driver.rangeDate({ date_from: moment(value[0]).format('YYYY-MM-DD'), date_to: moment(value[1]).format('YYYY-MM-DD') })
       .then(response => setDriverRangeData(response))
-      
+
   }, [value])
 
   React.useEffect(() => {
 
     driver.hubsRangeDate({ date_from: moment(value[0]).format('YYYY-MM-DD'), date_to: moment(value[1]).format('YYYY-MM-DD') })
       .then(response => setDriverHubsRangeData(response))
-      
+
   }, [value])
   return (
     <Stack>
       <div>
-      <DateRangePicker
-              cleanable={false}
-              defaultValue={value}
-              onChange={setValue}
-            />
+        <DateRangePicker
+          cleanable={false}
+          defaultValue={value}
+          onChange={setValue}
+        />
       </div>
       <Card variant={'outline'}>
         <CardHeader>
           <Stack direction={'row'} alignItems={'center'}>
             <Heading size='md'>Captação por período</Heading>
-            
+
           </Stack>
 
         </CardHeader>

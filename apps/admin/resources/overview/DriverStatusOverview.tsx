@@ -16,12 +16,12 @@ export default function DriverStatusOverview({ rangeData, type, groupBy }) {
     const labelOption = {
         show: true,
         position: 'insideBottom',
-        distance: 15,
+        distance: 10,
         align: 'left',
         verticalAlign: 'middle',
         rotate: 90,
-        formatter: '{c}  {name|{a}}',
-        fontSize: 16,
+        formatter: '{c}',
+        fontSize: 12,
         rich: {
           name: {}
         }
