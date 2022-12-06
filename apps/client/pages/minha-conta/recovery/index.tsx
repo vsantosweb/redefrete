@@ -18,7 +18,7 @@ export const Recovery = () => {
 
         setButtonState({ isLoading: true, disabled: true });
 
-        api.post('/driver/auth/password/recovery-request', formData)
+        api.post('/drivers/auth/password/recovery-request', formData)
             .then(() => router.push({ pathname: 'recovery/confirmation', query: 'souzavito@hotmail.com' }, '/minha-conta/recovery'))
 
     }

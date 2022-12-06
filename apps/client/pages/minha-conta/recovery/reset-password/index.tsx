@@ -7,7 +7,7 @@ import { AccountButton } from '../../styles'
 
 export async function getServerSideProps(req, res) {
 
-    const { error, data } = await api.post('/driver/auth/password/validate-recovery-request', { email: req.query.email, token: req.query.token })
+    const { error, data } = await api.post('/drivers/auth/password/validate-recovery-request', { email: req.query.email, token: req.query.token })
         .then(response => response.data)
 
     return error ? {
@@ -31,7 +31,7 @@ export const Recovery = ({ layout, history, ...props }: any) => {
 
     const handleResetPassword = (formData) => {
 
-        api.post('/driver/auth/password/recovery', { ...formData, ...props })
+        api.post('/drivers/auth/password/recovery', { ...formData, ...props })
             .then(response => {
 
                 return router.push({

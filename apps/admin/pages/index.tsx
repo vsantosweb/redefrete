@@ -1,92 +1,85 @@
 import React from 'react';
 import { Page } from './_app';
 import {
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
-  StatArrow,
-  StatGroup,
   Stack,
+  Heading,
+  Button,
+  Card, CardHeader, CardBody, CardFooter,
+  Grid, GridItem
 } from '@chakra-ui/react'
-import * as echarts from 'echarts';
+
+import { DateRangePicker } from 'rsuite';
+
+import DriverStatusOverview from '../resources/overview/DriverStatusOverview';
+import moment from 'moment';
+import { container, SERVICE_KEYS } from '@redefrete/container';
+
+import { IDriverRepository } from '@redefrete/interfaces';
+
+const driver = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
 
 
 const Home: Page = () => {
 
+  const [value, setValue] = React.useState<any>([
+    new Date(moment().startOf('month').format("YYYY-MM-DD HH:mm:ss")),
+    new Date(moment().endOf('month').format("YYYY-MM-DD HH:mm:ss"))
+  ]);
 
+  const [driverRangeData, setDriverRangeData] = React.useState([]);
+  const [driverHubsRangeData, setDriverHubsRangeData] = React.useState([]);
+
+  React.useEffect(() => {
+
+    driver.rangeDate({ date_from: moment(value[0]).format('YYYY-MM-DD'), date_to: moment(value[1]).format('YYYY-MM-DD') })
+      .then(response => setDriverRangeData(response))
+      
+  }, [value])
+
+  React.useEffect(() => {
+
+    driver.hubsRangeDate({ date_from: moment(value[0]).format('YYYY-MM-DD'), date_to: moment(value[1]).format('YYYY-MM-DD') })
+      .then(response => setDriverHubsRangeData(response))
+      
+  }, [value])
   return (
     <Stack>
-      <StatGroup gap={3}>
-        <Stat border={'solid 1px #eee'} p={3}>
-          <StatLabel>Customers</StatLabel>
-          <StatNumber>345,670</StatNumber>
-          <StatHelpText>
-            <StatArrow type='increase' />
-            23.36%
-          </StatHelpText>
-        </Stat>
+      <div>
+      <DateRangePicker
+              cleanable={false}
+              defaultValue={value}
+              onChange={setValue}
+            />
+      </div>
+      <Card variant={'outline'}>
+        <CardHeader>
+          <Stack direction={'row'} alignItems={'center'}>
+            <Heading size='md'>Captação por período</Heading>
+            
+          </Stack>
 
-        <Stat border={'solid 1px #eee'} p={3}>
-          <StatLabel>Customers</StatLabel>
-          <StatNumber>45</StatNumber>
-          <StatHelpText>
-            <StatArrow type='decrease' />
-            9.05%
-          </StatHelpText>
-        </Stat>
-        <Stat border={'solid 1px #eee'} p={3}>
-          <StatLabel>Customers</StatLabel>
-          <StatNumber>45</StatNumber>
-          <StatHelpText>
-            <StatArrow type='decrease' />
-            9.05%
-          </StatHelpText>
-        </Stat>
-        <Stat border={'solid 1px #eee'} p={3}>
-          <StatLabel>Customers</StatLabel>
-          <StatNumber>45</StatNumber>
-          <StatHelpText>
-            <StatArrow type='decrease' />
-            9.05%
-          </StatHelpText>
-        </Stat>
-      </StatGroup>
-      <StatGroup gap={3}>
-        <Stat border={'solid 1px #eee'} p={3}>
-          <StatLabel>Customers</StatLabel>
-          <StatNumber>345,670</StatNumber>
-          <StatHelpText>
-            <StatArrow type='increase' />
-            23.36%
-          </StatHelpText>
-        </Stat>
+        </CardHeader>
+        <CardBody>
+          <DriverStatusOverview rangeData={driverRangeData} type={'bar'} groupBy={'status'} />
+        </CardBody>
+        <CardFooter>
+        </CardFooter>
+      </Card>
 
-        <Stat border={'solid 1px #eee'} p={3}>
-          <StatLabel>Customers</StatLabel>
-          <StatNumber>45</StatNumber>
-          <StatHelpText>
-            <StatArrow type='decrease' />
-            9.05%
-          </StatHelpText>
-        </Stat>
-        <Stat border={'solid 1px #eee'} p={3}>
-          <StatLabel>Customers</StatLabel>
-          <StatNumber>45</StatNumber>
-          <StatHelpText>
-            <StatArrow type='decrease' />
-            9.05%
-          </StatHelpText>
-        </Stat>
-        <Stat border={'solid 1px #eee'} p={3}>
-          <StatLabel>Customers</StatLabel>
-          <StatNumber>45</StatNumber>
-          <StatHelpText>
-            <StatArrow type='decrease' />
-            9.05%
-          </StatHelpText>
-        </Stat>
-      </StatGroup>
+      <Card variant={'outline'}>
+        <CardHeader>
+          <Stack direction={'row'} alignItems={'center'}>
+            <Heading size='md'>{`Distribuição para HUB's`}</Heading>
+
+          </Stack>
+
+        </CardHeader>
+        <CardBody>
+          <DriverStatusOverview rangeData={driverHubsRangeData} type={'bar'} groupBy={'company'} />
+        </CardBody>
+        <CardFooter>
+        </CardFooter>
+      </Card>
     </Stack>
   )
 }

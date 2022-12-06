@@ -14,7 +14,7 @@ import 'libs/fonts/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css';
 import NProgress from 'nprogress'
 import { useRouter } from 'next/router';
 import { LoaderTracker } from '@redefrete/components';
-
+import 'rsuite/dist/rsuite.min.css';
 type PageConfigProps = {
   title?: string,
   description?: string
