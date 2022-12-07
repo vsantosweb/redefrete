@@ -3,21 +3,27 @@ import { Page } from './_app';
 import {
   Stack,
   Heading,
-  Button,
-  Card, CardHeader, CardBody, CardFooter,
-  Grid, GridItem
 } from '@chakra-ui/react'
+import { Grid, Row, Col } from 'rsuite';
 
 import { DateRangePicker } from 'rsuite';
+import { Panel, Placeholder } from 'rsuite';
 
 import DriverStatusOverview from '../resources/overview/DriverStatusOverview';
 import moment from 'moment';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 
 import { IDriverRepository } from '@redefrete/interfaces';
+import ApexChart from '../resources/components/Charts';
+import BasicBarChart from '../resources/components/Charts/BasicBarChart';
 
 const driver = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
 
+const Card = ({ children, title, ...rest }) => (
+  <Panel {...rest} shaded header={title}>
+    {children}
+  </Panel>
+);
 
 const Home: Page = () => {
 
@@ -43,44 +49,75 @@ const Home: Page = () => {
 
   }, [value])
   return (
-    <Stack>
-      <div>
-        <DateRangePicker
-          cleanable={false}
-          defaultValue={value}
-          onChange={setValue}
-        />
-      </div>
-      <Card variant={'outline'}>
-        <CardHeader>
-          <Stack direction={'row'} alignItems={'center'}>
-            <Heading size='md'>Captação por período</Heading>
+    <Grid fluid>
+      <Row gutter={16}>
+        <Col>
+          <DateRangePicker
+            cleanable={false}
+            defaultValue={value}
+            onChange={setValue}
+          />
+        </Col>
+      </Row>
+      <Row>
+        <Col md={12}>
+          {/* <Card title={'Total de Pré-cadastros'}>
+            <DriverStatusOverview rangeData={driverHubsRangeData} type={'line'} groupBy={'company'} />
+          </Card> */}
+          <Card title={'Total de Pré-cadastros'}>
+            <BasicBarChart rangeData={driverHubsRangeData} />
+          </Card>
+        </Col>
+        <Col lg={12}>
+          <Stack>
+            <Card title={'Pré-cadastros aprovados e não aprovados'}>
+              <DriverStatusOverview rangeData={driverHubsRangeData} type={'line'} groupBy={'is_avaiable'} />
+            </Card>
 
           </Stack>
+        </Col>
 
-        </CardHeader>
-        <CardBody>
-          <DriverStatusOverview rangeData={driverRangeData} type={'bar'} groupBy={'status'} />
-        </CardBody>
-        <CardFooter>
-        </CardFooter>
-      </Card>
 
-      <Card variant={'outline'}>
-        <CardHeader>
-          <Stack direction={'row'} alignItems={'center'}>
-            <Heading size='md'>{`Distribuição para HUB's`}</Heading>
 
-          </Stack>
+      </Row>
+    </Grid>
+    // <div>
+    //   <DateRangePicker
+    //     cleanable={false}
+    //     defaultValue={value}
+    //     onChange={setValue}
+    //   />
+    // </div>
+    // <Card variant={'outline'}>
+    //   <CardHeader>
+    //     <Stack direction={'row'} alignItems={'center'}>
+    //       <Heading size='md'>Captação por período</Heading>
 
-        </CardHeader>
-        <CardBody>
-          <DriverStatusOverview rangeData={driverHubsRangeData} type={'bar'} groupBy={'company'} />
-        </CardBody>
-        <CardFooter>
-        </CardFooter>
-      </Card>
-    </Stack>
+    //     </Stack>
+
+    //   </CardHeader>
+    //   <CardBody>
+    //     {/* <ApexChart /> */}
+    //     <DriverStatusOverview rangeData={driverRangeData} type={'bar'} groupBy={'status'} />
+    //   </CardBody>
+    //   <CardFooter>
+    //   </CardFooter>
+    // </Card>
+
+    // <Card variant={'outline'}>
+    //   <CardHeader>
+    //     <Stack direction={'row'} alignItems={'center'}>
+    //       <Heading size='md'>{`Distribuição para HUB's`}</Heading>
+
+    //     </Stack>
+
+    //   </CardHeader>
+    //   <CardBody>
+    //     <DriverStatusOverview rangeData={driverHubsRangeData} type={'bar'} groupBy={'company'} />
+    //   </CardBody>
+    //   <CardFooter>
+    //   </CardFooter>
+    // </Card>
   )
 }
 
