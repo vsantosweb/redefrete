@@ -196,7 +196,6 @@ function RegisterComplete({ history, driver }) {
             <Alert
                 status='success'
                 size={'lg'}
-                colorScheme={'primary'}
                 flexDirection='column'
                 alignItems='center'
                 justifyContent='center'

@@ -6,6 +6,7 @@ import DriverApiService from './api/Driver/DriverApiService';
 import {
     ICaptureLead,
     IDriverAuthRepository,
+    IDriverContractRepository,
     IDriverLicenceRepository,
     IDriverPartnerRepository,
     IDriverRepository,
@@ -19,6 +20,7 @@ import { DriverVehicleApiService } from './api/Driver/DriverVehicleApiService';
 import { IVehicleRepository } from '../Interfaces/Vehicle/IVehicleRepository';
 import VehicleApiService from './api/Vehicle/VehicleApiService';
 import { DriverPartnerApiService } from './api/Driver/DriverPartnerApiService';
+import { DriverContractApiService } from './api/Driver/DriverContractApiService';
 
 
 
@@ -29,6 +31,7 @@ export const SERVICE_KEYS = {
     DRIVER_LICENCE_REPOSITORY: Symbol('DRIVER_REPOSITORY'),
     DRIVER_VEHICLE_REPOSITORY: Symbol('DRIVER_VEHICLE_REPOSITORY'),
     DRIVER_PARTNER_REPOSITORY: Symbol('DRIVER_PARTNER_REPOSITORY'),
+    DRIVER_CONTRACT: Symbol('DRIVER_CONTRACT'),
 
     VEHICLE_TYPE_REPOSITORY: Symbol('VEHICLE_TYPE_REPOSITORY'),
     VEHICLE_REPOSITORY: Symbol('VEHICLE_REPOSITORY'),
@@ -45,6 +48,7 @@ _container.bind<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY).to(DriverApiS
 _container.bind<IDriverLicenceRepository>(SERVICE_KEYS.DRIVER_LICENCE_REPOSITORY).to(DriverLicenceApiService).inSingletonScope();
 _container.bind<IDriverVehicleRepository>(SERVICE_KEYS.DRIVER_VEHICLE_REPOSITORY).to(DriverVehicleApiService).inSingletonScope();
 _container.bind<IDriverPartnerRepository>(SERVICE_KEYS.DRIVER_PARTNER_REPOSITORY).to(DriverPartnerApiService).inSingletonScope();
+_container.bind<IDriverContractRepository>(SERVICE_KEYS.DRIVER_CONTRACT).to(DriverContractApiService).inSingletonScope();
 
 
 _container.bind<IVehicleTypeRepository>(SERVICE_KEYS.VEHICLE_TYPE_REPOSITORY).to(VehicleTypeApiService).inSingletonScope();

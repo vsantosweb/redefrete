@@ -40,7 +40,14 @@ const GlobalStyles = css`
   .InovuaReactDataGrid > div:nth-child(3) {
     display: none !important;
   }
+  .InovuaReactDataGrid{
+    border:none
+  }
   .InovuaReactDataGrid__row{}
+  .InovuaReactDataGrid--theme-pink-light .InovuaReactDataGrid__column-header--show-border-left, .InovuaReactDataGrid--theme-pink-light .InovuaReactDataGrid__column-header__resize-wrapper--show-border-left,
+   .InovuaReactDataGrid--theme-pink-light .InovuaReactDataGrid__header-group__title--show-border-left	{
+    border-left: none !important;
+  }
   
 `;
 export const ViewPort = styled.main`

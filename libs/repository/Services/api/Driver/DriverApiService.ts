@@ -8,7 +8,7 @@ import api from "..";
 
 export default class DriverApiService implements IDriverRepository {
 
-  list = () => api().get('/drivers').then(response => response.data.data)
+  list = (params: string) => api().get('/drivers'+params).then(response => response.data)
 
   show = async (id: number) => await api().get('/drivers/' + id).then(response => response.data)
 

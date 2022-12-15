@@ -8,7 +8,7 @@ export const AppWrapper = styled.div`
 position: relative; */
 `;
 export const AppContent = styled.div`
-  padding: 0 3em;
+  padding: 0 1.8em;
   position: relative;
   flex: 1;
 `;

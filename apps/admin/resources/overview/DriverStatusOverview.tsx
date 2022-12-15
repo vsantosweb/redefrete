@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as echarts from 'echarts';
+import { init }  from 'echarts';
 
 import data from './data.json';
 import _ from 'lodash';
@@ -53,16 +53,14 @@ export default function DriverStatusOverview({ rangeData, type, groupBy }) {
         const chartDom = nameGraphRef.current;
         // const chartDom = document.getElementById('teste');
 
-        const myChart = echarts.init(chartDom);
+        const myChart = init(chartDom, 'roma');
 
         const option = {
 
             tooltip: {
                 trigger: 'axis'
             },
-            legend: {
-                data: chartData.statuses
-            },
+           
             dataZoom: [
                 {
                     type: 'inside',

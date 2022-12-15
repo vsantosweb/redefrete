@@ -15,6 +15,10 @@ import NProgress from 'nprogress'
 import { useRouter } from 'next/router';
 import { LoaderTracker } from '@redefrete/components';
 import 'rsuite/dist/rsuite.min.css';
+import echartTheme from './echart-theme.json';
+
+import {registerTheme} from 'echarts';
+
 type PageConfigProps = {
   title?: string,
   description?: string
@@ -28,6 +32,8 @@ export type Page = NextPage & {
 type AppPropsWithLayout = AppProps & {
   Component: Page
 }
+
+registerTheme('roma', echartTheme);
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
 

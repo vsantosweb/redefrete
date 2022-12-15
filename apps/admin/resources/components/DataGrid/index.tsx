@@ -15,7 +15,7 @@ const DataGrid = ({ columns, dataSource, onSelectionChange, idProperty = 'id', .
         columns={columns}
         theme="pink-light"
         dataSource={dataSource}
-        enableSelection={true}
+        enableSelection={false}
         licenseKey={'LSKFAN-SAFAS_K'}
         {...rest}
     />

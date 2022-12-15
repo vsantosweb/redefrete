@@ -4,7 +4,7 @@ import {
   Stack,
   Heading,
 } from '@chakra-ui/react'
-import { Grid, Row, Col } from 'rsuite';
+import { Grid, Row, Col, Badge } from 'rsuite';
 
 import { DateRangePicker } from 'rsuite';
 import { Panel, Placeholder } from 'rsuite';
@@ -16,14 +16,41 @@ import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverRepository } from '@redefrete/interfaces';
 import ApexChart from '../resources/components/Charts';
 import BasicBarChart from '../resources/components/Charts/BasicBarChart';
+import LineChart from '../resources/overview/LineChart';
+import _ from 'lodash';
+import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
+import { DataGrid } from '@redefrete/components';
 
 const driver = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
 
 const Card = ({ children, title, ...rest }) => (
-  <Panel {...rest} shaded header={title}>
+  <Panel {...rest} bordered header={title}>
     {children}
   </Panel>
 );
+
+
+const approvalRegisterColumns: Array<IColumn> = [
+  { name: 'id', header: 'id', defaultVisible: false },
+  {
+    name: 'name', header: 'Nome', defaultFlex: 1.8, render: ({ value, ...rest }) => <strong>{rest.data.name}</strong>
+  },
+  { name: 'email', header: 'Email', defaultFlex: 1.3 },
+  { name: 'phone', header: 'Telefone/Whatsapp', defaultFlex: 1.3 },
+  { name: 'vehicle_type', header: 'Tipo de veículo', defaultFlex: .7 },
+  { name: 'city', header: 'Cidade', defaultFlex: 1 },
+  { name: 'hub', header: 'HUB', defaultFlex: 1.4, render: ({ value, ...rest }) => <Badge color="violet" content={rest.data.hub} /> },
+  { name: 'company', header: 'Empresa', defaultFlex: 1 },
+
+];
+
+const registerByHubsColumns: Array<IColumn> = [
+  { name: 'id', header: 'id', defaultVisible: false },
+  { name: 'name', header: 'HUB', defaultFlex: 5, render: ({ value, ...rest }) => <strong>{rest.data.name}</strong> },
+  { name: 'qty', header: 'Qty', defaultFlex: 1, render: ({ value, ...rest }) => <Badge color="blue" content={rest.data.qty} /> },
+
+];
+
 
 const Home: Page = () => {
 
@@ -35,6 +62,19 @@ const Home: Page = () => {
   const [driverRangeData, setDriverRangeData] = React.useState([]);
   const [driverHubsRangeData, setDriverHubsRangeData] = React.useState([]);
 
+  const groupByHub = _.groupBy(driverHubsRangeData, 'hub');
+
+
+
+  const registerByHub = Object.keys(groupByHub).map((item, index) => {
+    return {
+      id: index + 1,
+      name: item,
+      qty: groupByHub[item].length
+    }
+  })
+
+  console.log(registerByHub)
   React.useEffect(() => {
 
     driver.rangeDate({ date_from: moment(value[0]).format('YYYY-MM-DD'), date_to: moment(value[1]).format('YYYY-MM-DD') })
@@ -48,79 +88,59 @@ const Home: Page = () => {
       .then(response => setDriverHubsRangeData(response))
 
   }, [value])
+
   return (
     <Grid fluid>
-      <Row gutter={16}>
-        <Col>
-          <DateRangePicker
-            cleanable={false}
-            defaultValue={value}
-            onChange={setValue}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col md={12}>
-          {/* <Card title={'Total de Pré-cadastros'}>
-            <DriverStatusOverview rangeData={driverHubsRangeData} type={'line'} groupBy={'company'} />
-          </Card> */}
-          <Card title={'Total de Pré-cadastros'}>
-            <BasicBarChart rangeData={driverHubsRangeData} />
-          </Card>
-        </Col>
-        <Col lg={12}>
-          <Stack>
-            <Card title={'Pré-cadastros aprovados e não aprovados'}>
+      <Stack>
+        <Row>
+          <Col>
+            <DateRangePicker
+              cleanable={false}
+              defaultValue={value}
+              onChange={setValue}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+
+            <Card title={'Total de pré cadastros'}>
+              <BasicBarChart options={{ barColor: '#9043e7' }} rangeData={driverHubsRangeData} orderBy={'created_at'} />
+            </Card>
+          </Col>
+          <Col lg={12}>
+            <Card title={'Pré cadastros por status'}>
               <DriverStatusOverview rangeData={driverHubsRangeData} type={'line'} groupBy={'is_avaiable'} />
             </Card>
-
-          </Stack>
-        </Col>
-
-
-
-      </Row>
+          </Col>
+        </Row>
+        <Row>
+          <Col lg={18}>
+            <Card title={'Últimos Pré-cadastros aprovados'}>
+              <DataGrid
+                columns={approvalRegisterColumns}
+                dataSource={_.slice(driverHubsRangeData, 0, 5)}
+                style={{ minHeight: '244px' }}
+              />
+            </Card>
+          </Col>
+          <Col lg={6}>
+            <Card title={'Pré-Cadastros aprovados por HUB'}>
+              <DataGrid
+                columns={registerByHubsColumns}
+                dataSource={registerByHub}
+                style={{ minHeight: '244px' }}
+              />
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          
+        </Row>
+      </Stack>
     </Grid>
-    // <div>
-    //   <DateRangePicker
-    //     cleanable={false}
-    //     defaultValue={value}
-    //     onChange={setValue}
-    //   />
-    // </div>
-    // <Card variant={'outline'}>
-    //   <CardHeader>
-    //     <Stack direction={'row'} alignItems={'center'}>
-    //       <Heading size='md'>Captação por período</Heading>
-
-    //     </Stack>
-
-    //   </CardHeader>
-    //   <CardBody>
-    //     {/* <ApexChart /> */}
-    //     <DriverStatusOverview rangeData={driverRangeData} type={'bar'} groupBy={'status'} />
-    //   </CardBody>
-    //   <CardFooter>
-    //   </CardFooter>
-    // </Card>
-
-    // <Card variant={'outline'}>
-    //   <CardHeader>
-    //     <Stack direction={'row'} alignItems={'center'}>
-    //       <Heading size='md'>{`Distribuição para HUB's`}</Heading>
-
-    //     </Stack>
-
-    //   </CardHeader>
-    //   <CardBody>
-    //     <DriverStatusOverview rangeData={driverHubsRangeData} type={'bar'} groupBy={'company'} />
-    //   </CardBody>
-    //   <CardFooter>
-    //   </CardFooter>
-    // </Card>
   )
 }
-
 
 Home.config = {
   title: 'Dashboard',

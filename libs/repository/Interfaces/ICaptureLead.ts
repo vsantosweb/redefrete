@@ -1,3 +1,3 @@
  export interface ICaptureLead  {
-    get(params): Promise<any>;
+    get(params:string): Promise<any>;
 }

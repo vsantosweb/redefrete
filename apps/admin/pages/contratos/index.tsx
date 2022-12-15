@@ -1,22 +1,19 @@
 import React from 'react';
-import suspenseResource from '../../suspenseResource';
-import { Spinner, Stack, Link as ChakraLink, Box, Avatar, Input, Button, Select } from '@chakra-ui/react';
+import { Badge, Button, Input, Select, Spinner, Stack } from '@chakra-ui/react';
 import { Page } from '../_app';
 import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
 import { container, SERVICE_KEYS } from '@redefrete/container';
-import { ICaptureLead } from '@redefrete/interfaces';
+import { IDriverContractRepository } from '@redefrete/interfaces';
 import { DataGrid } from '@redefrete/components';
-import axios from 'axios';
-import { Badge, DatePicker, InputPicker, Panel, Form, IconButton } from 'rsuite';
-
+import { Drawer } from 'rsuite';
 import queryString from 'query-string';
 
-const leads = container.get<ICaptureLead>(SERVICE_KEYS.CAPTURE_LEAD_REPOSITORY);
+const driverContract = container.get<IDriverContractRepository>(SERVICE_KEYS.DRIVER_CONTRACT);
 import csvDownload from 'json-to-csv-export'
 import _ from 'lodash';
-import { useForm, Controller } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import hubs from './hubs.json';
+import DriverContractView from './contract-view';
+import { useForm } from 'react-hook-form';
+
 interface CsvDownloadProps {
     data: any[];
     filename?: string;
@@ -25,40 +22,34 @@ interface CsvDownloadProps {
 }
 
 const columns: Array<IColumn> = [
-    { name: 'id', header: 'id', defaultVisible: false },
-    {
-        name: 'name', header: 'Nome', defaultFlex: 1.8, render: ({ value, ...rest }) => <strong>{rest.data.name}</strong>
-    },
-    { name: 'phone', header: 'Telefone/Whatsapp', defaultFlex: 1.3 },
-    { name: 'email', header: 'Email', defaultFlex: 1.3 },
-    { name: 'vehicle_type', header: 'Tipo de veículo', defaultFlex: .7 },
-    { name: 'hub', header: 'HUB', defaultFlex: 1.4, render: ({ value, ...rest }) => <Badge color="violet" content={rest.data.hub} /> },
-    { name: 'zipcode', header: 'CEP', defaultFlex: 1 },
-    { name: 'city', header: 'Cidade', defaultFlex: 1 },
-    { name: 'code', header: 'Código', defaultFlex: .6 },
-    { name: 'company', header: 'Empresa', defaultFlex: 1 },
-    {
-        name: 'is_avaiable', header: 'Status', defaultFlex: 1, render: ({ value, ...rest }) => {
-            return <strong style={{ color: rest.data.is_avaiable ? '#24b224' : 'red' }}>{!rest.data.is_avaiable ? 'Fora de area' : 'Disponível'}</strong>
-        }
-    },
-    { name: 'created_at', header: 'Criado em', defaultFlex: 1 },
+    { name: 'id', header: 'id', defaultFlex: .4 },  
+    { name: 'risk_manager', header: 'GR', defaultFlex: 1, render: ({ value, ...rest }) => <Badge variant={'solid'} colorScheme={'blue'}>{rest.data.risk_manager}</Badge> },
+    { name: 'ref', header: 'ref', defaultFlex: 1 },
+    { name: 'status', header: 'Status', defaultFlex: 1 },
+    { name: 'requester_name', header: 'Solicitante', defaultFlex: 1 },
+    { name: 'driver_name', header: 'Motorista', defaultFlex: 1 },
+    { name: 'driver_email', header: 'Email', defaultFlex: 1 },
+    { name: 'driver_phone', header: 'Telefone', defaultFlex: 1 },
+    { name: 'driver_licence_number', header: 'CNH', defaultFlex: 1 },
+    { name: 'driver_licence_security_code', header: 'Cód. CNH', defaultFlex: 1 },
+    { name: 'vehicle_licence_plate', header: 'Placa', defaultFlex: 1 },
+    { name: 'created_at', header: 'Criado Em', defaultFlex: 1 },
 ];
 
 
-const CaptationLead: Page = () => {
+
+const DriverContract: Page = () => {
 
     const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState([]);
-
-    const route = useRouter()
-
+    const [open, setOpen] = React.useState(false);
+    const [selectRow, setSelectedRow] = React.useState<any>({});
     const [filterData, setFilterData] = React.useState<string>(null)
 
     const filter = useForm();
 
     const loadData = ({ skip, sortInfo, limit }) => {
-        return leads.get('?skip=' + skip + '&limit=' + limit + '&' + filterData)
+        return driverContract.get('?skip=' + skip + '&limit=' + limit + '&' + filterData)
             .then(response => {
                 setData(response.data)
                 return { data: response.data, count: response.count };
@@ -66,6 +57,11 @@ const CaptationLead: Page = () => {
     }
 
     const dataSource = React.useCallback(loadData, [filterData])
+
+    const onSelectionChange = React.useCallback(({ data }) => {
+        setSelectedRow(data)
+        setOpen(true)
+    }, [])
 
     const dataToConvert: CsvDownloadProps = {
         data: data,
@@ -79,6 +75,7 @@ const CaptationLead: Page = () => {
         Object.keys(formData).map(data => formData[data] == '' && delete formData[data])
         setFilterData(queryString.stringify(formData))
     }
+
     return (
         <React.Suspense fallback={<Spinner />}>
             <Stack h={'100%'}>
@@ -86,30 +83,25 @@ const CaptationLead: Page = () => {
                 <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                     <form onSubmit={filter.handleSubmit(submitFilter)}>
                         <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+
                             <div>
-                                <Input size={'md'} {...filter.register('zipcode')} placeholder="CEP" />
+                                <Input size={'md'} {...filter.register('driver_document_1')} placeholder="CPF/CNPJ" />
                             </div>
 
                             <div>
-                                <Select {...filter.register('vehicle_type')} placeholder={'Tipo de Veículo'}>
-                                    {['Caminhão', 'Passeio', 'Caminhonete'].map((item, key) => (<option key={key}>{item}</option>))}
-                                </Select>
+                                <Input size={'md'} {...filter.register('vehicle_licence_plate')} placeholder="Placa deo veículo" />
                             </div>
 
                             <div>
-                                <Input size={'md'} type={'date'} {...filter.register('created_at')} placeholder="CEP" />
+                                <Input size={'md'} type={'date'} {...filter.register('created_at')}  />
                             </div>
-
-                            <div>
-                                <Select {...filter.register('hub')} placeholder={'Hub'}>
-                                    {hubs.map((item) => (<option key={item}>{item}</option>))}
-                                </Select>
-                            </div>
+                
                             <div>
                                 <Select {...filter.register('is_avaiable')} placeholder={'Status'}>
                                     {['Indisponível', 'Disponível'].map((item, index) => (<option value={index} key={index}>{item}</option>))}
                                 </Select>
                             </div>
+
                             <div>
                                 {filterData && <Button onClick={() => [setFilterData(null), filter.reset()]} rightIcon={<i className={'las la-times'}></i>}>Limpar</Button>}
                             </div>
@@ -124,17 +116,30 @@ const CaptationLead: Page = () => {
                 </div>
 
                 <DataGrid
-                    pagination
                     columns={columns}
                     dataSource={dataSource}
                     onLoadingChange={setLoading}
+                    onSelectionChange={onSelectionChange}
+                    enableSelection={true}
+                    pagination
                 />
 
             </Stack>
+
+            <Drawer size={'full'} placement={'bottom'} open={open} onClose={() => setOpen(false)}>
+                <Drawer.Header>
+                    <Drawer.Title>{selectRow?.driver_name}</Drawer.Title>
+
+                </Drawer.Header>
+                <Drawer.Body>
+                    <DriverContractView data={selectRow} />
+                </Drawer.Body>
+            </Drawer>
+
         </React.Suspense>
     )
 }
 
-CaptationLead.config = { title: 'Captação', layout: 'AccountLayout' }
+DriverContract.config = { title: 'Contratos de Motoristas', layout: 'AccountLayout' }
 
-export default CaptationLead
+export default DriverContract

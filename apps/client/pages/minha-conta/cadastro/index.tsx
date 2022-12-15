@@ -111,7 +111,6 @@ function Register() {
         return <Stack spacing={4}>
             <Alert
                 status='success'
-                colorScheme={'primary'}
                 flexDirection='column'
                 alignItems='center'
                 justifyContent='center'

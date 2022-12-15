@@ -1,12 +1,12 @@
 import React from 'react';
 
-import * as echarts from 'echarts';
+import  { init }  from 'echarts';
 
 import data from './data.json';
 import _ from 'lodash';
 
 
-export default function BasicBarChart({ rangeData }) {
+export default function BasicBarChart({ rangeData, orderBy, options = null }) {
 
     const data = rangeData;
 
@@ -20,18 +20,18 @@ export default function BasicBarChart({ rangeData }) {
         align: 'left',
         verticalAlign: 'middle',
         rotate: 90,
-        formatter: '{c}',
+        formatter: '{c}  {name|{a}}',
         fontSize: 14,
         rich: {
             name: {}
         }
     };
 
-    const xAxis = Object.keys(_.groupBy(data, 'created_at'));
+    const xAxis = Object.keys(_.groupBy(data, orderBy));
 
-    const orderBy = _.groupBy(data, 'created_at');
+    const orderedBy = _.groupBy(data, orderBy);
 
-    const series = Object.keys(orderBy).map(key => orderBy[key].length)
+    const series = Object.keys(orderedBy).map(key => orderedBy[key].length)
 
 
     // const chartSeries = chartData.rangeDates.map((date) => {
@@ -50,16 +50,16 @@ export default function BasicBarChart({ rangeData }) {
         const chartDom = nameGraphRef.current;
         // const chartDom = document.getElementById('teste');
 
-        const myChart = echarts.init(chartDom);
+        const myChart = init(chartDom, 'roma');
 
         const option = {
 
             tooltip: {
                 trigger: 'axis'
             },
-            legend: {
-                data: ['Aptos']
-            },
+            // legend: {
+            //     data: ['Aptos']
+            // },
             dataZoom: [
                 {
                     type: 'inside',
@@ -91,18 +91,17 @@ export default function BasicBarChart({ rangeData }) {
                     data: series,
                     type: 'bar',
                     showBackground: true,
-                    label: labelOption,
-
+                  
                     backgroundStyle: {
-                      color: 'rgba(180, 180, 180, 0.2)'
+                        color: 'rgba(180, 180, 180, 0.2)'
                     }
-                  }
+                }
             ]
         };
 
         option && myChart.setOption(option);
 
-    }, [series, xAxis])
+    }, [series, xAxis, options])
 
     return (
         <div style={{ width: '100%', height: 'auto', minHeight: '320px' }} ref={nameGraphRef}></div>

@@ -74,7 +74,6 @@ function Register({ history }) {
         return <Stack spacing={4}>
             <Alert
                 status='success'
-                variant='subtle'
                 flexDirection='column'
                 alignItems='center'
                 justifyContent='center'
