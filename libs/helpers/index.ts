@@ -4,6 +4,7 @@ import CPFValidation from './CPFValidation';
 import CNPJValidation from './CNPJValidation';
 import { stateList } from './StateList';
 import suspenseResource from './suspenseResource';
+import licencePlateValidator from './licencePlateValidator';
 
 export {
     Banks,
@@ -11,6 +12,7 @@ export {
     CPFValidation,
     stateList,
     suspenseResource,
-    CNPJValidation
+    CNPJValidation,
+    licencePlateValidator,
 }
 

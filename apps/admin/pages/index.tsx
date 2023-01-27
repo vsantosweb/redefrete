@@ -35,7 +35,6 @@ const approvalRegisterColumns: Array<IColumn> = [
   {
     name: 'name', header: 'Nome', defaultFlex: 1.8, render: ({ value, ...rest }) => <strong>{rest.data.name}</strong>
   },
-  { name: 'email', header: 'Email', defaultFlex: 1.3 },
   { name: 'phone', header: 'Telefone/Whatsapp', defaultFlex: 1.3 },
   { name: 'vehicle_type', header: 'Tipo de veículo', defaultFlex: .7 },
   { name: 'city', header: 'Cidade', defaultFlex: 1 },
@@ -46,9 +45,8 @@ const approvalRegisterColumns: Array<IColumn> = [
 
 const registerByHubsColumns: Array<IColumn> = [
   { name: 'id', header: 'id', defaultVisible: false },
-  { name: 'name', header: 'HUB', defaultFlex: 5, render: ({ value, ...rest }) => <strong>{rest.data.name}</strong> },
+  { name: 'name', header: 'HUB', defaultFlex: 4, render: ({ value, ...rest }) => <strong>{rest.data.name}</strong> },
   { name: 'qty', header: 'Qty', defaultFlex: 1, render: ({ value, ...rest }) => <Badge color="blue" content={rest.data.qty} /> },
-
 ];
 
 

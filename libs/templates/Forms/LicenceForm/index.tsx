@@ -1,7 +1,7 @@
 import React from 'react'
 import { CheckboxGroup, FormControl, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
 import InputMask from 'react-input-mask';
-import { stateList, CPFValidation, suspenseResource } from '@redefrete/helpers';
+import { stateList } from '@redefrete/helpers';
 import { InputCustom, InputFile } from '@redefrete/components';
 
 import { IDriverLicenceRepository } from '@redefrete/interfaces';
@@ -15,6 +15,7 @@ const LicenceForm = ({ form, driver = null }) => {
 
     React.useEffect(() => { driverLicence.getCategories().then(response => setDriverLicenceCategories(response)) }, [])
 
+    console.log(driverLicenceCategories, 'aspofkasopfkasopkf')
     return (
         <Stack spacing={3}>
 

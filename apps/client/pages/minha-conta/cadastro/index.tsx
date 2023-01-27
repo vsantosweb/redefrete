@@ -1,6 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { Alert, AlertDescription, AlertIcon, AlertTitle, FormControl, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, FormControl, FormErrorMessage, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
 import * as Styled from '../styles';
 import InputMask from 'react-input-mask';
 
@@ -8,6 +8,7 @@ import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverAuthRepository } from '@redefrete/interfaces';
 import { useRouter } from 'next/router';
 import { InputCustom } from '@redefrete/components';
+import { licencePlateValidator } from '@redefrete/helpers';
 
 const driverAuthService = container.get<IDriverAuthRepository>(SERVICE_KEYS.DRIVER_AUTH);
 
@@ -29,7 +30,7 @@ function Register() {
 
     const router = useRouter();
 
-    const { handleSubmit, register, formState: { isValid, isSubmitting } } = useForm({ mode: 'onChange' });
+    const { handleSubmit, register, formState: { isValid, isSubmitting, errors } } = useForm({ mode: 'onChange' });
     const [errorMessage, setErrorMessage] = React.useState();
     const [registerSuccess, setRegisterSuccess] = React.useState<boolean>(false);
 
@@ -62,51 +63,53 @@ function Register() {
                         {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
                     </InputMask>
                 </FormControl>
-
                 <Stack direction={'row'}>
-                    <FormControl isRequired={true}>
-                        <FormLabel>Placa</FormLabel>
-                        <InputCustom
-                            style={{ textTransform: 'uppercase' }}
-                            maxLength={7}
-                            autoComplete={'off'}
-                            placeholder={'eee9999'}
-                            accept={'noSpecialChar'}
-                            {...register('licence_plate', { required: true, minLength: 4 })}
-                        />
-                    </FormControl>
-                    <FormControl isRequired={true} variant={'floating'}>
-                        <FormLabel>CEP</FormLabel>
-                        <InputMask
-                            alwaysShowMask={true}
-                            maskChar={null}
-                            mask={'99999-999'}
-                            {...register('zipcode', {
-                                required: true,
-                                minLength: 8,
-                                setValueAs: v => v.replace(/[^\d]/g, ''),
-                            })}>
-                            {(inputProps => <Input type={'tel'} {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
-                        </InputMask>
-                    </FormControl>
-                </Stack>
-
-                <FormControl isRequired={true} variant={'floating'}>
-                    <FormLabel>Tipo de veículo</FormLabel>
-                    <Select placeholder={'Selecione...'} {...register('vehicle_type', { required: true, })}  >
-                        {vehicleTypes.map((type, index) => <option value={type.value} key={index}>{type.name} </option>)}
-                    </Select>
+                    <FormControl isInvalid={errors?.licence_plate ? true : false} isRequired={true} data-invalid={true}>
+                    <FormLabel>Placa</FormLabel>
+                    <InputCustom
+                        style={{ textTransform: 'uppercase' }}
+                        maxLength={7}
+                        autoComplete={'off'}
+                        placeholder={'eee9999'}
+                        accept={'noSpecialChar'}
+                        {...register('licence_plate', {
+                            required: true, minLength: 4, validate: e => licencePlateValidator(e)
+                        })}
+                    />
+                    <FormErrorMessage>Placa Inválida</FormErrorMessage>
                 </FormControl>
-
-                <Styled.AccountButton disabled={!isValid || isSubmitting} isLoading={isSubmitting} type={'submit'} colorScheme={'secondary'}>Registrar-se <i className={'las la-arrow-right'}></i></Styled.AccountButton>
-                {errorMessage && <Alert variant={'solid'} status='error'>
-                    <AlertIcon />
-                    <AlertDescription fontSize={14}>{errorMessage}</AlertDescription>
-                </Alert>}
-                <Styled.AccountButton onClick={() => router.push('/minha-conta/login')} colorScheme={'primary'}>Já possuo uma conta<i className={'las la-arrow-right'}></i></Styled.AccountButton>
-
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>CEP</FormLabel>
+                    <InputMask
+                        alwaysShowMask={true}
+                        maskChar={null}
+                        mask={'99999-999'}
+                        {...register('zipcode', {
+                            required: true,
+                            minLength: 8,
+                            setValueAs: v => v.replace(/[^\d]/g, ''),
+                        })}>
+                        {(inputProps => <Input type={'tel'} {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
+                    </InputMask>
+                </FormControl>
             </Stack>
-        </form>
+
+            <FormControl isRequired={true} variant={'floating'}>
+                <FormLabel>Tipo de veículo</FormLabel>
+                <Select placeholder={'Selecione...'} {...register('vehicle_type', { required: true, })}  >
+                    {vehicleTypes.map((type, index) => <option value={type.value} key={index}>{type.name} </option>)}
+                </Select>
+            </FormControl>
+
+            <Styled.AccountButton disabled={!isValid || isSubmitting} isLoading={isSubmitting} type={'submit'} colorScheme={'secondary'}>Registrar-se <i className={'las la-arrow-right'}></i></Styled.AccountButton>
+            {errorMessage && <Alert variant={'solid'} status='error'>
+                <AlertIcon />
+                <AlertDescription fontSize={14}>{errorMessage}</AlertDescription>
+            </Alert>}
+            <Styled.AccountButton onClick={() => router.push('/minha-conta/login')} colorScheme={'primary'}>Já possuo uma conta<i className={'las la-arrow-right'}></i></Styled.AccountButton>
+
+        </Stack>
+        </form >
     } else {
         return <Stack spacing={4}>
             <Alert

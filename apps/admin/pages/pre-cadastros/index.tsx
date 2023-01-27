@@ -1,20 +1,18 @@
 import React from 'react';
-import suspenseResource from '../../suspenseResource';
-import { Spinner, Stack, Link as ChakraLink, Box, Avatar, Input, Button, Select } from '@chakra-ui/react';
+import { Spinner, Stack, Link as ChakraLink, Input, Button, Select } from '@chakra-ui/react';
 import { Page } from '../_app';
 import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { ICaptureLead } from '@redefrete/interfaces';
 import { DataGrid } from '@redefrete/components';
-import axios from 'axios';
-import { Badge, DatePicker, InputPicker, Panel, Form, IconButton } from 'rsuite';
+import { Badge } from 'rsuite';
 
 import queryString from 'query-string';
 
 const leads = container.get<ICaptureLead>(SERVICE_KEYS.CAPTURE_LEAD_REPOSITORY);
 import csvDownload from 'json-to-csv-export'
 import _ from 'lodash';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import hubs from './hubs.json';
 interface CsvDownloadProps {
@@ -29,20 +27,17 @@ const columns: Array<IColumn> = [
     {
         name: 'name', header: 'Nome', defaultFlex: 1.8, render: ({ value, ...rest }) => <strong>{rest.data.name}</strong>
     },
-    { name: 'phone', header: 'Telefone/Whatsapp', defaultFlex: 1.3 },
-    { name: 'email', header: 'Email', defaultFlex: 1.3 },
-    { name: 'vehicle_type', header: 'Tipo de veículo', defaultFlex: .7 },
-    { name: 'hub', header: 'HUB', defaultFlex: 1.4, render: ({ value, ...rest }) => <Badge color="violet" content={rest.data.hub} /> },
-    { name: 'zipcode', header: 'CEP', defaultFlex: 1 },
+    { name: 'phone', header: 'Telefone/Whatsapp', defaultFlex: 1 },
+    { name: 'email', header: 'Email', defaultFlex: 1 },
+    { name: 'vehicle_type', header: 'Tipo de veículo', defaultFlex: 1 },
     { name: 'city', header: 'Cidade', defaultFlex: 1 },
-    { name: 'code', header: 'Código', defaultFlex: .6 },
+    { name: 'hub', header: 'HUB', defaultFlex: 1, render: ({ value, ...rest }) => <Badge color="violet" content={rest.data.hub} /> },
     { name: 'company', header: 'Empresa', defaultFlex: 1 },
     {
         name: 'is_avaiable', header: 'Status', defaultFlex: 1, render: ({ value, ...rest }) => {
             return <strong style={{ color: rest.data.is_avaiable ? '#24b224' : 'red' }}>{!rest.data.is_avaiable ? 'Fora de area' : 'Disponível'}</strong>
         }
     },
-    { name: 'created_at', header: 'Criado em', defaultFlex: 1 },
 ];
 
 
@@ -92,7 +87,7 @@ const CaptationLead: Page = () => {
 
                             <div>
                                 <Select {...filter.register('vehicle_type')} placeholder={'Tipo de Veículo'}>
-                                    {['Caminhão', 'Passeio', 'Caminhonete'].map((item, key) => (<option key={key}>{item}</option>))}
+                                    {['Carro', 'Moto', 'Caminhão'].map((item, key) => (<option key={key}>{item}</option>))}
                                 </Select>
                             </div>
 
@@ -135,6 +130,6 @@ const CaptationLead: Page = () => {
     )
 }
 
-CaptationLead.config = { title: 'Captação', layout: 'AccountLayout' }
+CaptationLead.config = { title: 'Pré-Cadastros', layout: 'AccountLayout' }
 
 export default CaptationLead

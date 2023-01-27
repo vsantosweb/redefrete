@@ -94,7 +94,6 @@ const Driver: Page = () => {
                         <Tab>CNH</Tab>
                         <Tab>Dados bancários</Tab>
                         <Tab>Veículos</Tab>
-                        <Tab>Senha</Tab>
                     </TabList>
 
                     <TabPanels>
@@ -168,11 +167,13 @@ const Driver: Page = () => {
                             <DataGrid
                                 columns={[
                                     { name: 'id', header: 'id', defaultVisible: false },
-                                    { name: 'brand', header: 'Marca' },
                                     { name: 'licence_plate', header: 'Placa', },
-                                    { name: 'owner_document', header: 'Documento do Resposável' },
-                                    { name: 'owner_name', header: 'Nome do responsável' },
-                                    { name: 'document_url', header: 'Document', defaultFlex: 1.3, render: ({ value, ...rest }) => <Link target={'_blank'} href={rest.data.document_url}><ChakraLink>{rest.data.document_url}</ChakraLink></Link> },
+                                    { name: 'model', header: 'Modelo', },
+                                    { name: 'brand', header: 'Marca' },
+                                    { name: 'type', header: 'Tipo', render: ({ value }) => value.name },
+                                    { name: 'owner_name', header: 'Nome do responsável', defaultFlex: 1 },
+                                    { name: 'owner_document', header: 'Documento do Resposável', defaultFlex: 1 },
+                                    { name: 'document_url', header: 'Documento do Veículo', defaultFlex: 1, render: ({ value, ...rest }) => <Link target={'_blank'} href={rest.data.document_url}><ChakraLink>{rest.data.document_url}</ChakraLink></Link> },
                                 ]}
                                 dataSource={driver.vehicles || []}
                             />

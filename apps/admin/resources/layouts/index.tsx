@@ -18,7 +18,6 @@ export interface LayoutProps {
 }
 
 export const Layout = ({ children, layout, title }: LayoutProps) => {
-layout
     let Component = layouts[layout] || React.Fragment;
     return <Component title={title}>{children}</Component>;
 

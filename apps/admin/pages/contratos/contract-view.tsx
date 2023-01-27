@@ -1,3 +1,5 @@
+import { Badge } from '@chakra-ui/react';
+import _ from 'lodash';
 import React from 'react';
 
 import * as Styled from './styles';
@@ -34,10 +36,11 @@ const fields = {
     "vehicle_licence_plate": "Placa",
     "vehicle_licence_number": "RENAVAM",
     "created_at": "Criado em",
+    'hubs': `Hub's Disponíveis`
 }
 
 export default function DriverContractView({ data }) {
-    console.log(data)
+    
     return (
         <Styled.Container>
 
@@ -45,7 +48,13 @@ export default function DriverContractView({ data }) {
                 {Object.keys(data).map((item, key) => <Styled.DetailViewContent key={key}>
                     <Styled.DetailViewItem >
                         <Styled.DetailViewItemLabel>{fields[item]}</Styled.DetailViewItemLabel>
-                        <Styled.DetailViewItemContent>{data[item]}</Styled.DetailViewItemContent>
+                        {console.log( data[item], 'kasopfkasopfksoap')}
+                        {
+                            _.isArray(data[item]) ? data[item].map((item, key) =>
+                                <Styled.DetailViewItemContent style={{display: 'inline-block'}} key={key}><Badge ml={2} colorScheme={'green'}>{item.name}</Badge></Styled.DetailViewItemContent>) :
+                                <Styled.DetailViewItemContent>{data[item]}</Styled.DetailViewItemContent>
+                        }
+
                     </Styled.DetailViewItem>
                 </Styled.DetailViewContent>)}
             </Styled.DetailView>

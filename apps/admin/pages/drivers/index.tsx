@@ -32,7 +32,6 @@ const columns: Array<IColumn> = [
   { name: 'document_1', header: 'CPF/CNPJ', defaultFlex: 1 },
   { name: 'phone', header: 'Telefone/Whatsapp', defaultFlex: 1 },
   { name: 'status', header: 'Status', defaultFlex: 1 },
-  { name: 'last_activity', header: 'Ultima atividade', defaultFlex: 1 },
   { name: 'created_at', header: 'Criado em', defaultFlex: 1 },
 ];
 
@@ -54,6 +53,7 @@ const Driver: Page = () => {
   const loadData = ({ skip, sortInfo, limit }) => {
     return driverRepository.list('?skip=' + skip + '&limit=' + limit + '&' + filterData)
       .then(response => {
+        console.log(response)
         setDrivers(response.data)
         return { data: response.data, count: response.count };
       })
@@ -63,7 +63,6 @@ const Driver: Page = () => {
     driverRepository.statusList().then(response => setDriverStatuses(response.data))
   }, [])
 
-  console.log(driverStatuses, 'ksaofksao')
   const dataSource = React.useCallback(loadData, [filterData])
 
   const submitFilter = (formData) => {
@@ -120,6 +119,6 @@ const Driver: Page = () => {
   )
 }
 
-Driver.config = { title: 'Motoristas', layout: 'AccountLayout' }
+Driver.config = { title: 'Usuários', layout: 'AccountLayout' }
 
 export default Driver
