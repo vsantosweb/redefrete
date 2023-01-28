@@ -2,7 +2,7 @@ import React from 'react'
 import { Checkbox, FormControl, FormErrorMessage, FormLabel, Heading, Input, Select, Stack } from '@chakra-ui/react';
 import axios from 'axios';
 import InputMask from 'react-input-mask';
-import { CPFValidation, stateList } from '@redefrete/helpers';
+import { CPFValidation, licencePlateValidator, stateList } from '@redefrete/helpers';
 import { DocumentInput, InputCustom, InputFile } from '@redefrete/components';
 
 import { container, SERVICE_KEYS } from '@redefrete/container';
@@ -34,7 +34,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
     }
 
     React.useEffect(() => {
-        
+
         if (ownerAccount) {
 
             form.setValue('vehicle.owner_name', formField.name, { shouldValidate: true })
@@ -44,7 +44,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
             form.setValue('vehicle.owner_rg', formField.rg, { shouldValidate: true })
             form.setValue('vehicle.owner_rg_issue', formField.rg_issue, { shouldValidate: true })
             form.setValue('vehicle.owner_rg_uf', formField.rg_uf, { shouldValidate: true })
-        
+
             return;
         }
 
@@ -62,7 +62,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
             form.resetField('vehicle.brand')
             form.resetField('vehicle.brand_code')
             form.resetField('vehicle.model')
-            
+
         }
         axios.get('https://parallelum.com.br/fipe/api/v1/' + e.target.value + '/marcas').then(response => {
 
@@ -74,7 +74,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
     }
 
     const getModels = (e) => {
-        console.log(form.getValues('vehicle.type'), e.target.value)
+
         axios.get('https://parallelum.com.br/fipe/api/v1/' + form.getValues('vehicle.type') + '/marcas/' + e.target.value + '/modelos')
             .then(response => {
                 setVehicleModels(response.data.modelos);
@@ -82,7 +82,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
             })
             .catch(error => console.log(error.response))
     }
-    console.log(form.formState.errors)
+    
     return (
 
         <div>
@@ -138,7 +138,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
                                 </Select>
                             </FormControl>
                         </Stack>
-                        
+
                     </>
                 }
                 <hr />
@@ -193,13 +193,18 @@ const VehicleForm = ({ form, vehicle }: any) => {
                             maxLength={7}
                             {...form.register('vehicle.licence_plate', {
                                 required: true,
-                                validate: async (licencePlate: string) => (
-                                    licencePlate.length >= 7 ? await vehicleRepository.checkVehicleExists(licencePlate)
-                                        .then(response => {
-                                            setLicenceVehicleMessage(response.message)
-                                            return response.success
-                                        }) : setLicenceVehicleMessage(null)
-                                )
+                                validate: (licencePlate: string) => {
+
+                                    if (licencePlateValidator(licencePlate)) {
+                                        vehicleRepository.checkVehicleExists(licencePlate)
+                                            .then(response => {
+                                                setLicenceVehicleMessage(response.message)
+                                                return response.success
+                                            })
+                                    }
+                                    setLicenceVehicleMessage('Placa Inválida')
+                                    return false;
+                                }
 
                             })}
                         />
