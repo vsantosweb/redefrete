@@ -1,4 +1,4 @@
-import { Badge } from '@chakra-ui/react';
+import { Badge, Tooltip } from '@chakra-ui/react';
 import React from 'react'
 import _nav from '../../../nav';
 
@@ -19,17 +19,31 @@ function SidebarMenu() {
                 </Styled.SidebarHeader>
                 <Styled.SidebarContent>
                     <Styled.SidebarMenu>
-                        <div>
+                        {/* <div>
                             {_nav.map(route => route.visible && <Styled.SidebarMenuItem key={route.path} active={router.pathname === route.path}>
                                 <Link href={route.path}><a> <div className={`innerItem`} >
                                     <div className={'icon-wrapper'}>
                                         <div className={'icon'}>{route.icon}</div>
                                     </div>
                                     <div className={'itemLink'}>{route.name}</div>
-                                    {/* <Badge variant={'solid'}>6</Badge> */}
                                 </div></a></Link>
                             </Styled.SidebarMenuItem>)}
-
+                        </div> */}
+                        <div>
+                            {_nav.map(route => route.visible && <Styled.SidebarMenuItem key={route.path} active={router.pathname === route.path}>
+                                <Link href={route.path}>
+                                    <a>
+                                        <div className={`innerItem`} >
+                                            <div className={'icon-wrapper'}>
+                                                <Tooltip label={route.name} aria-label='A tooltip'>
+                                                <div className={'icon'}>{route.icon}</div>
+                                                </Tooltip>
+                                                
+                                            </div>
+                                        </div>
+                                    </a>
+                                </Link>
+                            </Styled.SidebarMenuItem>)}
                         </div>
 
                     </Styled.SidebarMenu>

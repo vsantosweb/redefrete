@@ -61,7 +61,7 @@ const Driver: Page = () => {
         driverRepository.changeStatus(router.query.id, { driver_status_id: e.target.value })
             .then(response => showDriver(router.query.id))
     }
-    console.log(driver)
+
     return (
         driver ? <Styled.ProfileWrapper>
             <Styled.ProfileDetails>

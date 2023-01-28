@@ -30,8 +30,8 @@ export const AccountHeaderWrapper = styled.header`
 export const SideBar = styled.aside`
   height: auto;
   min-height: 100%;
-  width: 250px;
-  min-width: 250px;
+  width: 60px;
+  min-width: 60px;
   text-align: left;
   transition: width, left, right, 0.3s;
   position: relative;

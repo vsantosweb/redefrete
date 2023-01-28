@@ -3,8 +3,8 @@ import styled from "@emotion/styled";
 export const Sidebar = styled.div`
   color: #b5b5b5;
   height: 100%;
-  width: 250px;
-  min-width: 250px;
+  width: 60px;
+  min-width: 60px;
   text-align: left;
   transition: width, left, right, 0.3s;
   position: relative;
