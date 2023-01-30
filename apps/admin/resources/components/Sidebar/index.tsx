@@ -14,7 +14,7 @@ function SidebarMenu() {
         <Styled.Sidebar>
             <Styled.SidebarInner>
                 <Styled.SidebarHeader>
-                    <div><img src={'/redefrete-white.png'} width={"130px"} /></div>
+                    <div><img src={'/Logo.png'} width={"130px"} /></div>
 
                 </Styled.SidebarHeader>
                 <Styled.SidebarContent>
