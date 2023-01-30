@@ -82,7 +82,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
             })
             .catch(error => console.log(error.response))
     }
-    
+
     return (
 
         <div>
@@ -193,18 +193,21 @@ const VehicleForm = ({ form, vehicle }: any) => {
                             maxLength={7}
                             {...form.register('vehicle.licence_plate', {
                                 required: true,
-                                validate: (licencePlate: string) => {
+                                validate: async (licencePlate: string) => {
 
-                                    if (licencePlateValidator(licencePlate)) {
-                                        vehicleRepository.checkVehicleExists(licencePlate)
-                                            .then(response => {
-                                                setLicenceVehicleMessage(response.message)
-                                                return response.success
-                                            })
+                                    if (!licencePlateValidator(licencePlate)) {
+                                        setLicenceVehicleMessage('Placa inválida')
+                                        return false;
                                     }
-                                    setLicenceVehicleMessage('Placa Inválida')
-                                    return false;
+
+                                    return licencePlate.length >= 7 && licencePlateValidator(licencePlate) ? await vehicleRepository.checkVehicleExists(licencePlate)
+                                        .then(response => {
+                                            setLicenceVehicleMessage(response.message)
+                                            return response.success
+                                        }) : setLicenceVehicleMessage(null)
                                 }
+
+
 
                             })}
                         />

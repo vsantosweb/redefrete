@@ -59,11 +59,11 @@ const Vehicles: Page = () => {
     // return console.log(data);
 
     await driverVehicleService.createVehicle(data).then(response => {
-      console.log(response)
       onClose()
       setVehicleCreated(Math.random());
     })
   }
+  console.log(vehicleForm.formState.errors, vehicleForm.formState.isValid)
   return (
     <Box display={'flex'} flexDirection={'column'} gap={3}>
       <Loader isPromisse={true} area={'fetch-vehicles'}>
