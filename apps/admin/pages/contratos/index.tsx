@@ -36,6 +36,7 @@ const columns: Array<IColumn> = [
     { name: 'driver_name', header: 'Motorista', defaultFlex: 1 },
     { name: 'driver_phone', header: 'Telefone', defaultFlex: 1 },
     { name: 'vehicle_licence_plate', header: 'Placa', defaultFlex: 1 },
+    { name: 'vehicle_type', header: 'Tipo de Veículo', defaultFlex: 1 },
     { name: 'created_at', header: 'Criado Em', defaultFlex: 1 },
     { name: 'updated_at', header: 'Ultima Atualização', defaultFlex: 1 },
 ];
@@ -147,6 +148,6 @@ const DriverContract: Page = () => {
     )
 }
 
-DriverContract.config = { title: 'Contratos de Motoristas', layout: 'AccountLayout' }
+DriverContract.config = { title: 'Contratos GR', layout: 'AccountLayout' }
 
 export default DriverContract

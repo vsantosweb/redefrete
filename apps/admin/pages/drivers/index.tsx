@@ -119,6 +119,6 @@ const Driver: Page = () => {
   )
 }
 
-Driver.config = { title: 'Usuários', layout: 'AccountLayout' }
+Driver.config = { title: 'Conta de Usuários', layout: 'AccountLayout' }
 
 export default Driver

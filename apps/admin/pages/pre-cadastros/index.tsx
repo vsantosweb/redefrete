@@ -15,6 +15,7 @@ import _ from 'lodash';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import hubs from './hubs.json';
+import moment from 'moment';
 interface CsvDownloadProps {
     data: any[];
     filename?: string;
@@ -38,6 +39,8 @@ const columns: Array<IColumn> = [
             return <strong style={{ color: rest.data.is_avaiable ? '#24b224' : 'red' }}>{!rest.data.is_avaiable ? 'Fora de area' : 'Disponível'}</strong>
         }
     },
+    { name: 'created_at', header: 'Criado Em', defaultFlex: 1, render: (value) => moment(value).format('DD-MM-YYYY')},
+
 ];
 
 
