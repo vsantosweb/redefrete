@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, FormControl, FormLabel, Heading, Select, Stack, useDisclosure } from '@chakra-ui/react';
+import { Alert, Box, Button, FormControl, FormLabel, Heading, Select, Stack, useDisclosure } from '@chakra-ui/react';
 import { ListView, Loader } from '@redefrete/components';
 import { Page } from '../_app';
 import { RouteGuardContext } from '../../RouteGuard';
@@ -27,7 +27,7 @@ const Vehicles: Page = () => {
 
   const [vehicles, setVehicles] = React.useState([]);
   const [vehicleCreated, setVehicleCreated] = React.useState(null);
-
+  const [apiStatusError, setApiStatusError] = React.useState(null)
   const { user } = React.useContext(RouteGuardContext);
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -61,9 +61,9 @@ const Vehicles: Page = () => {
     await driverVehicleService.createVehicle(data).then(response => {
       onClose()
       setVehicleCreated(Math.random());
-    })
+    }).catch(error => setApiStatusError(error.response.data.message))
   }
-  console.log(vehicleForm.formState.errors, vehicleForm.formState.isValid)
+
   return (
     <Box display={'flex'} flexDirection={'column'} gap={3}>
       <Loader isPromisse={true} area={'fetch-vehicles'}>
@@ -83,6 +83,8 @@ const Vehicles: Page = () => {
               <ModalCloseButton />
               <ModalBody>
                 <Stack>
+               {apiStatusError && <Alert size={'sm'} status={'error'}>Erro: {apiStatusError}</Alert>} 
+
                   <VehicleForm form={vehicleForm} />
                   <FormControl isInvalid={false}>
                     <FormLabel>Conta para pagamento</FormLabel>
