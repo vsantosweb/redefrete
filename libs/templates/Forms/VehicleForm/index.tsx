@@ -32,7 +32,6 @@ const VehicleForm = ({ form, vehicle }: any) => {
         rg_issue: form.watch('rg_issue'),
         rg_uf: form.watch('rg_uf'),
     }
-
     React.useEffect(() => {
 
         if (ownerAccount) {
@@ -48,10 +47,28 @@ const VehicleForm = ({ form, vehicle }: any) => {
             return;
         }
 
-        form.setValue('vehicle.owner_name', '')
-        form.setValue('vehicle.owner_document', '')
+        form.setValue('vehicle.owner_name', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_document', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_name', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_document', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_mother_name', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_birthday', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_rg', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_rg_issue', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_rg_uf', '', { shouldValidate: true })
 
-    }, [formField?.name, formField?.document_1, ownerAccount, form])
+    }, [
+        formField?.name,
+        formField?.document_1,
+        formField.birthday,
+        formField.mother_name,
+        formField.rg,
+        formField.rg_issue,
+        formField.rg_uf,
+        ownerAccount,
+        form
+    ]
+    )
 
 
     const getBrands = (e) => {

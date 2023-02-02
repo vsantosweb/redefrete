@@ -48,7 +48,6 @@ export default function DriverContractView({ data }) {
                 {Object.keys(data).map((item, key) => <Styled.DetailViewContent key={key}>
                     <Styled.DetailViewItem >
                         <Styled.DetailViewItemLabel>{fields[item]}</Styled.DetailViewItemLabel>
-                        {console.log( data[item], 'kasopfkasopfksoap')}
                         {
                             _.isArray(data[item]) ? data[item].map((item, key) =>
                                 <Styled.DetailViewItemContent style={{display: 'inline-block'}} key={key}><Badge ml={2} colorScheme={'green'}>{item.name}</Badge></Styled.DetailViewItemContent>) :

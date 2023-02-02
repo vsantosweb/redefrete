@@ -72,7 +72,6 @@ const Home: Page = () => {
     }
   })
 
-  console.log(registerByHub)
   React.useEffect(() => {
 
     driver.rangeDate({ date_from: moment(value[0]).format('YYYY-MM-DD'), date_to: moment(value[1]).format('YYYY-MM-DD') })

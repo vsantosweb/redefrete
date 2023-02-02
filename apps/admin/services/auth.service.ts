@@ -19,7 +19,6 @@ interface JWTtoken { token: string }
 
 const signIn = async ({ email, password }: SignInCredentials) => api.post(AuthEndpoints.LOGIN, { email, password })
     .then(response => {
-            console.log(response)
         Cookie.set('token', response.data.data);
         return response.data;
     })

@@ -61,7 +61,6 @@ export default function approvalChartByHub(driverRangeData) {
 
     sourceData.unshift(['Income', 'Hub', 'Date']);
 
-    console.log(sourceData, 'cccccc')
 
     // console.log(sourceData, 'askfpoksafopkas')
 

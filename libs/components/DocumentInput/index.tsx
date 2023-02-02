@@ -13,11 +13,13 @@ type DocumentInputProps = {
 const documentInputMask = {
     document_1: {
         mask: '999.999.999-99',
-        validator: CPFValidation
+        validator: CPFValidation,
+        label: 'CPF'
     },
     document_2: {
         mask: '99.999.999/9999-99',
-        validator: CNPJValidation
+        validator: CNPJValidation,
+        label: 'CNPJ'
     },
 }
 
@@ -29,6 +31,11 @@ const DocumentInput = ({ useForm, field,  ...rest }) => {
         useForm.resetField(field);
         setDocumentType(value);
     }
+    //funcao para acessar keys
+    // const accessFieldValue = (obj, field) => { 
+    //     const accessArray = field.split('.');
+    //     return accessArray.reduce((acc, curr) => console.log(acc.owner_document, curr , 'kkkkkkkkkkk'), obj);
+    //   };
 
     return (
         <FormControl isInvalid={useForm.formState.errors?.[field]} isRequired={true} variant={'floating'}>
@@ -49,14 +56,13 @@ const DocumentInput = ({ useForm, field,  ...rest }) => {
                     required: true,
                     setValueAs: v => v.replace(/[^\d]/g, ''),
                     validate: v => {
-
                         return documentInputMask[documentType].validator(v);
                     }
                 })}
             >
                 {(inputProps => <Input  {...inputProps} autoComplete={'off'} />)}
             </InputMask>
-            <FormErrorMessage>Documento inválido</FormErrorMessage>
+            <FormErrorMessage>Insira um documento {documentInputMask[documentType].label} válido.</FormErrorMessage>
 
         </FormControl>
     )

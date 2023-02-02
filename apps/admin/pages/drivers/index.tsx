@@ -53,7 +53,6 @@ const Driver: Page = () => {
   const loadData = ({ skip, sortInfo, limit }) => {
     return driverRepository.list('?skip=' + skip + '&limit=' + limit + '&' + filterData)
       .then(response => {
-        console.log(response)
         setDrivers(response.data)
         return { data: response.data, count: response.count };
       })

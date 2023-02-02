@@ -33,7 +33,7 @@ const Vehicles: Page = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const vehicleForm = useForm<UseFormProps | any>({ mode: 'onChange', defaultValues: { ...user } });
-  
+
   React.useEffect(() => {
     trackPromise(
       driverVehicleService.getVehicles().then(
@@ -56,8 +56,6 @@ const Vehicles: Page = () => {
     data.document_file = await base64FileConverter(data.document_file[0]);
     data.driver_bank_id = formData.driver_bank_id
 
-    // return console.log(data);
-
     await driverVehicleService.createVehicle(data).then(response => {
       onClose()
       setVehicleCreated(Math.random());
@@ -77,13 +75,13 @@ const Vehicles: Page = () => {
       <>
         <Modal scrollBehavior={'inside'} size={'xl'} isCentered isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
-            <form onSubmit={vehicleForm.handleSubmit(handleCreateVehicle)}>
-          <ModalContent>
+          <form onSubmit={vehicleForm.handleSubmit(handleCreateVehicle)}>
+            <ModalContent>
               <ModalHeader>Cadastrar novo Veículo</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
                 <Stack>
-               {apiStatusError && <Alert size={'sm'} status={'error'}>Erro: {apiStatusError}</Alert>} 
+                  {apiStatusError && <Alert size={'sm'} status={'error'}>Erro: {apiStatusError}</Alert>}
 
                   <VehicleForm form={vehicleForm} />
                   <FormControl isInvalid={false}>
@@ -98,8 +96,8 @@ const Vehicles: Page = () => {
               <ModalFooter>
                 <Button type={'submit'} disabled={!vehicleForm.formState.isValid} isLoading={vehicleForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
               </ModalFooter>
-          </ModalContent>
-            </form>
+            </ModalContent>
+          </form>
         </Modal>
       </>
     </Box>

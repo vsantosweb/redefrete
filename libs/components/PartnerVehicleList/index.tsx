@@ -35,7 +35,6 @@ export default function PartnerVehicleList() {
     const getVehicleDrivers = () => trackPromise(
         driverPartnerService.getVehiclePartners().then(response => {
             setVehiclePartners(response.data)
-            console.log(response, 'chameeei')
         }), 'show-vehicle')
     
         console.log(vehiclePartners)

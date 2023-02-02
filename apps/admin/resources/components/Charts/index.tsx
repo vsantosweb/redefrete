@@ -6,7 +6,6 @@ import data from './data.json';
 import _ from 'lodash';
 
 export default function ApexChart() {
-    console.log(data)
     const chartData = {
         rangeDates: Object.keys(_.groupBy(data.data, 'created_at')),
         statuses: Object.keys(_.groupBy(data.data, 'status'))
@@ -23,7 +22,6 @@ export default function ApexChart() {
           }
     })
 
-    console.log(chartData.rangeDates, 'teste')
 
     const options = {
 
