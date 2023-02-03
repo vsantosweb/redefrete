@@ -55,7 +55,6 @@ const Vehicles: Page = () => {
 
     data.document_file = await base64FileConverter(data.document_file[0]);
     data.driver_bank_id = formData.driver_bank_id
-
     await driverVehicleService.createVehicle(data).then(response => {
       onClose()
       setVehicleCreated(Math.random());

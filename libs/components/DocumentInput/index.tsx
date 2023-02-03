@@ -23,13 +23,14 @@ const documentInputMask = {
     },
 }
 
-const DocumentInput = ({ useForm, field,  ...rest }) => {
+const DocumentInput = ({ useForm, field, selectedDocument = null, ...rest }) => {
 
     const [documentType, setDocumentType] = React.useState('document_1');
 
     const choseDocumentType = (value) => {
         useForm.resetField(field);
         setDocumentType(value);
+        selectedDocument && selectedDocument(value)
     }
     //funcao para acessar keys
     // const accessFieldValue = (obj, field) => { 

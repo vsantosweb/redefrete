@@ -54,7 +54,7 @@ function RouteGuard({ children }) {
     const authCheck = async (url) => {
         
         return await authService.session().then((user) => {
-            console.log(user)
+            
             if (user && router.pathname === AuthEndpoints.LOGIN) {
                 router.push(`/`)
             }

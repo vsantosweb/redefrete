@@ -22,7 +22,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
     const [vehicleModels, setVehicleModels] = React.useState(null);
     const [ownerAccount, setOwnerAccount] = React.useState(true);
     const [licenceVehicleMessage, setLicenceVehicleMessage] = React.useState(null);
-
+    const [selectedDocument, setSelectedDocument] = React.useState('document_1');
     const formField = {
         name: form.watch('name'),
         document_1: form.watch('document_1'),
@@ -89,7 +89,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
         })
             .catch(error => console.log(error.response.data))
     }
-
+    
     const getModels = (e) => {
 
         axios.get('https://parallelum.com.br/fipe/api/v1/' + form.getValues('vehicle.type') + '/marcas/' + e.target.value + '/modelos')
@@ -99,7 +99,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
             })
             .catch(error => console.log(error.response))
     }
-
+    
     return (
 
         <div>
@@ -112,50 +112,57 @@ const VehicleForm = ({ form, vehicle }: any) => {
                 <Checkbox defaultChecked={ownerAccount} onChange={() => setOwnerAccount(prev => !prev)}>Eu sou proprietário do veículo</Checkbox>
                 {
                     !ownerAccount && <>
-                        <DocumentInput field={'vehicle.owner_document'} useForm={form} />
+                        <DocumentInput
+                            field={'vehicle.owner_document'}
+                            selectedDocument={(value) => setSelectedDocument(value)}
+                            useForm={form}
+                        />
                         <FormControl isRequired={true}>
                             <FormLabel>Nome do Titular</FormLabel>
                             <InputCustom accept={'alpha'} autoComplete={'off'} {...form.register('vehicle.owner_name', { required: true })} />
                         </FormControl>
-                        <FormControl isRequired={true}>
-                            <FormLabel>Nome da mãe</FormLabel>
-                            <InputCustom accept={'alpha'} autoComplete={'off'} {...form.register('vehicle.owner_mother_name', { required: true })} />
-                        </FormControl>
-                        <FormControl isRequired={true} variant={'floating'}>
-                            <FormLabel>Data de nascimento</FormLabel>
-                            <Input
-                                type={'date'}
-                                autoComplete={'off'}
-                                max={moment().subtract(18, 'years').format('YYYY-MM-DD')}
-                                {...form.register('vehicle.owner_birthday', { required: true, minLength: 4 })}
-                            />
-                        </FormControl>
-                        <FormControl isRequired={true} variant={'floating'}>
-                            <FormLabel>Nº RG</FormLabel>
-                            <InputCustom
-                                accept={'noSpecialChar'}
-                                maxLength={9}
-                                autoComplete={'off'}
-                                {...form.register('vehicle.owner_rg', { required: true, minLength: 4 })}
-                            />
-                        </FormControl>
 
-                        <Stack direction={'row'}>
+
+                        {selectedDocument === 'document_1' && <>
+                            <FormControl isRequired={true}>
+                                <FormLabel>Nome da mãe</FormLabel>
+                                <InputCustom accept={'alpha'} autoComplete={'off'} {...form.register('vehicle.owner_mother_name', { required: true })} />
+                            </FormControl>
                             <FormControl isRequired={true} variant={'floating'}>
-                                <FormLabel>Data de emissão</FormLabel>
+                                <FormLabel>Data de nascimento</FormLabel>
                                 <Input
-                                    type={'date'} autoComplete={'off'}
-                                    {...form.register('vehicle.owner_rg_issue', { required: true })} />
+                                    type={'date'}
+                                    autoComplete={'off'}
+                                    max={moment().subtract(18, 'years').format('YYYY-MM-DD')}
+                                    {...form.register('vehicle.owner_birthday', { required: true, minLength: 4 })}
+                                />
                             </FormControl>
-
                             <FormControl isRequired={true} variant={'floating'}>
-                                <FormLabel>UF</FormLabel>
-                                <Select  {...form.register('vechile.owner_rg_uf', { required: true })}>
-                                    {stateList.map(state => <option key={state} value={state}>{state}</option>)}
-                                </Select>
+                                <FormLabel>Nº RG</FormLabel>
+                                <InputCustom
+                                    accept={'noSpecialChar'}
+                                    maxLength={9}
+                                    autoComplete={'off'}
+                                    {...form.register('vehicle.owner_rg', { required: true, minLength: 4 })}
+                                />
                             </FormControl>
-                        </Stack>
 
+                            <Stack direction={'row'}>
+                                <FormControl isRequired={true} variant={'floating'}>
+                                    <FormLabel>Data de emissão</FormLabel>
+                                    <Input
+                                        type={'date'} autoComplete={'off'}
+                                        {...form.register('vehicle.owner_rg_issue', { required: true })} />
+                                </FormControl>
+                            </Stack>
+                        </>
+                        }
+                        <FormControl isRequired={true} variant={'floating'}>
+                            <FormLabel>UF</FormLabel>
+                            <Select  {...form.register('vechile.owner_rg_uf', { required: true })}>
+                                {stateList.map(state => <option key={state} value={state}>{state}</option>)}
+                            </Select>
+                        </FormControl>
                     </>
                 }
                 <hr />
