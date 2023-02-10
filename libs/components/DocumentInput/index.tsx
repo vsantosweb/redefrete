@@ -4,11 +4,6 @@ import InputMask from 'react-input-mask';
 import { FormControl, FormErrorMessage, FormLabel, Input, Radio, RadioGroup, Stack } from '@chakra-ui/react';
 import { CNPJValidation, CPFValidation } from '@redefrete/helpers';
 
-type DocumentInputProps = {
-    label: string,
-    acceptFiles: string[],
-    maxSize: string,
-}
 
 const documentInputMask = {
     document_1: {
@@ -23,7 +18,7 @@ const documentInputMask = {
     },
 }
 
-const DocumentInput = ({ useForm, field, selectedDocument = null, ...rest }) => {
+const DocumentInput = ({ useForm, field, selectedDocument = null, loadOnly=null, ...rest }) => {
 
     const [documentType, setDocumentType] = React.useState('document_1');
 

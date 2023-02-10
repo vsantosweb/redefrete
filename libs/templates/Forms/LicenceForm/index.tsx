@@ -15,7 +15,6 @@ const LicenceForm = ({ form, driver = null }) => {
 
     React.useEffect(() => { driverLicence.getCategories().then(response => setDriverLicenceCategories(response)) }, [])
 
-    console.log(driverLicenceCategories, 'aspofkasopfkasopkf')
     return (
         <Stack spacing={3}>
 

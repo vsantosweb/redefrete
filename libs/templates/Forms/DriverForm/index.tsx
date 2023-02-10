@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormControl, FormErrorMessage, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
 import { DocumentInput, InputCustom } from '@redefrete/components';
-import { stateList } from '@redefrete/helpers';
+import { CPFValidation, stateList } from '@redefrete/helpers';
 import InputMask from 'react-input-mask';
 
 import { Path, UseFormRegister } from 'react-hook-form';
@@ -34,7 +34,21 @@ const DriverForm = ({ form, driver }: any) => {
             </FormControl>
 
             <FormControl isInvalid={form.formState.errors?.document_1} isRequired={true} variant={'floating'}>
-                <DocumentInput defaultValue={driver?.document_1 || ''} field={'document_1'} useForm={form} />
+                <FormLabel>CPF</FormLabel>
+                <InputMask
+                    alwaysShowMask={true}
+                    mask={'999.999.999-99'}
+                    type={'tel'}
+                    defaultValue={driver?.document_1 || ''}
+                    {...form.register('document_1', {
+                        required: true,
+                        minLength: 8,
+                        setValueAs: v => v.replace(/[^\d]/g, ''),
+                        validate: v => {
+                            return CPFValidation(v);
+                        }
+                    })}>{(inputProps => <Input  {...inputProps} autoComplete={'off'} />)}</InputMask>
+                <FormErrorMessage>Insira um documento válido.</FormErrorMessage>
             </FormControl>
 
             <FormControl isRequired={true} variant={'floating'}>
@@ -88,7 +102,7 @@ const DriverForm = ({ form, driver }: any) => {
                     </Select>
                 </FormControl>
             </Stack>
-            
+
             <FormControl variant={'floating'}>
                 <FormLabel>Gênero</FormLabel>
                 <Select placeholder={'Selecione...'} {...form.register('gender', { required: true })} defaultValue={driver?.gender || null}>

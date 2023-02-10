@@ -9,7 +9,7 @@ const AddressForm = ({ form, driver = null }: any) => {
 
     React.useEffect(() => {
 
-        let zipcode = driver?.address?.zipcode || driver?.zipcode;
+        const zipcode = driver?.address?.zipcode || driver?.zipcode;
 
         if(zipcode){
             fillAddressFields(zipcode)
@@ -52,8 +52,8 @@ const AddressForm = ({ form, driver = null }: any) => {
                             required: true,
                             maxLength: 8,
                             setValueAs: v => v.replace(/[^\d]/g, ''),
-                            validate: async (value) => {
-                                value.length === 8 ? fillAddressFields(value) : resetAddress()
+                            validate:  (value) => {
+                               return value.length === 8  ?  fillAddressFields(value) : resetAddress()
                             }
                         })}>
                         {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
