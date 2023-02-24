@@ -28,13 +28,7 @@ export default function AccountLayout({ children, ...props }) {
                                         <Avatar as={'button'} bg={'secondary.500'} color={'#fff'} name={user.name} />
                                     </MenuButton>
                                     <MenuList>
-                                        <MenuGroup title={user.name}>
-                                            <MenuItem>My Account</MenuItem>
-                                            <MenuItem>Payments </MenuItem>
-                                        </MenuGroup>
-                                        <MenuDivider />
                                         <MenuGroup title='Help'>
-                                            <MenuItem>Docs</MenuItem>
                                             <MenuItem onClick={() => driverAuth.logout()}>Sair</MenuItem>
                                         </MenuGroup>
                                     </MenuList>
