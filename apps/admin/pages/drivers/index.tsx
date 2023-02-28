@@ -1,6 +1,6 @@
 import React from 'react';
 import suspenseResource from '../../suspenseResource';
-import { Avatar, Box, Input, Spinner, Stack, Link as ChakraLink, Select, Button } from '@chakra-ui/react';
+import { Avatar, Box, Input, Modal, Spinner, Stack, Link as ChakraLink, Select, Button, useDisclosure, ModalFooter, ModalOverlay, ModalCloseButton, ModalBody, ModalHeader, ModalContent, Alert } from '@chakra-ui/react';
 import { Page } from '../_app';
 import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
 import Link from 'next/link';
@@ -10,6 +10,8 @@ import { DataGrid } from '@redefrete/components';
 import { useForm } from 'react-hook-form';
 import csvDownload from 'json-to-csv-export';
 import queryString from 'query-string';
+import { DriverForm } from '@redefrete/templates/forms';
+import { useRouter } from 'next/router';
 
 const driverRepository = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
 
@@ -42,9 +44,11 @@ const Driver: Page = () => {
   const [filterData, setFilterData] = React.useState<string>(null)
   const [loading, setLoading] = React.useState(false);
   const [driverStatuses, setDriverStatuses] = React.useState([]);
-
+  const [driverFormErrorMessage, setDriverFormErrorMessage] = React.useState(false);
   const filter = useForm();
-
+  const driverForm = useForm();
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const router = useRouter();
   // const onSelectionChange = React.useCallback(({ data }) => { Router.push(`/drivers/${data[0].id}`) }, [])
 
   const filterDrivers = search.length > 0 ? drivers.filter(driver => driver.document_1.includes(search)) : []
@@ -70,20 +74,27 @@ const Driver: Page = () => {
     setFilterData(queryString.stringify(formData))
   }
 
-  // const dataToConvert: CsvDownloadProps = {
-  //   data: drivers,
-  //   filename: 'pre-cadastros',
-  //   delimiter: ',',
-  //   headers: drivers?.length > 0 && Object.keys(drivers[0])
-  // }
+  const dataToConvert: CsvDownloadProps = {
+    data: drivers,
+    filename: 'motoristas',
+    delimiter: ',',
+    headers: drivers?.length > 0 && Object.keys(drivers[0])
+  }
+  const handleCreateDriver = (form) => {
 
+
+    driverRepository.create(form).then(response=> {
+      router.push(`/drivers/${response.data.id}?redirect=success`)
+    }).catch(error => setDriverFormErrorMessage(error.response.data.message))
+    console.log(form)
+  }
   return (
     <Stack h={'100%'}>
       <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between' }}>
         <div>
           <Input name={'search'} onChange={e => setSearch(e.target.value)} placeholder='CPF do motorista' />
         </div>
-        <form onSubmit={filter.handleSubmit(submitFilter)}>
+        <form onSubmit={filter.handleSubmit(submitFilter)} style={{ flex: 1 }}>
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
 
             <div>
@@ -103,9 +114,12 @@ const Driver: Page = () => {
             </div>
           </div>
         </form>
-        {/* <div>
-            <Button colorScheme={'primary'} variant={'outline'} onClick={() => csvDownload(dataToConvert)}>Exportar em CSV</Button>
-          </div> */}
+        <div>
+          <Button colorScheme={'primary'} variant={'outline'} onClick={() => csvDownload(dataToConvert)}>Exportar em CSV</Button>
+        </div>
+        <div>
+          <Button colorScheme={'green'} leftIcon={<i className={'las la-plus'}></i>} onClick={onOpen}>Adicionar novo</Button>
+        </div>
       </div>
 
       <DataGrid
@@ -114,6 +128,25 @@ const Driver: Page = () => {
         dataSource={search.length > 0 ? filterDrivers : dataSource || []}
         onLoadingChange={setLoading}
       />
+
+
+      <Modal size={'xl'} isCentered isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <form onSubmit={driverForm.handleSubmit(handleCreateDriver)}>
+            <ModalHeader>Novo Motorista</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              {driverFormErrorMessage && <Alert status={'error'}>{driverFormErrorMessage}</Alert>}
+              <DriverForm form={driverForm} />
+            </ModalBody>
+            <ModalFooter>
+              <Button mr={3} onClick={onClose}>Cancelar</Button>
+              <Button type={'submit'} colorScheme={'green'}>Cadastrar</Button>
+            </ModalFooter>
+          </form>
+        </ModalContent>
+      </Modal>
     </Stack>
   )
 }

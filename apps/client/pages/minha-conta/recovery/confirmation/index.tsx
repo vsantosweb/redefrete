@@ -10,8 +10,7 @@ export const RecoveryConfirmation = ({ layout , history}: any) => {
         <Stack spacing={3}>
             <Heading size={'lg'}>Solicitação enviada</Heading>
             <Text>
-                Acabamos de enviar instruções e um link para você redefinir a senha para
-                <strong> souzavito@hotmail.com</strong>. Pode levar alguns minutinhos para chegar.
+                Acabamos de enviar instruções e um link para você redefinir a sua senha. Pode levar alguns minutinhos para chegar.
             </Text>
             <Button variant={'outline'} onClick={() => router.push('/minha-conta/login')} colorScheme={'primary'}>Voltar para o login</Button>
         </Stack>

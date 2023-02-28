@@ -11,9 +11,12 @@ import {
     Box,
     Select,
     FormControl,
-    FormLabel,
     Link,
-    Switch,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
+    CloseButton,
 } from '@chakra-ui/react'
 import { AddressForm, BankForm, DriverForm, LicenceForm, PasswordForm } from '@redefrete/templates/forms';
 import { useForm } from "react-hook-form";
@@ -25,8 +28,6 @@ import _ from 'lodash';
 import { DriverProfile } from '@redefrete/types';
 
 const driverRepository = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
-
-
 
 
 const Driver: Page = () => {
@@ -61,9 +62,22 @@ const Driver: Page = () => {
         driverRepository.changeStatus(router.query.id, { driver_status_id: e.target.value })
             .then(response => showDriver(router.query.id))
     }
+    console.log(driverDataForm.formState.errors)
 
     return (
         driver ? <Styled.ProfileWrapper>
+
+            {router.query.redirect == 'success' && <Alert status='success'>
+                <AlertIcon />
+                <Box>
+                    <AlertTitle>Motorista cadastrado com sucesso!</AlertTitle>
+                    <AlertDescription>
+                        Agora vamos cadastrar sua <strong>CNH</strong>, <strong>Endereço</strong>,<strong> Dados bancários</strong> e <strong>Veículos</strong>.
+                    </AlertDescription>
+                </Box>
+
+            </Alert>}
+
             <Styled.ProfileDetails>
                 <Styled.ProfileInfoContainer>
                     <Avatar size={'lg'} name={driver.name} />
@@ -86,7 +100,7 @@ const Driver: Page = () => {
             </Styled.ProfileDetails>
             <Styled.ProfileOverView>
 
-                <Tabs variant={'enclosed'} colorScheme={'red'}>
+                <Tabs variant={'line'} colorScheme={'red'}>
 
                     <TabList>
                         <Tab>Dados do motorista</Tab>
@@ -98,12 +112,16 @@ const Driver: Page = () => {
 
                     <TabPanels>
                         <TabPanel px={0}>
-                            <form onSubmit={handleupdateDriverData}>
+                            <form onSubmit={driverDataForm.handleSubmit(handleupdateDriverData)}>
                                 <Stack spacing={3}>
                                     <DriverForm form={driverDataForm} driver={driver} />
                                     <Divider />
                                     <div>
-                                        <Button disabled={!driverDataForm.formState.isValid || driverDataForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
+                                        <Button
+                                            type={'submit'}
+                                            disabled={driverDataForm.formState.isValid}
+                                            isLoading={driverDataForm.formState.isSubmitting}
+                                            colorScheme={'primary'}>Salvar</Button>
                                     </div>
                                 </Stack>
                             </form>
@@ -113,7 +131,7 @@ const Driver: Page = () => {
                             <Heading mb={3} size={'md'}>Endereço</Heading>
                             <form onSubmit={handleupdateDriverData}>
                                 <Stack spacing={3}>
-                                    <Link color={'red'} target={'_blank'} href={driver?.licence?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
+                                    <Link color={'red'} target={'_blank'} href={driver?.address?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
 
                                     {driver.address && <AddressForm form={driverDataForm} driver={driver} />}
 
@@ -128,7 +146,7 @@ const Driver: Page = () => {
                             <Heading mb={3} size={'md'}>CNH</Heading>
                             <form onSubmit={handleupdateDriverData}>
                                 <Stack spacing={3}>
-                                    <Link color={'red'} target={'_blank'} href={driver?.address?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
+                                <Link color={'red'} target={'_blank'} href={driver?.licence?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
 
                                     {driver.licence && <LicenceForm form={driverDataForm} driver={driver} />}
 

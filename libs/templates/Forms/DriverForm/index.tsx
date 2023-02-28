@@ -71,7 +71,7 @@ const DriverForm = ({ form, driver }: any) => {
                     defaultValue={driver?.phone || null}
                     {...form.register('phone', { required: true, minLength: 11, setValueAs: v => v.replace(/[^\d]/g, '') })}
                 >
-                    {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
+                    {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99 99999-999'} />)}
                 </InputMask>
             </FormControl>
 
@@ -81,7 +81,7 @@ const DriverForm = ({ form, driver }: any) => {
                     accept={'noSpecialChar'}
                     maxLength={9}
                     autoComplete={'off'}
-                    defaultValue={driver?.birthday || ''}
+                    defaultValue={driver?.rg || ''}
                     {...form.register('rg', { required: true, minLength: 4 })}
                 />
             </FormControl>
@@ -90,25 +90,25 @@ const DriverForm = ({ form, driver }: any) => {
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Data de emissão</FormLabel>
                     <Input
-                        defaultValue={driver?.licence?.expire_at || ''}
+                        defaultValue={driver?.rg_issue || ''}
                         type={'date'} autoComplete={'off'}
                         {...form.register('rg_issue', { required: true })} />
                 </FormControl>
 
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>UF</FormLabel>
-                    <Select defaultValue={driver?.licence?.uf || ''} {...form.register('rg_uf', { required: true })}>
+                    <Select placeholder={'Selecione...'} defaultValue={driver?.rg_uf || ''} {...form.register('rg_uf', { required: true })}>
                         {stateList.map(state => <option key={state} value={state}>{state}</option>)}
                     </Select>
                 </FormControl>
             </Stack>
 
-            <FormControl variant={'floating'}>
+            <FormControl isRequired={true} variant={'floating'}>
                 <FormLabel>Gênero</FormLabel>
                 <Select placeholder={'Selecione...'} {...form.register('gender', { required: true })} defaultValue={driver?.gender || null}>
-                    <option>Masculino</option>
-                    <option>Feminino</option>
-                    <option>Outro</option>
+                    <option value={'M'}>Masculino</option>
+                    <option value={'F'}>Feminino</option>
+                    <option value={'O'}>Outro</option>
                 </Select>
             </FormControl>
 

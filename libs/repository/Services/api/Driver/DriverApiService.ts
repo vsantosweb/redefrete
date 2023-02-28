@@ -3,12 +3,15 @@ import { injectable } from "inversify";
 
 import { IDriverRepository } from '@redefrete/interfaces';
 import api from "..";
+import { Driver } from "@redefrete/types";
 
 @injectable()
 
 export default class DriverApiService implements IDriverRepository {
 
   list = (params: string) => api().get('/drivers'+params).then(response => response.data)
+
+  create = (data: Driver) => api().post('/drivers', data).then(response => response.data)
 
   show = async (id: number) => await api().get('/drivers/' + id).then(response => response.data)
 

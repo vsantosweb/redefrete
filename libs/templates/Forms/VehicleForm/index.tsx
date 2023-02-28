@@ -159,7 +159,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
                         }
                         <FormControl isRequired={true} variant={'floating'}>
                             <FormLabel>UF</FormLabel>
-                            <Select  {...form.register('vechile.owner_rg_uf', { required: true })}>
+                            <Select  {...form.register('vehicle.owner_rg_uf', { required: true })}>
                                 {stateList.map(state => <option key={state} value={state}>{state}</option>)}
                             </Select>
                         </FormControl>

@@ -1,6 +1,7 @@
 import { IRepository } from "../IRepository";
-
+import { Driver } from '@redefrete/types'
 export interface IDriverRepository {
+    create(data:Driver): Promise<any>
     list(params: string): Promise<any>;
     show(id: number | string | string[]): Promise<any>;
     statusList(): Promise<any>;
