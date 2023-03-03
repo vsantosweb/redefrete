@@ -16,7 +16,7 @@ const vehicleTypes = [
     { id: 2, name: 'Moto', value: 'motos' },
     { id: 3, name: 'Caminhão', value: 'caminhoes' },
 ]
-const VehicleForm = ({ form, vehicle }: any) => {
+const VehicleForm = ({ form, vehicle, driver = null }: any) => {
 
     const [vehicleBrands, setVehicleBrands] = React.useState(null);
     const [vehicleModels, setVehicleModels] = React.useState(null);
@@ -36,13 +36,13 @@ const VehicleForm = ({ form, vehicle }: any) => {
 
         if (ownerAccount) {
 
-            form.setValue('vehicle.owner_name', formField.name, { shouldValidate: true })
-            form.setValue('vehicle.owner_document', formField.document_1, { shouldValidate: true })
-            form.setValue('vehicle.owner_mother_name', formField.mother_name, { shouldValidate: true })
-            form.setValue('vehicle.owner_birthday', formField.birthday, { shouldValidate: true })
-            form.setValue('vehicle.owner_rg', formField.rg, { shouldValidate: true })
-            form.setValue('vehicle.owner_rg_issue', formField.rg_issue, { shouldValidate: true })
-            form.setValue('vehicle.owner_rg_uf', formField.rg_uf, { shouldValidate: true })
+            form.setValue('vehicle.owner_name', driver.name, { shouldValidate: true })
+            form.setValue('vehicle.owner_document', driver.document_1, { shouldValidate: true })
+            form.setValue('vehicle.owner_mother_name', driver.mother_name, { shouldValidate: true })
+            form.setValue('vehicle.owner_birthday', driver.birthday, { shouldValidate: true })
+            form.setValue('vehicle.owner_rg', driver.rg, { shouldValidate: true })
+            form.setValue('vehicle.owner_rg_issue', driver.rg_issue, { shouldValidate: true })
+            form.setValue('vehicle.owner_rg_uf', driver.rg_uf, { shouldValidate: true })
 
             return;
         }
@@ -57,17 +57,7 @@ const VehicleForm = ({ form, vehicle }: any) => {
         form.setValue('vehicle.owner_rg_issue', '', { shouldValidate: true })
         form.setValue('vehicle.owner_rg_uf', '', { shouldValidate: true })
 
-    }, [
-        formField?.name,
-        formField?.document_1,
-        formField.birthday,
-        formField.mother_name,
-        formField.rg,
-        formField.rg_issue,
-        formField.rg_uf,
-        ownerAccount,
-        form
-    ]
+    }, [driver,form, ownerAccount]
     )
 
 

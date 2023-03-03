@@ -15,7 +15,8 @@ export class DriverVehicleApiService implements IDriverVehicleRepository {
         return api().get('/drivers/vehicles/' + licencePlate).then(response => response.data)
     }
 
-    createVehicle(data: Vehicle): Promise<any> {
+    createVehicle(data: Vehicle, driverId = null): Promise<any> {
+        if (driverId) return api().post(`/drivers/${driverId}/vehicles`, data).then(response => response.data)
         return api().post('/drivers/vehicles', data).then(response => response.data)
     }
 

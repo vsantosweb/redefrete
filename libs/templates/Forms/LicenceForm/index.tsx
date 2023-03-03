@@ -9,7 +9,7 @@ import { container, SERVICE_KEYS } from '@redefrete/container';
 
 const driverLicence = container.get<IDriverLicenceRepository>(SERVICE_KEYS.DRIVER_LICENCE_REPOSITORY);
 
-const LicenceForm = ({ form, driver = null }) => {
+const LicenceForm = ({ form, licence = null }) => {
 
     const [driverLicenceCategories, setDriverLicenceCategories] = React.useState(null)
 
@@ -22,7 +22,7 @@ const LicenceForm = ({ form, driver = null }) => {
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Nº CNH </FormLabel>
                     <InputCustom
-                        defaultValue={driver?.licence?.document_number || ''}
+                        defaultValue={licence?.document_number || ''}
                         accept={'number'}
                         type={'tel'}
                         maxLength={11}
@@ -33,7 +33,7 @@ const LicenceForm = ({ form, driver = null }) => {
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Cod. </FormLabel>
                     <InputCustom
-                        defaultValue={driver?.licence?.security_code || ''}
+                        defaultValue={licence?.security_code || ''}
                         accept={'number'}
                         type={'tel'}
                         maxLength={12}
@@ -49,7 +49,7 @@ const LicenceForm = ({ form, driver = null }) => {
                 <FormLabel>Categoria</FormLabel>
                 {driverLicenceCategories && <Select
                     placeholder={'Selecione...'}
-                    defaultValue={driver?.licence.driver_licence_category_id || ''}
+                    defaultValue={licence?.driver_licence_category_id || ''}
                     {...form.register('licence.driver_licence_category_id', { required: true })}>
                     {driverLicenceCategories?.map((category, index) => <option value={category.id} key={index}>{category.name}</option>)}
                 </Select>}
@@ -58,12 +58,12 @@ const LicenceForm = ({ form, driver = null }) => {
             <Stack direction={'row'}>
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Vencimento</FormLabel>
-                    <Input defaultValue={driver?.licence?.expire_at || ''} type={'date'} autoComplete={'off'} placeholder={'000.000.000-00'} {...form.register('licence.expire_at', { required: true })} />
+                    <Input defaultValue={licence?.expire_at || ''} type={'date'} autoComplete={'off'} placeholder={'000.000.000-00'} {...form.register('licence.expire_at', { required: true })} />
                 </FormControl>
 
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>UF</FormLabel>
-                    <Select defaultValue={driver?.licence?.uf || ''} {...form.register('licence.uf', { required: true })}>
+                    <Select defaultValue={licence?.uf || ''} {...form.register('licence.uf', { required: true })}>
                         {stateList.map(state => <option key={state} value={state}>{state}</option>)}
                     </Select>
                 </FormControl>
@@ -73,11 +73,11 @@ const LicenceForm = ({ form, driver = null }) => {
             <Stack direction={'row'}>
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Nome da mãe</FormLabel>
-                    <InputCustom defaultValue={driver?.licence?.mother_name || ''} accept={'alpha'}  {...form.register('licence.mother_name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
+                    <InputCustom defaultValue={licence?.mother_name || ''} accept={'alpha'}  {...form.register('licence.mother_name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
                 </FormControl>
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Data da 1ª habilitação</FormLabel>
-                    <Input defaultValue={driver?.licence?.expire_at || ''} type={'date'} autoComplete={'off'} placeholder={'000.000.000-00'} {...form.register('licence.first_licence_date', { required: true })} />
+                    <Input defaultValue={licence?.expire_at || ''} type={'date'} autoComplete={'off'} placeholder={'000.000.000-00'} {...form.register('licence.first_licence_date', { required: true })} />
                 </FormControl>
             </Stack>
             <InputFile

@@ -15,19 +15,28 @@ import {
     Alert,
     AlertIcon,
     AlertTitle,
-    AlertDescription,
-    CloseButton,
+    ModalOverlay,
+    ModalContent,
+    Modal,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
+    FormLabel,
+    ModalFooter,
+    useDisclosure
 } from '@chakra-ui/react'
-import { AddressForm, BankForm, DriverForm, LicenceForm, PasswordForm } from '@redefrete/templates/forms';
+import { AddressForm, BankForm, DriverForm, LicenceForm, PasswordForm, VehicleForm } from '@redefrete/templates/forms';
 import { useForm } from "react-hook-form";
 import { container, SERVICE_KEYS } from '@redefrete/container';
-import { IDriverRepository } from '@redefrete/interfaces';
-import { DataGrid } from '@redefrete/components';
+import { IDriverBankRepository, IDriverRepository, IDriverVehicleRepository } from '@redefrete/interfaces';
+import { DataGrid, Loader } from '@redefrete/components';
 import { useRouter } from 'next/router';
-import _ from 'lodash';
 import { DriverProfile } from '@redefrete/types';
+import { base64FileConverter } from '@redefrete/helpers';
 
 const driverRepository = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
+const driverBankRepository = container.get<IDriverBankRepository>(SERVICE_KEYS.DRIVER_BANK_REPOSITORY);
+const driverVehicleRepository = container.get<IDriverVehicleRepository>(SERVICE_KEYS.DRIVER_VEHICLE_REPOSITORY);
 
 
 const Driver: Page = () => {
@@ -35,7 +44,13 @@ const Driver: Page = () => {
     const [driver, setDriver] = React.useState<DriverProfile>(null)
     const [driverStatuses, setDriverStatuses] = React.useState(null)
 
+    const [vehicles, setVehicles] = React.useState([]);
+    const [vehicleCreated, setVehicleCreated] = React.useState(null);
+    const [apiStatusError, setApiStatusError] = React.useState(null)
+
     const router = useRouter();
+    const [formAction, setFormAction] = React.useState<string | any>(router?.query.action)
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     const showDriver = (driverId) => {
         return driverRepository.show(driverId).then(response => setDriver(response.data))
@@ -52,31 +67,92 @@ const Driver: Page = () => {
 
 
     const driverDataForm = useForm({ mode: 'onChange' });
-
+    const addressForm = useForm({ mode: 'onChange' });
+    const licenceForm = useForm({ mode: 'onChange' });
+    const bankForm = useForm({ mode: 'onChange' });
+    const vehicleForm = useForm({ mode: 'onChange' });
 
     const handleupdateDriverData = async (formData) => {
+        driverRepository.update(router?.query.id, formData).then(response => {
+            setFormAction('updated')
+        })
         console.log(formData)
     }
 
     const changeStatus = (e) => {
         driverRepository.changeStatus(router.query.id, { driver_status_id: e.target.value })
-            .then(response => showDriver(router.query.id))
+            .then(response => {
+                showDriver(router.query.id)
+                setFormAction('updated')
+            })
     }
-    console.log(driverDataForm.formState.errors)
+
+    const resultMessages = {
+        created: 'Cadastro efetuado com sucesso!',
+        updated: 'Os dados foram atualizados.'
+    }
+
+    const handleUpdateOrCreateDriverAddress = async (formData) => {
+        const { address } = formData;
+        address.document_file = await base64FileConverter(address.document_file[0])
+        driverRepository.makeAddress(address, router.query.id).then(response => {
+            setFormAction('updated')
+            showDriver(router.query.id)
+
+        })
+    }
+
+    const handleUpdateOrCreateDriverLicence = async (formData) => {
+
+        const { licence } = formData;
+        licence.document_file = await base64FileConverter(licence.document_file[0])
+
+        driverRepository.makeLicence(licence, router.query.id).then(response => {
+            setFormAction('updated')
+            showDriver(router.query.id)
+        })
+    }
+
+    const handleCreateBank = (formData) => {
+
+        const { driver_bank } = formData;
+
+        driverBankRepository.create(driver_bank, router.query.id).then(response => {
+            setFormAction('created')
+            showDriver(router.query.id)
+        })
+    }
+
+    const handleUpdateBank = (formData) => {
+
+        const { driver_bank } = formData;
+
+        driverBankRepository.update(driver_bank, router.query.id, driver?.banks[0].id).then(response => {
+            setFormAction('updated')
+        })
+    }
+
+    const handleCreateVehicle = async (formData) => {
+        const data = { ...formData.vehicle, }
+
+        data.document_file = await base64FileConverter(data.document_file[0]);
+        data.driver_bank_id = formData.driver_bank_id
+        await driverVehicleRepository.createVehicle(data, driver.id).then(response => {
+            onClose()
+            showDriver(router.query.id);
+            setFormAction('created')
+        }).catch(error => setApiStatusError(error.response.data.message))
+    }
 
     return (
         driver ? <Styled.ProfileWrapper>
 
-            {router.query.redirect == 'success' && <Alert status='success'>
+            <Alert status='info'>
                 <AlertIcon />
-                <Box>
-                    <AlertTitle>Motorista cadastrado com sucesso!</AlertTitle>
-                    <AlertDescription>
-                        Agora vamos cadastrar sua <strong>CNH</strong>, <strong>Endereço</strong>,<strong> Dados bancários</strong> e <strong>Veículos</strong>.
-                    </AlertDescription>
-                </Box>
-
-            </Alert>}
+                <AlertTitle>Importante:</AlertTitle>
+                Para poder realizar o cadastro de veículos é necessário ter o cadastro completo do motorista!
+            </Alert>
+            {formAction && <Alert status={'success'}><AlertIcon />{resultMessages[formAction]}</Alert>}
 
             <Styled.ProfileDetails>
                 <Styled.ProfileInfoContainer>
@@ -104,10 +180,14 @@ const Driver: Page = () => {
 
                     <TabList>
                         <Tab>Dados do motorista</Tab>
-                        <Tab>Endereço</Tab>
-                        <Tab>CNH</Tab>
-                        <Tab>Dados bancários</Tab>
-                        <Tab>Veículos</Tab>
+                        <Tab>{!driver.address && <i style={{ color: 'red', marginRight: '4px' }} className={'las la-exclamation-circle la-2x'}></i>} Endereço</Tab>
+                        <Tab>{!driver.licence && <i style={{ color: 'red', marginRight: '4px' }} className={'las la-exclamation-circle la-2x'}></i>} CNH</Tab>
+                        <Tab>{driver.banks.length === 0 && <i style={{ color: 'red', marginRight: '4px' }} className={'las la-exclamation-circle la-2x'}></i>} Dados Bancários</Tab>
+                        <Tab isDisabled={
+                            !driver.address ||
+                            !driver.licence ||
+                            driver.banks.length <= 0 ? true : false
+                        }>Veículos</Tab>
                     </TabList>
 
                     <TabPanels>
@@ -119,48 +199,57 @@ const Driver: Page = () => {
                                     <div>
                                         <Button
                                             type={'submit'}
-                                            disabled={driverDataForm.formState.isValid}
                                             isLoading={driverDataForm.formState.isSubmitting}
                                             colorScheme={'primary'}>Salvar</Button>
                                     </div>
                                 </Stack>
                             </form>
                         </TabPanel>
-
                         <TabPanel px={0}>
                             <Heading mb={3} size={'md'}>Endereço</Heading>
-                            <form onSubmit={handleupdateDriverData}>
+                            <form onSubmit={addressForm.handleSubmit(handleUpdateOrCreateDriverAddress)}>
                                 <Stack spacing={3}>
-                                    <Link color={'red'} target={'_blank'} href={driver?.address?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
+                                    {driver.address && <Link color={'red'} target={'_blank'} href={driver?.address?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>}
 
-                                    {driver.address && <AddressForm form={driverDataForm} driver={driver} />}
+                                    <AddressForm form={addressForm} address={driver.address} />
 
                                     <Divider />
                                     <Box gap={4} display={'flex'}>
-                                        <Button disabled={!driverDataForm.formState.isValid || driverDataForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
+                                        <Button type={'submit'} isLoading={driverDataForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
                                     </Box>
                                 </Stack>
                             </form>
                         </TabPanel>
                         <TabPanel>
                             <Heading mb={3} size={'md'}>CNH</Heading>
-                            <form onSubmit={handleupdateDriverData}>
+                            <form onSubmit={licenceForm.handleSubmit(handleUpdateOrCreateDriverLicence)}>
                                 <Stack spacing={3}>
-                                <Link color={'red'} target={'_blank'} href={driver?.licence?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>
 
-                                    {driver.licence && <LicenceForm form={driverDataForm} driver={driver} />}
+                                    {driver.licence && <Link color={'red'} target={'_blank'} href={driver?.licence?.document_file}>Ver documento <i className={'las la-external-link-alt'}></i></Link>}
 
+                                    <LicenceForm form={licenceForm} licence={driver.licence} />
                                     <Divider />
+
                                     <Box gap={4} display={'flex'}>
-                                        <Button disabled={!driverDataForm.formState.isValid || driverDataForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
+                                        <Button
+                                            isLoading={driverDataForm.formState.isSubmitting}
+                                            type={'submit'}
+                                            colorScheme={'primary'}>Salvar</Button>
                                     </Box>
                                 </Stack>
                             </form>
                         </TabPanel>
-
                         <TabPanel>
                             <Accordion variant={'filled'} defaultIndex={[0]} allowToggle>
-                                {driver?.banks?.map((bank, index) =>
+                                <form onSubmit={driver?.banks[0] ? bankForm.handleSubmit(handleUpdateBank) : bankForm.handleSubmit(handleCreateBank)}>
+                                    <Stack>
+                                        <BankForm bank={driver?.banks[0]} form={bankForm} />
+                                        <span><Button colorScheme={'primary'} type={'submit'}>Salvar</Button></span>
+                                    </Stack>
+                                </form>
+
+
+                                {/* {driver?.banks?.map((bank, index) =>
 
                                     <AccordionItem key={index}>
                                         <h2>
@@ -178,7 +267,7 @@ const Driver: Page = () => {
                                             </form>
                                         </AccordionPanel>
                                     </AccordionItem>
-                                )}
+                                )} */}
                             </Accordion>
                         </TabPanel>
                         <TabPanel>
@@ -196,10 +285,44 @@ const Driver: Page = () => {
                                 dataSource={driver.vehicles || []}
                             />
 
-                        </TabPanel>
+                            <Box display={'flex'} flexDirection={'column'} gap={3}>
+                                <Loader isPromisse={true} area={'fetch-vehicles'}>
+                                    <Box display={'flex'} alignItems={'center'} justifyContent={'center'} style={{ textAlign: 'right' }}>
+                                        <Button onClick={onOpen} leftIcon={<i className={'las la-plus'}></i>} colorScheme={'primary'}>Adicionar</Button>
+                                    </Box>
 
+                                </Loader>
+                                <Modal scrollBehavior={'inside'} size={'xl'} isCentered isOpen={isOpen} onClose={onClose}>
+                                    <ModalOverlay />
+                                    <form onSubmit={vehicleForm.handleSubmit(handleCreateVehicle)}>
+                                        <ModalContent>
+                                            <ModalHeader>Cadastrar novo Veículo</ModalHeader>
+                                            <ModalCloseButton />
+                                            <ModalBody>
+                                                <Stack>
+                                                    {apiStatusError && <Alert size={'sm'} status={'error'}>Erro: {apiStatusError}</Alert>}
+
+                                                    <VehicleForm form={vehicleForm} driver={driver} />
+                                                    <FormControl isInvalid={false}>
+                                                        <FormLabel>Conta para pagamento</FormLabel>
+                                                        <Select placeholder={'Selecione...'} {...vehicleForm.register('driver_bank_id', { required: true })}>
+                                                            {driver.banks.map((bank, index) => <option key={index} value={bank.id}> {bank.bank_name} </option>)}
+                                                        </Select>
+                                                        <small>Adicionar conta bancária +</small>
+                                                    </FormControl>
+                                                </Stack>
+                                            </ModalBody>
+                                            <ModalFooter>
+                                                <Button type={'submit'} disabled={!vehicleForm.formState.isValid} isLoading={vehicleForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
+                                            </ModalFooter>
+                                        </ModalContent>
+                                    </form>
+                                </Modal>
+                            </Box>
+
+                        </TabPanel>
                         <TabPanel>
-                            <PasswordForm form={driverDataForm} />
+                            {/* <PasswordForm form={driverDataForm} /> */}
                         </TabPanel>
                     </TabPanels>
 

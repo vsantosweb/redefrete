@@ -4,7 +4,7 @@ export * from './IDriverLicenceRepository';
 export * from './IDriverVehicleRepository';
 export * from './IDriverPartnerRepository';
 export * from './IDriverContractRepository';
-
+export * from './IDriverBankRepository';
 
 
 

@@ -5,7 +5,7 @@ import { Page } from '../_app';
 import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
 import Link from 'next/link';
 import { container, SERVICE_KEYS } from '@redefrete/container';
-import { IDriverRepository } from '@redefrete/interfaces';
+import { IDriverBankRepository, IDriverRepository } from '@redefrete/interfaces';
 import { DataGrid } from '@redefrete/components';
 import { useForm } from 'react-hook-form';
 import csvDownload from 'json-to-csv-export';
@@ -14,7 +14,6 @@ import { DriverForm } from '@redefrete/templates/forms';
 import { useRouter } from 'next/router';
 
 const driverRepository = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
-
 interface CsvDownloadProps {
   data: any[];
   filename?: string;
@@ -84,10 +83,11 @@ const Driver: Page = () => {
 
 
     driverRepository.create(form).then(response=> {
-      router.push(`/drivers/${response.data.id}?redirect=success`)
+      router.push(`/drivers/${response.data.id}?action=created`)
     }).catch(error => setDriverFormErrorMessage(error.response.data.message))
     console.log(form)
   }
+  
   return (
     <Stack h={'100%'}>
       <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between' }}>
