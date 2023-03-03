@@ -10,7 +10,7 @@ export interface NavProps {
 
 const _nav: Array<NavProps> = [
     { name: 'Dashboard', path: '/', icon: <i className={'las la-tachometer-alt'}></i>, private: true, visible: true },
-    { name: 'Pré-Cadastros', path: '/pre-cadastros', icon: <i className="las la-poll-h"></i>, private: true, visible: true },
+    { name: 'Pre-Cadastros', path: '/pre-cadastros', icon: <i className="las la-poll-h"></i>, private: true, visible: true },
     { name: 'Contas de Usuários', path: '/drivers', icon: <i className={'las la-users'}></i>, private: true, visible: true },
     { name: 'Usuário', path: '/drivers/[id]', icon: <i className={'las la-users'}></i>, private: true, visible: false },
     { name: 'Contratos GR', path: '/contratos', icon: <i className={'las la-file-alt'}></i>, private: true, visible: true },

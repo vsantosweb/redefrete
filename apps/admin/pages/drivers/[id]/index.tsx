@@ -44,8 +44,6 @@ const Driver: Page = () => {
     const [driver, setDriver] = React.useState<DriverProfile>(null)
     const [driverStatuses, setDriverStatuses] = React.useState(null)
 
-    const [vehicles, setVehicles] = React.useState([]);
-    const [vehicleCreated, setVehicleCreated] = React.useState(null);
     const [apiStatusError, setApiStatusError] = React.useState(null)
 
     const router = useRouter();
@@ -64,7 +62,11 @@ const Driver: Page = () => {
 
     }, [router.query.id])
 
+    React.useEffect(() => {
+       const timeOut = setTimeout(() => setFormAction(null), 2000)
 
+        return () => { clearTimeout(timeOut) }
+    }, [formAction])
 
     const driverDataForm = useForm({ mode: 'onChange' });
     const addressForm = useForm({ mode: 'onChange' });
@@ -73,7 +75,7 @@ const Driver: Page = () => {
     const vehicleForm = useForm({ mode: 'onChange' });
 
     const handleupdateDriverData = async (formData) => {
-        driverRepository.update(router?.query.id, formData).then(response => {
+       await driverRepository.update(router?.query.id, formData).then(response => {
             setFormAction('updated')
         })
         console.log(formData)
@@ -107,27 +109,27 @@ const Driver: Page = () => {
         const { licence } = formData;
         licence.document_file = await base64FileConverter(licence.document_file[0])
 
-        driverRepository.makeLicence(licence, router.query.id).then(response => {
+        await driverRepository.makeLicence(licence, router.query.id).then(response => {
             setFormAction('updated')
             showDriver(router.query.id)
         })
     }
 
-    const handleCreateBank = (formData) => {
+    const handleCreateBank = async (formData) => {
 
         const { driver_bank } = formData;
 
-        driverBankRepository.create(driver_bank, router.query.id).then(response => {
+        await driverBankRepository.create(driver_bank, router.query.id).then(response => {
             setFormAction('created')
             showDriver(router.query.id)
         })
     }
 
-    const handleUpdateBank = (formData) => {
+    const handleUpdateBank = async (formData) => {
 
         const { driver_bank } = formData;
 
-        driverBankRepository.update(driver_bank, router.query.id, driver?.banks[0].id).then(response => {
+        await driverBankRepository.update(driver_bank, router.query.id, driver?.banks[0].id).then(response => {
             setFormAction('updated')
         })
     }
@@ -232,7 +234,7 @@ const Driver: Page = () => {
 
                                     <Box gap={4} display={'flex'}>
                                         <Button
-                                            isLoading={driverDataForm.formState.isSubmitting}
+                                            isLoading={licenceForm.formState.isSubmitting}
                                             type={'submit'}
                                             colorScheme={'primary'}>Salvar</Button>
                                     </Box>

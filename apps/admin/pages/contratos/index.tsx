@@ -37,8 +37,8 @@ const columns: Array<IColumn> = [
     { name: 'driver_phone', header: 'Telefone', defaultFlex: 1 },
     { name: 'vehicle_licence_plate', header: 'Placa', defaultFlex: 1 },
     { name: 'vehicle_type', header: 'Tipo de Veículo', defaultFlex: 1 },
-    { name: 'created_at', header: 'Criado Em', defaultFlex: 1 },
-    { name: 'updated_at', header: 'Ultima Atualização', defaultFlex: 1 },
+    { name: 'created_at', header: 'Cadastrado em', defaultFlex: 1 },
+    { name: 'updated_at', header: 'Última Atualização', defaultFlex: 1 },
 ];
 
 

@@ -113,7 +113,7 @@ const Home: Page = () => {
         </Row>
         <Row>
           <Col lg={18}>
-            <Card title={'Últimos Pré-cadastros aprovados'}>
+            <Card title={'Últimos Pre-cadastros aprovados'}>
               <DataGrid
                 columns={approvalRegisterColumns}
                 dataSource={_.slice(driverHubsRangeData, 0, 5)}
@@ -122,7 +122,7 @@ const Home: Page = () => {
             </Card>
           </Col>
           <Col lg={6}>
-            <Card title={'Pré-Cadastros aprovados por HUB'}>
+            <Card title={'Pre-Cadastros aprovados por HUB'}>
               <DataGrid
                 columns={registerByHubsColumns}
                 dataSource={registerByHub}

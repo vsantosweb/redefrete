@@ -35,7 +35,7 @@ const fields = {
     "vehicle_model": "Modelo",
     "vehicle_licence_plate": "Placa",
     "vehicle_licence_number": "RENAVAM",
-    "created_at": "Criado em",
+    "created_at": "Cadastrado Em",
     'hubs': `Hub's Disponíveis`
 }
 

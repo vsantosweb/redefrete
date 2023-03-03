@@ -124,7 +124,7 @@ function Register() {
                 <AlertTitle mt={4} mb={1} fontSize='lg'>Cadastro efetuado com sucesso!</AlertTitle>
                 <AlertDescription maxWidth='sm'>
                     <p>Obrigado por fazer parte do time Redefrete.</p>
-                    <p>Enviamos um email para você confirmar seu pré-cadastro.</p>
+                    <p>Enviamos um email para você confirmar seu pre-cadastro.</p>
                 </AlertDescription>
             </Alert>
             {/* <Styled.AccountButton onClick={() => history.push('/minha-conta/login')} colorScheme={'primary'}>Acessar minha conta<i className={'las la-arrow-right'}></i></Styled.AccountButton> */}

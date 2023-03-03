@@ -39,7 +39,7 @@ const columns: Array<IColumn> = [
             return <strong style={{ color: rest.data.is_avaiable ? '#24b224' : 'red' }}>{!rest.data.is_avaiable ? 'Fora de area' : 'Disponível'}</strong>
         }
     },
-    { name: 'created_at', header: 'Criado Em', defaultFlex: 1, render: (value) => moment(value).format('DD-MM-YYYY')},
+    { name: 'created_at', header: 'Cadastrado em', defaultFlex: 1, render: (value) => moment(value).format('DD-MM-YYYY')},
 
 ];
 
@@ -133,6 +133,6 @@ const CaptationLead: Page = () => {
     )
 }
 
-CaptationLead.config = { title: 'Pré-Cadastros', layout: 'AccountLayout' }
+CaptationLead.config = { title: 'Pre-Cadastros', layout: 'AccountLayout' }
 
 export default CaptationLead
