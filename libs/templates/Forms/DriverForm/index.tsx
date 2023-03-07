@@ -79,7 +79,7 @@ const DriverForm = ({ form, driver }: any) => {
                 <FormLabel>Nº RG</FormLabel>
                 <InputCustom
                     accept={'noSpecialChar'}
-                    maxLength={9}
+                    maxLength={15}
                     autoComplete={'off'}
                     defaultValue={driver?.rg || ''}
                     {...form.register('rg', { required: true, minLength: 4 })}

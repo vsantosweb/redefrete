@@ -57,11 +57,11 @@ const BankForm = ({ form, bank }: any) => {
                 <Stack direction={'row'}>
                     <FormControl isRequired={true}>
                         <FormLabel>Agencia</FormLabel>
-                        <InputCustom defaultValue={bank?.bank_agency} type={'tel'} accept={'number'} maxLength={6} autoComplete={'off'} {...form.register('driver_bank.bank_agency', { required: true })} />
+                        <InputCustom defaultValue={bank?.bank_agency} type={'tel'} accept={'number'} maxLength={20} autoComplete={'off'} {...form.register('driver_bank.bank_agency', { required: true })} />
                     </FormControl>
                     <FormControl variant={'floating'}>
                         <FormLabel>Número</FormLabel>
-                        <InputCustom defaultValue={bank?.bank_number} type={'tel'} accept={'number'} maxLength={6} autoComplete={'off'} {...form.register('driver_bank.bank_number', { required: true })} />
+                        <InputCustom defaultValue={bank?.bank_number} type={'tel'} accept={'number'} maxLength={20} autoComplete={'off'} {...form.register('driver_bank.bank_number', { required: true })} />
                     </FormControl>
                     <FormControl variant={'floating'}>
                         <FormLabel>Digito</FormLabel>
