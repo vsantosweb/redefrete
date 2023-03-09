@@ -173,7 +173,6 @@ const Driver: Page = () => {
                                 </Select>
                             }
                         </FormControl>
-                            <Button disabled colorScheme={'orange'} size={'sm'}>Emitir contrato</Button>
                     </Styled.ProfileInfo>
                 </Styled.ProfileInfoContainer>
             </Styled.ProfileDetails>
