@@ -7,6 +7,7 @@ flex-direction: column;
 height: 100%;
 justify-content: flex-start;
 align-items: flex-start;
+height: 100%;
 `
 
 
@@ -21,6 +22,7 @@ gap: 12px;
 export const ProfileOverView = styled.div`
 flex-grow: 1;
 width: 100%;
+height: 100%;
 
 `
 export const ProfileAvatar = styled.div`

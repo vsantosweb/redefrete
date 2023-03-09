@@ -10,6 +10,7 @@ import VehicleProps from "./Vehicle"
 export interface DriverProfile extends Driver {
     licence?: DriverLicenceProps
     address?: AddressProps
+    hubs?: []
     banks?: Array<BankProps>
     documents?: DriverDocument
     password?: DriverPasswordProps

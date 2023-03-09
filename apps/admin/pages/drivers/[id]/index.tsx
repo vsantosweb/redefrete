@@ -23,7 +23,8 @@ import {
     ModalBody,
     FormLabel,
     ModalFooter,
-    useDisclosure
+    useDisclosure,
+    Spinner
 } from '@chakra-ui/react'
 import { AddressForm, BankForm, DriverForm, LicenceForm, PasswordForm, VehicleForm } from '@redefrete/templates/forms';
 import { useForm } from "react-hook-form";
@@ -63,7 +64,7 @@ const Driver: Page = () => {
     }, [router.query.id])
 
     React.useEffect(() => {
-       const timeOut = setTimeout(() => setFormAction(null), 2000)
+        const timeOut = setTimeout(() => setFormAction(null), 2000)
 
         return () => { clearTimeout(timeOut) }
     }, [formAction])
@@ -75,7 +76,7 @@ const Driver: Page = () => {
     const vehicleForm = useForm({ mode: 'onChange' });
 
     const handleupdateDriverData = async (formData) => {
-       await driverRepository.update(router?.query.id, formData).then(response => {
+        await driverRepository.update(router?.query.id, formData).then(response => {
             setFormAction('updated')
         })
         console.log(formData)
@@ -97,7 +98,7 @@ const Driver: Page = () => {
     const handleUpdateOrCreateDriverAddress = async (formData) => {
         const { address } = formData;
         address.document_file = await base64FileConverter(address.document_file[0])
-        driverRepository.makeAddress(address, router.query.id).then(response => {
+        await driverRepository.makeAddress(address, router.query.id).then(response => {
             setFormAction('updated')
             showDriver(router.query.id)
 
@@ -172,13 +173,13 @@ const Driver: Page = () => {
                                 </Select>
                             }
                         </FormControl>
-
+                            <Button disabled colorScheme={'orange'} size={'sm'}>Emitir contrato</Button>
                     </Styled.ProfileInfo>
                 </Styled.ProfileInfoContainer>
             </Styled.ProfileDetails>
             <Styled.ProfileOverView>
 
-                <Tabs variant={'line'} colorScheme={'red'}>
+                <Tabs variant={'line'} height={'100%'} colorScheme={'red'}>
 
                     <TabList>
                         <Tab>Dados do motorista</Tab>
@@ -187,9 +188,11 @@ const Driver: Page = () => {
                         <Tab>{driver.banks.length === 0 && <i style={{ color: 'red', marginRight: '4px' }} className={'las la-exclamation-circle la-2x'}></i>} Dados Bancários</Tab>
                         <Tab isDisabled={
                             !driver.address ||
-                            !driver.licence ||
-                            driver.banks.length <= 0 ? true : false
+                                !driver.licence ||
+                                driver.banks?.length <= 0 ? true : false
                         }>Veículos</Tab>
+                        <Tab isDisabled={driver.hubs?.length <= 0 ? true : false}>{"Hub's"}</Tab>
+
                     </TabList>
 
                     <TabPanels>
@@ -216,8 +219,9 @@ const Driver: Page = () => {
                                     <AddressForm form={addressForm} address={driver.address} />
 
                                     <Divider />
-                                    <Box gap={4} display={'flex'}>
-                                        <Button type={'submit'} isLoading={driverDataForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
+                                    <Box gap={4} display={'flex'} alignItems={'center'}>
+                                        <Button type={'submit'} isLoading={addressForm.formState.isSubmitting} colorScheme={'primary'}>Salvar</Button>
+                                        {addressForm.formState.isSubmitting && <> Registrando endereço e calculando {"Hub's"} disponíveis... <Spinner /></>}
                                     </Box>
                                 </Stack>
                             </form>
@@ -322,10 +326,18 @@ const Driver: Page = () => {
                                 </Modal>
                             </Box>
 
-                        </TabPanel>
+                        </TabPanel >
                         <TabPanel>
-                            {/* <PasswordForm form={driverDataForm} /> */}
-                        </TabPanel>
+                            <DataGrid
+                                style={{ height: '550px' }}
+                                columns={[
+                                    { name: 'id', header: 'id', defaultVisible: false },
+                                    { name: 'code', header: 'Código', },
+                                    { name: 'name', header: 'HUB', defaultFlex: 1 },
+                                    { name: 'distance', header: 'Distância(km/m)', render: ({ data }) => (data.pivot.distance / 1000).toFixed(2)  },
+                                ]}
+                                dataSource={driver.hubs || []}
+                            />                        </TabPanel>
                     </TabPanels>
 
                 </Tabs>
