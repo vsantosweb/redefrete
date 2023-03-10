@@ -1,13 +1,10 @@
 import React from 'react'
 import { Page } from '../../_app'
 import * as Styled from './styles';
+
 import {
     Tabs, TabList, TabPanels, Tab, TabPanel, Link as ChakraLink, Stack, Button, Divider, Avatar, Heading,
     Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
     Box,
     Select,
     FormControl,
@@ -24,12 +21,14 @@ import {
     FormLabel,
     ModalFooter,
     useDisclosure,
-    Spinner
+    Spinner,
+    Input,
+    FormHelperText
 } from '@chakra-ui/react'
 import { AddressForm, BankForm, DriverForm, LicenceForm, PasswordForm, VehicleForm } from '@redefrete/templates/forms';
 import { useForm } from "react-hook-form";
 import { container, SERVICE_KEYS } from '@redefrete/container';
-import { IDriverBankRepository, IDriverRepository, IDriverVehicleRepository } from '@redefrete/interfaces';
+import { IDriverBankRepository, IDriverRepository, IDriverVehicleRepository, IDriverContractRepository } from '@redefrete/interfaces';
 import { DataGrid, Loader } from '@redefrete/components';
 import { useRouter } from 'next/router';
 import { DriverProfile } from '@redefrete/types';
@@ -38,6 +37,7 @@ import { base64FileConverter } from '@redefrete/helpers';
 const driverRepository = container.get<IDriverRepository>(SERVICE_KEYS.DRIVER_REPOSITORY);
 const driverBankRepository = container.get<IDriverBankRepository>(SERVICE_KEYS.DRIVER_BANK_REPOSITORY);
 const driverVehicleRepository = container.get<IDriverVehicleRepository>(SERVICE_KEYS.DRIVER_VEHICLE_REPOSITORY);
+const driverContractRepository = container.get<IDriverContractRepository>(SERVICE_KEYS.DRIVER_CONTRACT);
 
 
 const Driver: Page = () => {
@@ -46,11 +46,13 @@ const Driver: Page = () => {
     const [driverStatuses, setDriverStatuses] = React.useState(null)
 
     const [apiStatusError, setApiStatusError] = React.useState(null)
+    const [selectedVehicle, setSelectedVehicle] = React.useState(null)
+    const [contractVehicleMessage, setContractVehicleMessage] = React.useState(null)
 
     const router = useRouter();
     const [formAction, setFormAction] = React.useState<string | any>(router?.query.action)
     const { isOpen, onOpen, onClose } = useDisclosure()
-
+    const modalContract = useDisclosure();
     const showDriver = (driverId) => {
         return driverRepository.show(driverId).then(response => setDriver(response.data))
     };
@@ -74,12 +76,12 @@ const Driver: Page = () => {
     const licenceForm = useForm({ mode: 'onChange' });
     const bankForm = useForm({ mode: 'onChange' });
     const vehicleForm = useForm({ mode: 'onChange' });
+    const vehicleContractForm = useForm({ mode: 'onChange' });
 
     const handleupdateDriverData = async (formData) => {
         await driverRepository.update(router?.query.id, formData).then(response => {
             setFormAction('updated')
         })
-        console.log(formData)
     }
 
     const changeStatus = (e) => {
@@ -147,6 +149,14 @@ const Driver: Page = () => {
         }).catch(error => setApiStatusError(error.response.data.message))
     }
 
+    const handleCreateContractVehicle = async (formData) => {
+        formData['driver_id'] = driver.id
+        formData['vehicle_id'] = selectedVehicle
+        await driverContractRepository.create(formData).then(response => {
+            router.push(`/contratos?ref=${response.data.ref}`)
+        }).catch(error => setContractVehicleMessage(error.response.data.message))
+    }
+
     return (
         driver ? <Styled.ProfileWrapper>
 
@@ -190,7 +200,6 @@ const Driver: Page = () => {
                                 !driver.licence ||
                                 driver.banks?.length <= 0 ? true : false
                         }>Veículos</Tab>
-                        <Tab isDisabled={driver.hubs?.length <= 0 ? true : false}>{"Hub's"}</Tab>
 
                     </TabList>
 
@@ -278,7 +287,7 @@ const Driver: Page = () => {
                         <TabPanel>
                             <DataGrid
                                 columns={[
-                                    { name: 'id', header: 'id', defaultVisible: false },
+                                    { name: 'id', header: 'id', defaultVisible: true },
                                     { name: 'licence_plate', header: 'Placa', },
                                     { name: 'model', header: 'Modelo', },
                                     { name: 'brand', header: 'Marca' },
@@ -286,6 +295,7 @@ const Driver: Page = () => {
                                     { name: 'owner_name', header: 'Nome do responsável', defaultFlex: 1 },
                                     { name: 'owner_document', header: 'Documento do Resposável', defaultFlex: 1 },
                                     { name: 'document_url', header: 'Documento do Veículo', defaultFlex: 1, render: ({ value, ...rest }) => <Link target={'_blank'} href={rest.data.document_url}><ChakraLink>{rest.data.document_url}</ChakraLink></Link> },
+                                    { name: '', header: '', render: ({ data }) => <Button onClick={() => [modalContract.onOpen(), setSelectedVehicle(data.id)]} size={'sm'}>Emitir Contrato</Button> }
                                 ]}
                                 dataSource={driver.vehicles || []}
                             />
@@ -297,12 +307,12 @@ const Driver: Page = () => {
                                     </Box>
 
                                 </Loader>
-                                <Modal scrollBehavior={'inside'} size={'xl'} isCentered isOpen={isOpen} onClose={onClose}>
+                                <Modal closeOnOverlayClick={false} scrollBehavior={'inside'} size={'xl'} isCentered isOpen={isOpen} onClose={onClose}>
                                     <ModalOverlay />
                                     <form onSubmit={vehicleForm.handleSubmit(handleCreateVehicle)}>
                                         <ModalContent>
                                             <ModalHeader>Cadastrar novo Veículo</ModalHeader>
-                                            <ModalCloseButton />
+                                            <ModalCloseButton onClick={() => vehicleForm.reset()} />
                                             <ModalBody>
                                                 <Stack>
                                                     {apiStatusError && <Alert size={'sm'} status={'error'}>Erro: {apiStatusError}</Alert>}
@@ -323,20 +333,59 @@ const Driver: Page = () => {
                                         </ModalContent>
                                     </form>
                                 </Modal>
+                                {/* Modal Contract */}
+                                <Modal closeOnOverlayClick={false} scrollBehavior={'inside'} size={'xl'} isCentered isOpen={modalContract.isOpen} onClose={modalContract.onClose}>
+                                    <ModalOverlay />
+                                    <form onSubmit={vehicleContractForm.handleSubmit(handleCreateContractVehicle)}>
+                                        <ModalContent>
+                                            <ModalHeader>Novo contrato</ModalHeader>
+                                            <ModalCloseButton onClick={() => vehicleContractForm.reset()} />
+                                            <ModalBody>
+                                                <Stack >
+
+                                                    <FormControl isRequired={true} variant={'floating'}>
+                                                        <FormLabel>Gerenciadora de Risco</FormLabel>
+                                                        <Select placeholder={'Selecione...'} {...vehicleContractForm.register('risk_manager_id', { required: true })}  >
+                                                            {[{ id: 1, name: 'GUEP' }, { id: 2, name: 'Telerisco' }].map((gr, index) => <option value={gr.id} key={index}>{gr.name} </option>)}
+                                                        </Select>
+                                                    </FormControl>
+
+                                                    <FormControl isRequired={true}>
+                                                        <FormLabel>Status</FormLabel>
+                                                        <Select placeholder={'Selecione...'} {...vehicleContractForm.register('status', { required: true })}  >
+                                                            {['ACORDO', 'REQUER ATENÇÃO', 'PENDENTE', 'EXPIRADO'].map((status, index) => <option value={status} key={index}>{status} </option>)}
+                                                        </Select>
+                                                    </FormControl>
+
+                                                </Stack>
+                                                <Stack spacing={'1'}>
+                                                    <FormControl isRequired={true}>
+                                                        <FormLabel>Vencimento</FormLabel>
+                                                        <Input type={'date'} {...vehicleContractForm.register('expire_at', { required: true })} />
+                                                    </FormControl>
+                                                    <FormControl isRequired={true}>
+                                                        <FormLabel>Protocolo</FormLabel>
+                                                        <Input {...vehicleContractForm.register('ref', { required: true })} />
+                                                        <FormHelperText>O número ou código fornececido pela gerenciadora de risco.</FormHelperText>
+                                                    </FormControl>
+                                                    {contractVehicleMessage && <Alert status={'error'}>{contractVehicleMessage}</Alert>}
+                                                </Stack>
+
+                                            </ModalBody>
+                                            <ModalFooter>
+
+                                                <Box gap={4} display={'flex'} alignItems={'center'}>
+                                                    {vehicleContractForm.formState.isSubmitting && <> Emitindo contrato e calculando {"Hub's"} disponíveis, aguarde... <Spinner /></>}
+                                                    <Button type={'submit'} isLoading={vehicleContractForm.formState.isSubmitting} colorScheme={'primary'}>Concluir</Button>
+                                                </Box>
+                                            </ModalFooter>
+                                        </ModalContent>
+                                    </form>
+                                </Modal>
                             </Box>
 
                         </TabPanel >
-                        <TabPanel>
-                            <DataGrid
-                                style={{ height: '550px' }}
-                                columns={[
-                                    { name: 'id', header: 'id', defaultVisible: false },
-                                    { name: 'code', header: 'Código', },
-                                    { name: 'name', header: 'HUB', defaultFlex: 1 },
-                                    { name: 'distance', header: 'Distância(km/m)', render: ({ data }) => (data.pivot.distance / 1000).toFixed(2)  },
-                                ]}
-                                dataSource={driver.hubs || []}
-                            />                        </TabPanel>
+
                     </TabPanels>
 
                 </Tabs>

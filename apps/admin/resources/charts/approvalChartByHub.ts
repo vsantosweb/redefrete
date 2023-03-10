@@ -27,7 +27,6 @@ export default function approvalChartByHub(driverRangeData) {
     }
     const dateList = Object.keys(groupByDate);
 
-    // console.log(dateList)
     const dataSet = [];
 
     for (const hub in groupByHub) {
@@ -62,15 +61,12 @@ export default function approvalChartByHub(driverRangeData) {
     sourceData.unshift(['Income', 'Hub', 'Date']);
 
 
-    // console.log(sourceData, 'askfpoksafopkas')
 
-    // console.log(dateList);
     const datasetWithFilters = [];
     const seriesList = [];
 
     util.each(_.uniq(hubList), function (hub) {
 
-        console.log(hub, 'MERDAAA')
         const datasetId = 'dataset_' + hub;
         datasetWithFilters.push({
             id: datasetId,

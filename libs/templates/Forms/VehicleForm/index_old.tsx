@@ -65,29 +65,29 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
         form.setValue('vehicle.owner_rg_issue', '', { shouldValidate: true })
         form.setValue('vehicle.owner_rg_uf', '', { shouldValidate: true })
 
-    }, [driver, form, ownerAccount]
+    }, [driver,form, ownerAccount]
     )
 
 
-    // const getBrands = (e) => {
+    const getBrands = (e) => {
 
-    //     if (vehicleModels && vehicleBrands) {
-    //         setVehicleBrands(null)
-    //         setVehicleModels(null)
-    //         form.resetField('vehicle.brand')
-    //         form.resetField('vehicle.brand_code')
-    //         form.resetField('vehicle.model')
+        if (vehicleModels && vehicleBrands) {
+            setVehicleBrands(null)
+            setVehicleModels(null)
+            form.resetField('vehicle.brand')
+            form.resetField('vehicle.brand_code')
+            form.resetField('vehicle.model')
 
-    //     }
-    //     axios.get('https://parallelum.com.br/fipe/api/v1/' + e.target.value + '/marcas').then(response => {
+        }
+        axios.get('https://parallelum.com.br/fipe/api/v1/' + e.target.value + '/marcas').then(response => {
 
-    //         setVehicleBrands(response.data);
-    //         form.setValue('vehicle.vehicle_type_id', vehicleTypes.filter(type => type.value === e.target.value)[0].id)
+            setVehicleBrands(response.data);
+            form.setValue('vehicle.vehicle_type_id', vehicleTypes.filter(type => type.value === e.target.value)[0].id)
 
-    //     })
-    //         .catch(error => console.log(error.response.data))
-    // }
-
+        })
+            .catch(error => console.log(error.response.data))
+    }
+    
     const getModels = (e) => {
 
         axios.get('https://parallelum.com.br/fipe/api/v1/' + form.getValues('vehicle.type') + '/marcas/' + e.target.value + '/modelos')
@@ -97,13 +97,14 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
             })
             .catch(error => console.log(error.response))
     }
-
+    
     return (
 
         <div>
             <Heading my={3} size={'md'}>Dados do Proprietário</Heading>
 
             <input type={'hidden'} {...form.register('vehicle.brand', { required: true, })} />
+            <input type={'hidden'} {...form.register('vehicle.vehicle_type_id', { required: true, })} />
 
             <Stack spacing={3}>
                 <Checkbox defaultChecked={ownerAccount} onChange={() => setOwnerAccount(prev => !prev)}>Eu sou proprietário do veículo</Checkbox>
@@ -169,29 +170,26 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
 
                     <FormControl isRequired={true} variant={'floating'}>
                         <FormLabel>Tipo</FormLabel>
-                        <Select placeholder={'Tipo de veículo'} {...form.register('vehicle.vehicle_type_id', { required: true })}  >
-                            {vehicleTypes.map((type, index) => <option value={type.id} key={index}>{type.name} </option>)}
+                        <Select onChangeCapture={getBrands} placeholder={'Tipo de veículo'} {...form.register('vehicle.type', { required: true })}  >
+                            {vehicleTypes.map((type, index) => <option value={type.value} key={index}>{type.name} </option>)}
                         </Select>
                     </FormControl>
 
                     <FormControl isRequired={true}>
                         <FormLabel>Marca</FormLabel>
-
-                        <Input
-                            autoComplete={'off'}
-                            {...form.register('vehicle.brand', { required: true })}
-                        />
+                        <Select onChangeCapture={getModels} placeholder={'Marca do veículo'} isDisabled={!vehicleBrands}
+                            {...form.register('vehicle.brand_code', { required: true })}
+                        >
+                            {vehicleBrands?.map((brand, index) => <option key={index} value={brand.codigo}>{brand.nome}</option>)}
+                        </Select>
                     </FormControl>
                 </Stack>
 
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Modelo</FormLabel>
-
-
-                    <Input
-                        autoComplete={'off'}
-                        {...form.register('vehicle.model', { required: true, })}
-                    />
+                    <Select placeholder={'Marca do veículo'} isDisabled={!vehicleModels} {...form.register('vehicle.model', { required: true, })}>
+                        {vehicleModels?.map((model, index) => <option key={index} value={model.nome}>{model.nome}</option>)}
+                    </Select>
                 </FormControl>
 
                 <FormControl isRequired={true} variant={'floating'}>

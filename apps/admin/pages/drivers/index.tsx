@@ -1,6 +1,6 @@
 import React from 'react';
 import suspenseResource from '../../suspenseResource';
-import { Avatar, Box, Input, Modal, Spinner, Stack, Link as ChakraLink, Select, Button, useDisclosure, ModalFooter, ModalOverlay, ModalCloseButton, ModalBody, ModalHeader, ModalContent, Alert } from '@chakra-ui/react';
+import { Avatar, Box, Input, Modal, Spinner, Stack, Link as ChakraLink, Select, Button, Badge, useDisclosure, ModalFooter, ModalOverlay, ModalCloseButton, ModalBody, ModalHeader, ModalContent, Alert } from '@chakra-ui/react';
 import { Page } from '../_app';
 import { IColumn } from '@inovua/reactdatagrid-enterprise/types';
 import Link from 'next/link';
@@ -33,6 +33,10 @@ const columns: Array<IColumn> = [
   { name: 'document_1', header: 'CPF/CNPJ', defaultFlex: 1 },
   { name: 'phone', header: 'Telefone/Whatsapp', defaultFlex: 1 },
   { name: 'status', header: 'Status', defaultFlex: 1 },
+  {
+    name: 'recommend_hub', header: 'Hub', defaultFlex: 1,
+    render: ({ data }) => data.recommended_hub ? <Badge variant={'solid'} colorScheme={'purple'}>{data.recommended_hub.code} - {data.recommended_hub.name}</Badge> : 'N/A'
+  },
   { name: 'created_at', header: 'Criado em', defaultFlex: 1 },
 ];
 
@@ -82,12 +86,11 @@ const Driver: Page = () => {
   const handleCreateDriver = (form) => {
 
 
-    driverRepository.create(form).then(response=> {
+    driverRepository.create(form).then(response => {
       router.push(`/drivers/${response.data.id}?action=created`)
     }).catch(error => setDriverFormErrorMessage(error.response.data.message))
-    console.log(form)
   }
-  
+
   return (
     <Stack h={'100%'}>
       <div style={{ display: 'flex', gap: '8px', justifyContent: 'space-between' }}>

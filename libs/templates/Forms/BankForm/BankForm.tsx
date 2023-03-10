@@ -6,7 +6,6 @@ import { DocumentInput, InputCustom } from '@redefrete/components';
 const BankForm = ({ form, bank }: any) => {
 
     // const [ownerAccount, setOwnerAccount] = React.useState(false);
-    console.log(bank,'askfpoaskfopaskfopaskfpos')
     // React.useEffect(() => {
 
     //     if (ownerAccount) {

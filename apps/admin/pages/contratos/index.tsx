@@ -20,6 +20,7 @@ import csvDownload from 'json-to-csv-export'
 import _ from 'lodash';
 import DriverContractView from './contract-view';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
 
 interface CsvDownloadProps {
     data: any[];
@@ -30,7 +31,10 @@ interface CsvDownloadProps {
 
 const columns: Array<IColumn> = [
     { name: 'id', header: 'id', defaultFlex: .4},
-    { name: 'risk_manager', header: 'GR', defaultFlex: .4, render: ({ value, ...rest }) => <Badge variant={'solid'} colorScheme={'blue'}>{rest.data.risk_manager}</Badge> },
+    { name: 'risk_manager', header: 'GR', defaultFlex: .4, render: ({ value, ...rest }) => <Badge 
+    variant={'solid'} 
+    colorScheme={rest.data.risk_manager === 'GUEP' ? 'blue': 'pink'}
+    >{rest.data.risk_manager}</Badge> },
     { name: 'ref', header: 'Protocolo', defaultFlex: 1 },
     { name: 'status', header: 'Status', defaultFlex: 1 },
     { name: 'driver_name', header: 'Motorista', defaultFlex: 1 },
@@ -53,7 +57,13 @@ const DriverContract: Page = () => {
 
     const filter = useForm();
     const { isOpen, onOpen, onClose } = useDisclosure()
-
+    const router = useRouter();
+    React.useEffect(() => {
+        if(router.query.ref){
+            setSelectedRow(data.filter(contract => contract.ref === router.query.ref)[0])  
+            onOpen()
+        }
+    }, [router, data, onOpen])
     const loadData = ({ skip, sortInfo, limit }) => {
         return driverContract.get('?skip=' + skip + '&limit=' + limit + '&' + filterData)
             .then(response => {
@@ -138,7 +148,7 @@ const DriverContract: Page = () => {
                     <DrawerCloseButton />
                     <DrawerHeader borderBottomWidth='1px'>{selectRow?.driver_name}</DrawerHeader>
                     <DrawerBody>
-                        <DriverContractView data={selectRow} />
+                       {selectRow && <DriverContractView data={selectRow} />}
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>

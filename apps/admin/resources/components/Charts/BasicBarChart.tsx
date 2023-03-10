@@ -36,7 +36,6 @@ export default function BasicBarChart({ rangeData, orderBy, options = null }) {
 
     // const chartSeries = chartData.rangeDates.map((date) => {
 
-    //     // console.log(orderBy[date])
     //     return {
     //         type: 'bar',
     //         barGap: 0,

@@ -37,7 +37,6 @@ export default function PartnerVehicleList() {
             setVehiclePartners(response.data)
         }), 'show-vehicle')
     
-        console.log(vehiclePartners)
     return (
         <div>
             <Styled.TableList>
