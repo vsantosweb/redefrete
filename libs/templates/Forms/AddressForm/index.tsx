@@ -6,18 +6,6 @@ import { InputFile } from '@redefrete/components';
 
 const AddressForm = ({ form, address = null }: any) => {
 
-
-    React.useEffect(() => {
-
-        const zipcode = address?.zipcode;
-
-        if(zipcode){
-            fillAddressFields(zipcode)
-            form.setValue('address.zipcode', zipcode)
-        }
-        
-    })
-
     const resetAddress = () => {
         form.setValue('address.address_1', '')
         form.setValue('address.address_2', '')

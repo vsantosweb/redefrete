@@ -98,7 +98,9 @@ const Driver: Page = () => {
     }
 
     const handleUpdateOrCreateDriverAddress = async (formData) => {
+
         const { address } = formData;
+        
         address.document_file = await base64FileConverter(address.document_file[0])
         await driverRepository.makeAddress(address, router.query.id).then(response => {
             setFormAction('updated')
