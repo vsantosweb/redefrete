@@ -12,16 +12,16 @@ import moment from 'moment';
 const vehicleRepository = container.get<IVehicleRepository>(SERVICE_KEYS.VEHICLE_REPOSITORY);
 
 const vehicleTypes = [
-    { id: 1, name: 'MOTO', value: 'carros' },
-    { id: 2, name: 'PASSEIO', value: 'motos' },
-    { id: 3, name: 'UTILITÁRIO', value: 'caminhoes' },
-    { id: 4, name: 'VAN', value: 'caminhoes' },
-    { id: 5, name: 'VLC', value: 'caminhoes' },
-    { id: 6, name: 'VUC', value: 'caminhoes' },
-    { id: 7, name: 'KOMBI', value: 'caminhoes' },
-    { id: 8, name: '¾ (TRÊS QUARTOS)', value: 'caminhoes' },
-    { id: 9, name: 'TOCO', value: 'caminhoes' },
-    { id: 10, name: 'TRUCK', value: 'caminhoes' },
+    { id: 1, name: 'PASSEIO', value: 'carros' },
+    { id: 2, name: 'MOTO', value: 'motos' },
+    { id: 3, name: 'TRUCK', value: 'caminhoes' },
+    { id: 4, name: 'UTILITÁRIO', value: 'caminhoes' },
+    { id: 5, name: 'VAN', value: 'caminhoes' },
+    { id: 6, name: 'VLC', value: 'caminhoes' },
+    { id: 7, name: 'VUC', value: 'caminhoes' },
+    { id: 8, name: 'KOMBI', value: 'caminhoes' },
+    { id: 9, name: '¾ (TRÊS QUARTOS)', value: 'caminhoes' },
+    { id: 10, name: 'TOCO', value: 'caminhoes' },
 ]
 
 const VehicleForm = ({ form, vehicle, driver = null }: any) => {
