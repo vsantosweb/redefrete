@@ -64,6 +64,10 @@ export const Banks = [
         name: "BVA"
     },
     {
+        value: "336",
+        name: "Banco C6 S.A"
+    },
+    {
         value: "045",
         name: "Banco Opportunity"
     },
