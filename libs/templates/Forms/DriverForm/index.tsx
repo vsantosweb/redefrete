@@ -18,6 +18,14 @@ type InputProps = {
     required: boolean;
 };
 
+const maritalStatus = [
+    'SOLTEIRO',
+    'CASADO',
+    'SEPARADO',
+    'DIVORCIADO',
+    'VIÚVO',
+    'OUTROS',
+]
 const DriverForm = ({ form, driver }: any) => {
 
     return (
@@ -103,6 +111,7 @@ const DriverForm = ({ form, driver }: any) => {
                 </FormControl>
             </Stack>
 
+            <Stack direction={'row'}>
             <FormControl isRequired={true} variant={'floating'}>
                 <FormLabel>Gênero</FormLabel>
                 <Select placeholder={'Selecione...'} {...form.register('gender', { required: true })} defaultValue={driver?.gender || null}>
@@ -111,6 +120,14 @@ const DriverForm = ({ form, driver }: any) => {
                     <option value={'O'}>Outro</option>
                 </Select>
             </FormControl>
+            <FormControl isRequired={true} variant={'floating'}>
+                <FormLabel>Estado civil</FormLabel>
+                <Select placeholder={'Selecione...'} {...form.register('marital_status', { required: true })} defaultValue={driver?.marital_status || null}>
+                    {maritalStatus.map(status => <option key={status} value={status}>{status}</option>)}
+                    
+                </Select>
+            </FormControl>
+            </Stack>
 
         </Stack>
     )

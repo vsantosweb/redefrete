@@ -24,7 +24,7 @@ const vehicleTypes = [
     { id: 10, name: 'TOCO', value: 'caminhoes' },
 ]
 
-const VehicleForm = ({ form, vehicle, driver = null }: any) => {
+const VehicleForm = ({ form, vehicle, driver = {} }: any) => {
 
     const [vehicleBrands, setVehicleBrands] = React.useState(null);
     const [vehicleModels, setVehicleModels] = React.useState(null);
@@ -51,6 +51,15 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
             form.setValue('vehicle.owner_rg', driver.rg, { shouldValidate: true })
             form.setValue('vehicle.owner_rg_issue', driver.rg_issue, { shouldValidate: true })
             form.setValue('vehicle.owner_rg_uf', driver.rg_uf, { shouldValidate: true })
+            form.setValue('vehicle.owner_phone', driver.phone, { shouldValidate: true })
+
+            form.setValue('vehicle.owner_address_1', driver.address.address_1, { shouldValidate: true })
+            form.setValue('vehicle.owner_address_2', driver.address.address_2, { shouldValidate: true })
+            form.setValue('vehicle.owner_address_zipcode', driver.address.zipcode, { shouldValidate: true })
+            form.setValue('vehicle.owner_address_number', driver.address.number, { shouldValidate: true })
+            form.setValue('vehicle.owner_address_complement', driver.address.complement, { shouldValidate: true })
+            form.setValue('vehicle.owner_address_city', driver.address.city, { shouldValidate: true })
+            form.setValue('vehicle.owner_address_state', driver.address.state, { shouldValidate: true })
 
             return;
         }
@@ -64,6 +73,15 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
         form.setValue('vehicle.owner_rg', '', { shouldValidate: true })
         form.setValue('vehicle.owner_rg_issue', '', { shouldValidate: true })
         form.setValue('vehicle.owner_rg_uf', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_phone', '', { shouldValidate: true })
+
+        form.setValue('vehicle.owner_address_1', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_address_2', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_address_zipcode', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_address_number', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_address_complement', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_address_city', '', { shouldValidate: true })
+        form.setValue('vehicle.owner_address_state', '', { shouldValidate: true })
 
     }, [driver, form, ownerAccount]
     )
@@ -96,6 +114,25 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
                 form.setValue('vehicle.brand', vehicleBrands.filter(brand => brand.codigo === e.target.value)[0].nome)
             })
             .catch(error => console.log(error.response))
+    }
+
+    const resetAddress = () => {
+        form.setValue('vehicle.owner_address_1', '')
+        form.setValue('vehicle.owner_address_2', '')
+        form.setValue('vehicle.owner_address_city', '')
+        form.setValue('vehicle.owner_address_state', '')
+    }
+
+    const fillAddressFields = (zipcode: string) => {
+
+        axios.get(`https://viacep.com.br/ws/${zipcode}/json`).then(response => {
+            if (response.data.erro) return resetAddress()
+            form.setValue('vehicle.owner_address_1', response.data.logradouro)
+            form.setValue('vehicle.owner_address_2', response.data.bairro)
+            form.setValue('vehicle.owner_address_city', response.data.localidade)
+            form.setValue('vehicle.owner_address_state', response.data.uf)
+        })
+
     }
 
     return (
@@ -144,6 +181,13 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
                                 />
                             </FormControl>
 
+                            <FormControl isRequired={true} variant={'floating'}>
+                                <FormLabel>UF</FormLabel>
+                                <Select  {...form.register('vehicle.owner_rg_uf', { required: true })}>
+                                    {stateList.map(state => <option key={state} value={state}>{state}</option>)}
+                                </Select>
+                            </FormControl>
+
                             <Stack direction={'row'}>
                                 <FormControl isRequired={true} variant={'floating'}>
                                     <FormLabel>Data de emissão</FormLabel>
@@ -152,16 +196,75 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
                                         {...form.register('vehicle.owner_rg_issue', { required: true })} />
                                 </FormControl>
                             </Stack>
+                            <FormControl variant={'floating'}>
+                                <FormLabel>Telefone/Whatsapp</FormLabel>
+                                <InputMask
+                                    mask={'(99) 99999-9999'}
+                                    autoComplete={'off'}
+                                    type={'tel'}
+                                    defaultValue={vehicle?.owner_phone || null}
+                                    {...form.register('vehicle.owner_phone', { required: true, minLength: 11, setValueAs: v => v.replace(/[^\d]/g, '') })}
+                                >
+                                    {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99 99999-999'} />)}
+                                </InputMask>
+                            </FormControl>
                         </>
                         }
+                        <Heading size={'md'}>Endereço</Heading>
                         <FormControl isRequired={true} variant={'floating'}>
-                            <FormLabel>UF</FormLabel>
-                            <Select  {...form.register('vehicle.owner_rg_uf', { required: true })}>
-                                {stateList.map(state => <option key={state} value={state}>{state}</option>)}
-                            </Select>
+                            <FormLabel>CEP</FormLabel>
+                            <InputMask
+                                alwaysShowMask={true}
+                                maskChar={null}
+                                type={'tel'}
+                                defaultValue={vehicle?.zipcode}
+                                mask={'99999-999'}
+                                {...form.register('vehicle.owner_address_zipcode', {
+                                    required: true,
+                                    maxLength: 8,
+                                    setValueAs: v => v.replace(/[^\d]/g, ''),
+                                    validate: (value) => {
+                                        return value.length === 8 ? fillAddressFields(value) : resetAddress()
+                                    }
+                                })}>
+                                {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
+                            </InputMask>
+
                         </FormControl>
+
+                        <FormControl isRequired={true} variant={'floating'}>
+                            <FormLabel>Endereço</FormLabel>
+                            <Input defaultValue={vehicle?.owner_address_1} autoComplete={'off'}  {...form.register('vehicle.owner_address_1', { required: true })} />
+                        </FormControl>
+                        <FormControl isRequired={true} variant={'floating'}>
+                            <FormLabel>Bairro</FormLabel>
+                            <Input defaultValue={vehicle?.owner_address_2} autoComplete={'off'}  {...form.register('vehicle.owner_address_2', { required: true })} />
+                        </FormControl>
+
+                        <Stack direction={'row'}>
+                            <FormControl isRequired={true} variant={'floating'}>
+                                <FormLabel>Cidade</FormLabel>
+                                <Input defaultValue={vehicle?.owner_address_city} autoComplete={'off'} {...form.register('vehicle.owner_address_city', { required: true })} />
+                            </FormControl>
+                            <FormControl isRequired={true} variant={'floating'}>
+                                <FormLabel>Estado</FormLabel>
+                                <Input defaultValue={vehicle?.owner_address_state} autoComplete={'off'}  {...form.register('vehicle.owner_address_state', { required: true })} />
+                            </FormControl>
+                        </Stack>
+                        <Stack direction={'row'}>
+                            <FormControl isRequired={true} variant={'floating'}>
+                                <FormLabel>Nº</FormLabel>
+                                <Input defaultValue={vehicle?.owner_address_number} autoComplete={'off'} type={'tel'}  {...form.register('vehicle.owner_address_number', { required: true })} />
+                            </FormControl>
+                            <FormControl variant={'floating'}>
+                                <FormLabel>Complemento</FormLabel>
+                                <Input defaultValue={vehicle?.owner_address_complement} autoComplete={'off'} {...form.register('vehicle.owner_address_complement')} />
+                            </FormControl>
+                        </Stack>
                     </>
+
                 }
+                {/* Dados do Beículo */}
                 <hr />
                 <Heading my={3} size={'md'}>Dados do Veículo</Heading>
 
@@ -176,7 +279,6 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
 
                     <FormControl isRequired={true}>
                         <FormLabel>Marca</FormLabel>
-
                         <Input
                             autoComplete={'off'}
                             {...form.register('vehicle.brand', { required: true })}
@@ -186,25 +288,37 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
 
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Modelo</FormLabel>
-
-
                     <Input
                         autoComplete={'off'}
                         {...form.register('vehicle.model', { required: true, })}
                     />
                 </FormControl>
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Ano de Fabricação</FormLabel>
+                    <Input
+                        type={'phone'}
+                        autoComplete={'off'}
+                        {...form.register('vehicle.manufacture_year', { required: true, })}
+                    />
+                </FormControl>
 
                 <FormControl isRequired={true} variant={'floating'}>
-                    <FormLabel>Renavam</FormLabel>
-                    <InputMask
-                        alwaysShowMask={true}
-                        maskChar={null}
-                        type={'tel'}
-                        mask={'99999999999'}
-                        {...form.register('vehicle.licence_number', { required: true })}
-                    >
-                        {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'00000000000'} />)}
-                    </InputMask>
+                    <FormLabel>Ano modelo</FormLabel>
+                    <Input
+                        type={'phone'}
+                        autoComplete={'off'}
+                        {...form.register('vehicle.model_year', { required: true, })}
+                    />
+                </FormControl>
+
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Chassi</FormLabel>
+                    <Input defaultValue={vehicle?.chassis} autoComplete={'off'}  {...form.register('vehicle.chassis', { required: true })} />
+                </FormControl>
+
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Cor</FormLabel>
+                    <Input defaultValue={vehicle?.color} autoComplete={'off'}  {...form.register('vehicle.color', { required: true })} />
                 </FormControl>
 
                 <Stack direction={'row'}>
@@ -237,20 +351,38 @@ const VehicleForm = ({ form, vehicle, driver = null }: any) => {
                         />
                         <FormErrorMessage>{licenceVehicleMessage}</FormErrorMessage>
                     </FormControl>
-
                     <FormControl isRequired={true} variant={'floating'}>
-                        <FormLabel>UF</FormLabel>
-                        <Select defaultValue={vehicle?.uf || ''} {...form.register('vehicle.uf', { required: true })}>
-                            {stateList.map(state => <option key={state} value={state}>{state}</option>)}
-                        </Select>
+                        <FormLabel>Renavam</FormLabel>
+                        <InputMask
+                            alwaysShowMask={true}
+                            maskChar={null}
+                            type={'tel'}
+                            mask={'99999999999'}
+                            {...form.register('vehicle.licence_number', { required: true })}
+                        >
+                            {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'00000000000'} />)}
+                        </InputMask>
                     </FormControl>
 
-                </Stack>
 
+                </Stack>
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>UF</FormLabel>
+                    <Select defaultValue={vehicle?.uf || ''} {...form.register('vehicle.uf', { required: true })}>
+                        {stateList.map(state => <option key={state} value={state}>{state}</option>)}
+                    </Select>
+                </FormControl>
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Cidade</FormLabel>
+                    <Input
+                        autoComplete={'off'}
+                        {...form.register('vehicle.city', { required: true, })}
+                    />
+                </FormControl>
                 <InputFile
                     required
                     label={'Documento do veículo'}
-                    acceptFiles={['PNG', 'JPG', 'GIF']}
+                    acceptFiles={['PNG', 'JPG', 'GIF', 'PDF']}
                     maxSize={'2MB'}
                     {...form.register('vehicle.document_file', { required: true })}
                 />

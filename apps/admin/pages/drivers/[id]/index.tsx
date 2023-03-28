@@ -23,9 +23,10 @@ import {
     useDisclosure,
     Spinner,
     Input,
-    FormHelperText
+    FormHelperText,
+    IconButton
 } from '@chakra-ui/react'
-import { AddressForm, BankForm, DriverForm, LicenceForm, PasswordForm, VehicleForm } from '@redefrete/templates/forms';
+import { AddressForm, BankForm, DriverForm, LicenceForm, VehicleForm } from '@redefrete/templates/forms';
 import { useForm } from "react-hook-form";
 import { container, SERVICE_KEYS } from '@redefrete/container';
 import { IDriverBankRepository, IDriverRepository, IDriverVehicleRepository, IDriverContractRepository } from '@redefrete/interfaces';
@@ -66,7 +67,7 @@ const Driver: Page = () => {
     }, [router.query.id])
 
     React.useEffect(() => {
-        const timeOut = setTimeout(() => setFormAction(null), 2000)
+        const timeOut = setTimeout(() => setFormAction(null), 3500)
 
         return () => { clearTimeout(timeOut) }
     }, [formAction])
@@ -94,13 +95,14 @@ const Driver: Page = () => {
 
     const resultMessages = {
         created: 'Cadastro efetuado com sucesso!',
-        updated: 'Os dados foram atualizados.'
+        updated: 'Os dados foram atualizados.',
+        deleted: 'Os dados foram excluidos com sucessso.'
     }
 
     const handleUpdateOrCreateDriverAddress = async (formData) => {
 
         const { address } = formData;
-        
+
         address.document_file = await base64FileConverter(address.document_file[0])
         await driverRepository.makeAddress(address, router.query.id).then(response => {
             setFormAction('updated')
@@ -148,7 +150,24 @@ const Driver: Page = () => {
             onClose()
             showDriver(router.query.id);
             setFormAction('created')
-        }).catch(error => setApiStatusError(error.response.data.message))
+        }).catch(error => {
+            console.log(error.response.data)
+            setApiStatusError(error.response.data.message + ': ' + error.response.data.data)
+        })
+    }
+
+    const deleteVehicle = async (id) => {
+
+        if(confirm('Deseja excluir este veículo ?'))
+
+        await driverVehicleRepository.deleteVehicle(driver.id, id).then(response => {
+            onClose()
+            showDriver(router.query.id);
+            setFormAction('deleted')
+        }).catch(error => {
+            console.log(error.response.data)
+            setApiStatusError(error.response.data.message + ': ' + error.response.data.data)
+        })
     }
 
     const handleCreateContractVehicle = async (formData) => {
@@ -295,9 +314,22 @@ const Driver: Page = () => {
                                     { name: 'brand', header: 'Marca' },
                                     { name: 'type', header: 'Tipo', render: ({ value }) => value.name },
                                     { name: 'owner_name', header: 'Nome do responsável', defaultFlex: 1 },
-                                    { name: 'owner_document', header: 'Documento do Resposável', defaultFlex: 1 },
                                     { name: 'document_url', header: 'Documento do Veículo', defaultFlex: 1, render: ({ value, ...rest }) => <Link target={'_blank'} href={rest.data.document_url}><ChakraLink>{rest.data.document_url}</ChakraLink></Link> },
-                                    { name: '', header: '', render: ({ data }) => <Button onClick={() => [modalContract.onOpen(), setSelectedVehicle(data.id)]} size={'sm'}>Emitir Contrato</Button> }
+                                    {
+                                        name: '', header: '', defaultFlex: 1, render: ({ data }) => {
+                                            return <Stack direction={'row'}>
+                                                <Button onClick={() => [modalContract.onOpen(), setSelectedVehicle(data.id)]} size={'sm'}>Emitir Contrato</Button>
+                                                <IconButton
+                                                    size={'sm'}
+                                                    variant={'outline'}
+                                                    aria-label='Delete Vehicle'
+                                                    colorScheme={'red'}
+                                                    icon={<i className={'las la-trash'}></i>}
+                                                    onClick={() => deleteVehicle(data.id)}
+                                                />
+                                            </Stack>
+                                        }
+                                    }
                                 ]}
                                 dataSource={driver.vehicles || []}
                             />

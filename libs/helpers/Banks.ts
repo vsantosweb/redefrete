@@ -526,5 +526,10 @@ export const Banks = [
     {
         value: "757",
         name: "KEB"
-    }
+    },
+    {
+        value: "290",
+        name: "PAG SEGURO"
+    },
+    
 ]

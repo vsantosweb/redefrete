@@ -1,8 +1,11 @@
 import React from 'react'
-import { FormControl, FormLabel, Input, Stack } from '@chakra-ui/react';
+import { FormControl, FormLabel, Input, Select, Stack } from '@chakra-ui/react';
 import axios from 'axios';
 import InputMask from 'react-input-mask';
 import { InputFile } from '@redefrete/components';
+
+
+const residenceTypes =['CASA', 'APARTAMENTO', 'ZONA RURAL']
 
 const AddressForm = ({ form, address = null }: any) => {
 
@@ -15,7 +18,7 @@ const AddressForm = ({ form, address = null }: any) => {
 
     const fillAddressFields = (zipcode: string) => {
 
-        axios.get(`https://viacep.com.br/ws/${zipcode}/json`).then(response => {
+        axios.get(`https://viacep.com.br/ws/${zipcode}/json`).then(response => {  
             if (response.data.erro) return resetAddress()
             form.setValue('address.address_1', response.data.logradouro)
             form.setValue('address.address_2', response.data.bairro)
@@ -39,13 +42,13 @@ const AddressForm = ({ form, address = null }: any) => {
                             required: true,
                             maxLength: 8,
                             setValueAs: v => v.replace(/[^\d]/g, ''),
-                            validate:  (value) => {
-                               return value.length === 8  ?  fillAddressFields(value) : resetAddress()
+                            validate: (value) => {
+                                return value.length === 8 ? fillAddressFields(value) : resetAddress()
                             }
                         })}>
                         {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99999-999'} />)}
                     </InputMask>
-
+                    
                 </FormControl>
 
                 <FormControl isRequired={true} variant={'floating'}>
@@ -78,6 +81,21 @@ const AddressForm = ({ form, address = null }: any) => {
                     </FormControl>
                 </Stack>
 
+                <FormControl isRequired={true} variant={'floating'}>
+                <FormLabel>Tipo de Residencia</FormLabel>
+                <Select placeholder={'Selecione...'} {...form.register('address.residence_type', { required: true })} defaultValue={address?.residence_type || null}>
+                 {residenceTypes.map(x =><option key={x} value={x}>{x}</option>
+)}
+                </Select>
+            </FormControl>
+                {/* <FormControl variant={'floating'}>
+                    <FormLabel>Tipo de Residência</FormLabel>
+                    <Input defaultValue={address?.residence_type} autoComplete={'off'} {...form.register('address.residence_type')} />
+                </FormControl>
+                <FormControl variant={'floating'}>
+                    <FormLabel>Tipo de Imóvel</FormLabel>
+                    <Input defaultValue={address?.property_type} autoComplete={'off'} {...form.register('address.property_type')} />
+                </FormControl> */}
                 <InputFile
                     required
                     // defaultValue={address?.document_file}

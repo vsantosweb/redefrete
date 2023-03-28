@@ -67,19 +67,28 @@ const LicenceForm = ({ form, licence = null }) => {
                         {stateList.map(state => <option key={state} value={state}>{state}</option>)}
                     </Select>
                 </FormControl>
+              
 
             </Stack>
-
+            <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Cidade</FormLabel>
+                    <InputCustom defaultValue={licence?.city || ''} accept={'alpha'}  {...form.register('licence.city', { required: true, pattern: { value: /[A-Za-z]/ } })} />
+                </FormControl>
             <Stack direction={'row'}>
                 <FormControl isRequired={true} variant={'floating'}>
-                    <FormLabel>Nome da mãe</FormLabel>
-                    <InputCustom defaultValue={licence?.mother_name || ''} accept={'alpha'}  {...form.register('licence.mother_name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
+                    <FormLabel>Date de emissão</FormLabel>
+                    <Input defaultValue={licence?.issue_date || ''} type={'date'} autoComplete={'off'} placeholder={'000.000.000-00'} {...form.register('licence.issue_date', { required: true })} />
                 </FormControl>
+
                 <FormControl isRequired={true} variant={'floating'}>
                     <FormLabel>Data da 1ª habilitação</FormLabel>
                     <Input defaultValue={licence?.expire_at || ''} type={'date'} autoComplete={'off'} placeholder={'000.000.000-00'} {...form.register('licence.first_licence_date', { required: true })} />
                 </FormControl>
             </Stack>
+            <FormControl isRequired={true} variant={'floating'}>
+                <FormLabel>Nome da mãe</FormLabel>
+                <InputCustom defaultValue={licence?.mother_name || ''} accept={'alpha'}  {...form.register('licence.mother_name', { required: true, pattern: { value: /[A-Za-z]/ } })} />
+            </FormControl>
             <InputFile
                 required
                 label={'Foto da CNH frente e verso'}

@@ -40,11 +40,11 @@ function RegisterComplete({ history, driver }) {
     const [registerSuccess, setRegisterSuccess] = React.useState<boolean>(false);
 
     const handleFinishRegister = async (driver) => {
-        
+
         driver.licence.document_file = await base64FileConverter(driver.licence.document_file[0]);
         driver.address.document_file = await base64FileConverter(driver.address.document_file[0]);
         // driver.vehicle.document_file = await base64FileConverter(driver.vehicle.document_file[0]);
-        
+
         await driverAuthService.completeRegister(driver).then(() => { setRegisterSuccess(true) })
     }
 
@@ -180,6 +180,7 @@ function RegisterComplete({ history, driver }) {
                                     <PasswordForm form={registerForm} />
                                 </div>
                             </div>
+                            
                             <Styled.AccountButton
                                 isLoading={registerForm.formState.isSubmitting}
                                 type={'submit'}
@@ -189,6 +190,7 @@ function RegisterComplete({ history, driver }) {
 
                     </div>
                 </div>
+
             </form>
         )
     } else {
@@ -206,8 +208,8 @@ function RegisterComplete({ history, driver }) {
                 <AlertTitle mt={4} mb={1} fontSize='lg'>Cadastro efetuado com sucesso!</AlertTitle>
                 <AlertDescription mb={4} maxWidth='sm'>Obrigado por fazer parte do time Redefrete. Seu cadastro foi enviado para análise e em breve você você fará parte da nossa equipe.</AlertDescription>
                 <Box display={'flex'} gap={3}>
-                <Button as={ChakraLink} colorScheme={'primary'}><Link href={'https://redefrete.com.br'}>Voltar para o Site</Link></Button>
-                <Button as={ChakraLink} colorScheme={'primary'}><Link href={'/minha-conta/login'}>Acessar</Link></Button>
+                    <Button as={ChakraLink} colorScheme={'primary'}><Link href={'https://redefrete.com.br'}>Voltar para o Site</Link></Button>
+                    <Button as={ChakraLink} colorScheme={'primary'}><Link href={'/minha-conta/login'}>Acessar</Link></Button>
                 </Box>
             </Alert>
 

@@ -20,7 +20,7 @@ export class DriverVehicleApiService implements IDriverVehicleRepository {
         return api().post('/drivers/vehicles', data).then(response => response.data)
     }
 
-    deleteVehicle(id: number): Promise<any> {
-        return api().delete('/drivers/vehicles/' + id).then(response => response.data)
+    deleteVehicle(driverId:null|number, id: number): Promise<any> {
+        return api().delete('/drivers/'+driverId+'/vehicles/' + id).then(response => response.data)
     }
 }
