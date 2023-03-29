@@ -37,6 +37,10 @@ const columns: Array<IColumn> = [
     name: 'recommend_hub', header: 'Hub', defaultFlex: 1,
     render: ({ data }) => data.recommended_hub ? <Badge variant={'solid'} colorScheme={'purple'}>{data.recommended_hub.code} - {data.recommended_hub.name}</Badge> : 'N/A'
   },
+  {
+    name: 'user', header: 'Criado por', defaultFlex: 1,
+    render: ({ data }) => data.user?.name
+  },
   { name: 'created_at', header: 'Criado em', defaultFlex: 1 },
 ];
 
