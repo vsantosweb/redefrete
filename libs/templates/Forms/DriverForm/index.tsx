@@ -83,6 +83,19 @@ const DriverForm = ({ form, driver }: any) => {
                 </InputMask>
             </FormControl>
 
+            <FormControl variant={'floating'}>
+                <FormLabel>Telefone de emergência (Opcional)</FormLabel>
+                <InputMask
+                    mask={'(99) 99999-9999'}
+                    autoComplete={'off'}
+                    type={'tel'}
+                    defaultValue={driver?.phone_2 || null}
+                    {...form.register('phone_2', { required: true, minLength: 11, setValueAs: v => v.replace(/[^\d]/g, '') })}
+                >
+                    {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99 99999-999'} />)}
+                </InputMask>
+            </FormControl>
+
             <FormControl isRequired={true} variant={'floating'}>
                 <FormLabel>Nº RG</FormLabel>
                 <InputCustom
@@ -92,6 +105,20 @@ const DriverForm = ({ form, driver }: any) => {
                     defaultValue={driver?.rg || ''}
                     {...form.register('rg', { required: true, minLength: 4 })}
                 />
+            </FormControl>
+
+            <FormControl variant={'floating'}>
+                <FormLabel>CNPJ MEI (Opcional)</FormLabel>
+                <InputMask
+                    mask={'99.999.999/9999-99'}
+                    autoComplete={'off'}
+                    type={'tel'}
+                    defaultValue={driver?.document_2 || null}
+                    {...form.register('document_2', { setValueAs: v => v.replace(/[^\d]/g, '') })}
+                >
+                    {(inputProps => <Input {...inputProps} autoComplete={'off'} placeholder={'99.999.999/9999-99'} />)}
+
+                </InputMask>
             </FormControl>
 
             <Stack direction={'row'}>
@@ -112,21 +139,21 @@ const DriverForm = ({ form, driver }: any) => {
             </Stack>
 
             <Stack direction={'row'}>
-            <FormControl isRequired={true} variant={'floating'}>
-                <FormLabel>Gênero</FormLabel>
-                <Select placeholder={'Selecione...'} {...form.register('gender', { required: true })} defaultValue={driver?.gender || null}>
-                    <option value={'M'}>Masculino</option>
-                    <option value={'F'}>Feminino</option>
-                    <option value={'O'}>Outro</option>
-                </Select>
-            </FormControl>
-            <FormControl isRequired={true} variant={'floating'}>
-                <FormLabel>Estado civil</FormLabel>
-                <Select placeholder={'Selecione...'} {...form.register('marital_status', { required: true })} defaultValue={driver?.marital_status || null}>
-                    {maritalStatus.map(status => <option key={status} value={status}>{status}</option>)}
-                    
-                </Select>
-            </FormControl>
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Gênero</FormLabel>
+                    <Select placeholder={'Selecione...'} {...form.register('gender', { required: true })} defaultValue={driver?.gender || null}>
+                        <option value={'M'}>Masculino</option>
+                        <option value={'F'}>Feminino</option>
+                        <option value={'O'}>Outro</option>
+                    </Select>
+                </FormControl>
+                <FormControl isRequired={true} variant={'floating'}>
+                    <FormLabel>Estado civil</FormLabel>
+                    <Select placeholder={'Selecione...'} {...form.register('marital_status', { required: true })} defaultValue={driver?.marital_status || null}>
+                        {maritalStatus.map(status => <option key={status} value={status}>{status}</option>)}
+
+                    </Select>
+                </FormControl>
             </Stack>
 
         </Stack>

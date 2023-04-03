@@ -353,11 +353,16 @@ const Driver: Page = () => {
 
                                                     <VehicleForm form={vehicleForm} driver={driver} />
                                                     <FormControl isInvalid={false}>
+                                                        <FormLabel>Tipo de Contrato</FormLabel>
+                                                        <Select placeholder={'Selecione...'} {...vehicleForm.register('contract_type', { required: true })}>
+                                                            {['AGREGADO', 'AUTÔNOMO'].map((value, index) => <option key={index} value={value}> {value} </option>)}
+                                                        </Select>
+                                                    </FormControl>
+                                                    <FormControl isInvalid={false}>
                                                         <FormLabel>Conta para pagamento</FormLabel>
                                                         <Select placeholder={'Selecione...'} {...vehicleForm.register('driver_bank_id', { required: true })}>
                                                             {driver.banks.map((bank, index) => <option key={index} value={bank.id}> {bank.bank_name} </option>)}
                                                         </Select>
-                                                        <small>Adicionar conta bancária +</small>
                                                     </FormControl>
                                                 </Stack>
                                             </ModalBody>
