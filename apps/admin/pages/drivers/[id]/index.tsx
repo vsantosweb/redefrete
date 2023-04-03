@@ -145,7 +145,8 @@ const Driver: Page = () => {
         const data = { ...formData.vehicle, }
 
         data.document_file = await base64FileConverter(data.document_file[0]);
-        data.driver_bank_id = formData.driver_bank_id
+        data.driver_bank_id = formData.driver_bank_id;
+        data.contract_type = formData.contract_type;
         await driverVehicleRepository.createVehicle(data, driver.id).then(response => {
             onClose()
             showDriver(router.query.id);
@@ -352,13 +353,13 @@ const Driver: Page = () => {
                                                     {apiStatusError && <Alert size={'sm'} status={'error'}>Erro: {apiStatusError}</Alert>}
 
                                                     <VehicleForm form={vehicleForm} driver={driver} />
-                                                    <FormControl isInvalid={false}>
+                                                    <FormControl isRequired={true}>
                                                         <FormLabel>Tipo de Contrato</FormLabel>
                                                         <Select placeholder={'Selecione...'} {...vehicleForm.register('contract_type', { required: true })}>
                                                             {['AGREGADO', 'AUTÔNOMO'].map((value, index) => <option key={index} value={value}> {value} </option>)}
                                                         </Select>
                                                     </FormControl>
-                                                    <FormControl isInvalid={false}>
+                                                    <FormControl isRequired={true}>
                                                         <FormLabel>Conta para pagamento</FormLabel>
                                                         <Select placeholder={'Selecione...'} {...vehicleForm.register('driver_bank_id', { required: true })}>
                                                             {driver.banks.map((bank, index) => <option key={index} value={bank.id}> {bank.bank_name} </option>)}
