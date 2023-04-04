@@ -101,19 +101,19 @@ const Home: Page = () => {
         <Row>
           <Col md={12}>
 
-            <Card title={'Total de pré cadastros'}>
+            <Card title={'Total de Pré-cadastros'}>
               <BasicBarChart options={{ barColor: '#9043e7' }} rangeData={driverHubsRangeData} orderBy={'created_at'} />
             </Card>
           </Col>
           <Col lg={12}>
-            <Card title={'Pré cadastros por status'}>
+            <Card title={'Pré-cadastros por status'}>
               <DriverStatusOverview rangeData={driverHubsRangeData} type={'line'} groupBy={'is_avaiable'} />
             </Card>
           </Col>
         </Row>
         <Row>
           <Col lg={18}>
-            <Card title={'Últimos Pre-cadastros aprovados'}>
+            <Card title={'Últimos Pré-cadastros aprovados'}>
               <DataGrid
                 columns={approvalRegisterColumns}
                 dataSource={_.slice(driverHubsRangeData, 0, 5)}
@@ -122,7 +122,7 @@ const Home: Page = () => {
             </Card>
           </Col>
           <Col lg={6}>
-            <Card title={'Pre-Cadastros aprovados por HUB'}>
+            <Card title={'Pré-cadastros aprovados por HUB'}>
               <DataGrid
                 columns={registerByHubsColumns}
                 dataSource={registerByHub}

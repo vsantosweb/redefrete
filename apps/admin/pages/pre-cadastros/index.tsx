@@ -133,6 +133,6 @@ const CaptationLead: Page = () => {
     )
 }
 
-CaptationLead.config = { title: 'Pre-Cadastros', layout: 'AccountLayout' }
+CaptationLead.config = { title: 'Pré-cadastros', layout: 'AccountLayout' }
 
 export default CaptationLead

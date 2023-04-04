@@ -82,7 +82,7 @@ const AddressForm = ({ form, address = null }: any) => {
                 </Stack>
 
                 <FormControl isRequired={true} variant={'floating'}>
-                <FormLabel>Tipo de Residencia</FormLabel>
+                <FormLabel>Tipo de Residência</FormLabel>
                 <Select placeholder={'Selecione...'} {...form.register('address.residence_type', { required: true })} defaultValue={address?.residence_type || null}>
                  {residenceTypes.map(x =><option key={x} value={x}>{x}</option>
 )}
