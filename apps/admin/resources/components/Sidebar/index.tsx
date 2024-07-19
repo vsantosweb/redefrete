@@ -21,13 +21,13 @@ function SidebarMenu() {
                     <Styled.SidebarMenu>
                         <div>
                             {_nav.map(route => route.visible && <Styled.SidebarMenuItem key={route.path} active={router.pathname === route.path}>
-                                <Link href={route.path}><a> <div className={`innerItem`} >
+                                <Link href={route.path}><div className={`innerItem`} >
                                     <div className={'icon-wrapper'}>
                                         <div className={'icon'}>{route.icon}</div>
                                     </div>
                                     <div className={'itemLink'}>{route.name}</div>
                                     {/* <Badge variant={'solid'}>6</Badge> */}
-                                </div></a></Link>
+                                </div></Link>
                             </Styled.SidebarMenuItem>)}
 
                         </div>

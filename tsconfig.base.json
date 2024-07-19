@@ -15,15 +15,15 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@redefrete/container": ["libs/repository/Services/container.ts"],
-      "@redefrete/interfaces": ["libs/repository/Interfaces/index.ts"],
-      "@redefrete/types": ["libs/repository/Types/index.d.ts"],
-      "@redefrete/teste": ["libs/teste/src/index.ts"],
+      "@redefrete/client/routes": ["libs/routes/client.ts"],
       "@redefrete/components": ["libs/components/index.ts"],
-      "@redefrete/templates/forms": ["libs/templates/Forms/index.ts"],
-      "@redefrete/themes/default": ["libs/themes/default.tsx"],
+      "@redefrete/container": ["libs/repository/Services/container.ts"],
       "@redefrete/helpers": ["libs/helpers/index.ts"],
-      "@redefrete/client/routes": ["libs/routes/client.ts"]
+      "@redefrete/interfaces": ["libs/repository/Interfaces/index.ts"],
+      "@redefrete/templates/forms": ["libs/templates/Forms/index.ts"],
+      "@redefrete/teste": ["libs/teste/src/index.ts"],
+      "@redefrete/themes/default": ["libs/themes/default.tsx"],
+      "@redefrete/types": ["libs/repository/Types/index.d.ts"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],

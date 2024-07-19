@@ -47,3 +47,4 @@ Thumbs.db
 /.env
 apps/client/.env
 apps/admin/.env
+.nx/cache

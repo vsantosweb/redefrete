@@ -76,9 +76,6 @@ const Home: Page = () => {
 
           </Stack>
         </Col>
-
-
-
       </Row>
     </Grid>
     // <div>
