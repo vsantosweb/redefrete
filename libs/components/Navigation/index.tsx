@@ -9,15 +9,13 @@ export default function Navigation({ list }) {
             <Styled.NavigationList>
                 {list.map(item =>
                     item.visible && <Link href={item.path}>
-                        <a>
-                            <Styled.NavigationListItem>
-                                <Styled.NavigationItemContent>
-                                    <Styled.NavigationTitle>{item.name}</Styled.NavigationTitle>
-                                    <p>{item.description}</p>
-                                </Styled.NavigationItemContent>
-                                <i className={'las la-angle-right'}></i>
-                            </Styled.NavigationListItem>
-                        </a>
+                        <Styled.NavigationListItem>
+                            <Styled.NavigationItemContent>
+                                <Styled.NavigationTitle>{item.name}</Styled.NavigationTitle>
+                                <p>{item.description}</p>
+                            </Styled.NavigationItemContent>
+                            <i className={'las la-angle-right'}></i>
+                        </Styled.NavigationListItem>
                     </Link>
                 )}
             </Styled.NavigationList>
